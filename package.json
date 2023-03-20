@@ -1,0 +1,42 @@
+{
+    "name": "js-fast-way",
+    "version": "0.0.1",
+    "description": "js-fast-way",
+    "type": "module",
+    "main": "./dist/index.common.js",
+    "module": "./dist/index.esm.js",
+    "scripts": {
+        "build": "rollup -c"
+    },
+    "files": [
+        "dist",
+        "LICENSE",
+        "README.md"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iZaiZaiA/js-fast-way"
+    },
+    "author": "iZaiZaiA<https://github.com/iZaiZaiA>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/iZaiZaiA/js-fast-way/issues"
+    },
+    "homepage": "https://github.com/iZaiZaiA/js-fast-way#readme",
+    "copyright": "Copyright © 2023 iZaiZaiA And js-fast-way",
+    "keywords": [
+        "js-fast-way",
+        "component",
+        "library",
+        "tools",
+        "vue"
+    ],
+    "devDependencies": {
+        "rollup": "^3.19.1",
+        "rollup-plugin-commonjs": "^10.1.0",
+        "rollup-plugin-json": "^4.0.0",
+        "rollup-plugin-node-resolve": "^5.2.0",
+        "rollup-plugin-terser": "^7.0.2",
+        "yargs": "^17.7.1"
+    }
+}
