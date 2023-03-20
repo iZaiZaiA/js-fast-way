@@ -1,128 +1,126 @@
-'use strict';
-
 //判断类型
 
 const toString = Object.prototype.toString;
 
 //判断值是否为某个类型
-function is(val, type)
+export function is(val, type)
 {
     return toString.call(val) === `[object ${type}]`;
 }
 
 //是否为函数
-function isFunction(val)
+export function isFunction(val)
 {
     return is(val, 'Function');
 }
 
 //是否为空对象
-function isObjNull(val)
+export function isObjNull(val)
 {
     return JSON.stringify(val) === "{}";
 }
 
 //是否已定义
-function isDef(val)
+export function isDef(val)
 {
     return typeof val !== 'undefined';
 }
 
 //是否未已定义
-function isUnDef(val)
+export function isUnDef(val)
 {
     return !isDef(val);
 }
 
 //是否为对象
-function isObject(val)
+export function isObject(val)
 {
     return val !== null && is(val, 'Object');
 }
 
 //是否为时间
-function isDate(val)
+export function isDate(val)
 {
     return is(val, 'Date');
 }
 
 //是否为数值
-function isNumber(val)
+export function isNumber(val)
 {
     return is(val, 'Number');
 }
 
 //是否为AsyncFunction
-function isAsyncFunction(val)
+export function isAsyncFunction(val)
 {
     return is(val, 'AsyncFunction');
 }
 
 //是否为promise
-function isPromise(val)
+export function isPromise(val)
 {
     return is(val, 'Promise') && isObject(val) && isFunction(val.then) && isFunction(val.catch);
 }
 
 //是否为字符串
-function isString(val)
+export function isString(val)
 {
     return is(val, 'String');
 }
 
 //是否为boolean类型
-function isBoolean(val)
+export function isBoolean(val)
 {
     return is(val, 'Boolean');
 }
 
 //是否为数组
-function isArray(val)
+export function isArray(val)
 {
     return val && Array.isArray(val);
 }
 
 //是否客户端
-function isClient()
+export function isClient()
 {
     return typeof window !== 'undefined';
 }
 
 //是否为浏览器
-function isWindow(val)
+export function isWindow(val)
 {
     return typeof window !== 'undefined' && is(val, 'Window');
 }
 
 //是否为元素
-function isElement(val)
+export function isElement(val)
 {
     return isObject(val) && !!val.tagName;
 }
 
 //是否为图片节点
-function isImageDom(val)
+export function isImageDom(val)
 {
     return val && ['IMAGE', 'IMG','image', 'img'].includes(val.tagName);
 }
 
 //是否为null
-function isNull(val)
+export function isNull(val)
 {
     return val === null;
 }
 
-function isNullAndUnDef(val)
+export function isNullAndUnDef(val)
 {
     return isUnDef(val) && isNull(val);
 }
 
-function isNullOrUnDef(val)
+export function isNullOrUnDef(val)
 {
     return isUnDef(val) || isNull(val);
 }
 
-function isNullAll(val)
+export function isNullAll(val)
 {
     return typeof val === undefined || val === null || val === '';
 }
@@ -133,13 +131,13 @@ function isNullAll(val)
  * @param val 内容
  * @returns {boolean} 是或否
  */
-function isValueNull(val)
+export function isValueNull(val)
 {
     return (val??'') === '';
 }
 
 //数据类型
-function getObjType(obj)
+export function getObjType(obj)
 {
     let toString = Object.prototype.toString;
     let map = {
@@ -161,47 +159,20 @@ function getObjType(obj)
 }
 
 //取数据
-function getArrValue(val)
+export function getArrValue(val)
 {
     return isArray(val) ? val : [];
 }
 
 //取数据
-function getObjValue(val)
+export function getObjValue(val)
 {
     return isObject(val) ? val : {};
 }
 
 //取数据
-function getObjNullValue(val)
+export function getObjNullValue(val)
 {
     const res = getObjValue(val);
     return isObjNull(res) ? false : res;
 }
-
-exports.getArrValue = getArrValue;
-exports.getObjNullValue = getObjNullValue;
-exports.getObjType = getObjType;
-exports.getObjValue = getObjValue;
-exports.is = is;
-exports.isArray = isArray;
-exports.isAsyncFunction = isAsyncFunction;
-exports.isBoolean = isBoolean;
-exports.isClient = isClient;
-exports.isDate = isDate;
-exports.isDef = isDef;
-exports.isElement = isElement;
-exports.isFunction = isFunction;
-exports.isImageDom = isImageDom;
-exports.isNull = isNull;
-exports.isNullAll = isNullAll;
-exports.isNullAndUnDef = isNullAndUnDef;
-exports.isNullOrUnDef = isNullOrUnDef;
-exports.isNumber = isNumber;
-exports.isObjNull = isObjNull;
-exports.isObject = isObject;
-exports.isPromise = isPromise;
-exports.isString = isString;
-exports.isUnDef = isUnDef;
-exports.isValueNull = isValueNull;
-exports.isWindow = isWindow;

@@ -1,1 +1,1 @@
-export * from './library/index'
+export * from './library/isType'

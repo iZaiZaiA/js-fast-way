@@ -1,12 +1,19 @@
 {
     "name": "js-fast-way",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "js-fast-way",
     "type": "module",
-    "main": "./dist/index.common.js",
-    "module": "./dist/index.esm.js",
     "scripts": {
         "build": "rollup -c"
+    },
+    "main": "./dist/index.common.js",
+    "module": "./dist/index.esm.js",
+    "exports": {
+        ".": {
+            "require": "./dist/index.common.js",
+            "import": "./dist/index.esm.js"
+        },
+        "./dist/*": "./dist/*"
     },
     "files": [
         "dist",
@@ -36,7 +43,6 @@
         "rollup-plugin-commonjs": "^10.1.0",
         "rollup-plugin-json": "^4.0.0",
         "rollup-plugin-node-resolve": "^5.2.0",
-        "rollup-plugin-terser": "^7.0.2",
         "yargs": "^17.7.1"
     }
 }
