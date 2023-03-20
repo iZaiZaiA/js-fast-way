@@ -1,5 +1,3 @@
-'use strict';
-
 //判断类型
 
 const toString = Object.prototype.toString;
@@ -10,7 +8,7 @@ const toString = Object.prototype.toString;
  * @param type 类型，boolean、number、string、function、array、date、regExp、undefined、null、object 等
  * @returns {boolean} 是或否
  */
-function isType(value, type)
+export function isType(value, type)
 {
     return toString.call(value) === `[object ${type}]`;
 }
@@ -21,7 +19,7 @@ function isType(value, type)
  * @param obj 数据内容
  * @returns {*|string}
  */
-function getObjType(obj)
+export function getObjType(obj)
 {
     let map = {
         '[object Boolean]': 'boolean',
@@ -47,7 +45,7 @@ function getObjType(obj)
  * @param value 数据内容
  * @returns {boolean} 是或否
  */
-function isString(value)
+export function isString(value)
 {
     return isType(value, 'String');
 }
@@ -58,7 +56,7 @@ function isString(value)
  * @param value 数据内容
  * @returns {boolean} 是或否
  */
-function isNumber(value)
+export function isNumber(value)
 {
     return isType(value, 'Number');
 }
@@ -69,7 +67,7 @@ function isNumber(value)
  * @param value 数据内容
  * @returns {boolean} 是或否
  */
-function isBoolean(value)
+export function isBoolean(value)
 {
     return isType(value, 'Boolean');
 }
@@ -80,7 +78,7 @@ function isBoolean(value)
  * @param value 数据内容
  * @returns {boolean} 是或否
  */
-function isArray(value)
+export function isArray(value)
 {
     return value && Array.isArray(value);
 }
@@ -91,7 +89,7 @@ function isArray(value)
  * @param value 数据内容
  * @returns {boolean} 是或否
  */
-function isObject(value)
+export function isObject(value)
 {
     return value !== null && isType(value, 'Object');
 }
@@ -102,7 +100,7 @@ function isObject(value)
  * @param value 数据内容
  * @returns {boolean} 是或否
  */
-function isDate(value)
+export function isDate(value)
 {
     return isType(value, 'Date');
 }
@@ -113,7 +111,7 @@ function isDate(value)
  * @param func 数据内容
  * @returns {boolean} 是或否
  */
-function isFunction(func)
+export function isFunction(func)
 {
     return isType(func, 'Function');
 }
@@ -124,7 +122,7 @@ function isFunction(func)
  * @param func 数据内容
  * @returns {boolean} 是或否
  */
-function isAsyncFunction(func)
+export function isAsyncFunction(func)
 {
     return isType(func, 'AsyncFunction');
 }
@@ -135,7 +133,7 @@ function isAsyncFunction(func)
  * @param value 数据内容
  * @returns {boolean} 是或否
  */
-function isPromise(value)
+export function isPromise(value)
 {
     return isType(value, 'Promise') && isObject(value) && isFunction(value.then) && isFunction(value.catch);
 }
@@ -146,7 +144,7 @@ function isPromise(value)
  * @param value 数据内容
  * @returns {boolean} 是或否
  */
-function isElement(value)
+export function isElement(value)
 {
     return isObject(value) && !!value.tagName;
 }
@@ -157,7 +155,7 @@ function isElement(value)
  * @param value 数据内容
  * @returns {boolean} 是或否
  */
-function isNullAll(value)
+export function isNullAll(value)
 {
     return typeof value === undefined || value === null || value === '';
 }
@@ -167,7 +165,7 @@ function isNullAll(value)
  * @param value 数据内容
  * @returns {boolean} 是或否
  */
-function isValueNull(value)
+export function isValueNull(value)
 {
     return (value??'') === '';
 }
@@ -178,7 +176,7 @@ function isValueNull(value)
  * @param value 数据内容
  * @returns {boolean} 是或否
  */
-function isObjNull(value)
+export function isObjNull(value)
 {
     return JSON.stringify(value) === "{}";
 }
@@ -188,7 +186,7 @@ function isObjNull(value)
  * @param value 数据内容
  * @returns {*|*[]}
  */
-function getArrValue(value)
+export function getArrValue(value)
 {
     return isArray(value) ? value : [];
 }
@@ -199,7 +197,7 @@ function getArrValue(value)
  * @param value 数据内容
  * @returns {*|{}}
  */
-function getObjValue(value)
+export function getObjValue(value)
 {
     return isObject(value) ? value : {};
 }
@@ -210,27 +208,8 @@ function getObjValue(value)
  * @param value 数据内容
  * @returns {boolean | {}}
  */
-function getObjNullValue(value)
+export function getObjNullValue(value)
 {
     const res = getObjValue(value);
     return isObjNull(res) ? false : res;
 }
-
-exports.getArrValue = getArrValue;
-exports.getObjNullValue = getObjNullValue;
-exports.getObjType = getObjType;
-exports.getObjValue = getObjValue;
-exports.isArray = isArray;
-exports.isAsyncFunction = isAsyncFunction;
-exports.isBoolean = isBoolean;
-exports.isDate = isDate;
-exports.isElement = isElement;
-exports.isFunction = isFunction;
-exports.isNullAll = isNullAll;
-exports.isNumber = isNumber;
-exports.isObjNull = isObjNull;
-exports.isObject = isObject;
-exports.isPromise = isPromise;
-exports.isString = isString;
-exports.isType = isType;
-exports.isValueNull = isValueNull;

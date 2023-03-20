@@ -1,1 +1,1 @@
-export * from './library/isType'
+export * from './isType'
