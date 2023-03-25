@@ -24,6 +24,6 @@ export default {
     plugins: [
         json(),
         resolve(),
-        commonjs(),
+        commonjs()
     ]
 }
