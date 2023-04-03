@@ -1343,6 +1343,31 @@
         }
     }
 
+
+    /**
+     * 拼接二维数组中的ID
+     * @param arr       二维数组
+     * @returns {*}
+     */
+    function arrToId(arr)
+    {
+        return arrToKey(arr, 'id')
+    }
+
+
+    /**
+     * 拼接二维数组中的字段
+     * @param arr       二维数组
+     * @param key       字段名
+     * @returns {*}
+     */
+    function arrToKey(arr, key)
+    {
+        return arr.map((obj) => {
+            return obj[key];
+        }).join(",")
+    }
+
     /**
      * 取当前时间
      * @returns {{dateTime: string, date: string, obj: {YY: number, MM: string, DD: string, S: string, H: string, M: string}, time: string}}
@@ -1720,23 +1745,43 @@
 
 
     /**
-     * 设置复制文本
+     * 设置剪切板文本
      * @param text  文本内容
-     * @returns {Promise<void>}
+     * @returns {Promise<unknown>}
      */
     async function setCopyText(text)
     {
-        return await navigator.clipboard.writeText(text);
+        return new Promise((resolve) => {
+            if (window.navigator?.clipboard) {
+                window.navigator.clipboard.writeText(text).then(() => {
+                    resolve(true);
+                }).catch(() => {
+                    resolve(false);
+                });
+            } else {
+                resolve(false);
+            }
+        })
     }
 
 
     /**
      * 取剪切板文本
-     * @returns {Promise<string>}
+     * @returns {Promise<unknown>}
      */
     async function getCopyText()
     {
-        return await navigator.clipboard.readText();
+        return new Promise((resolve) => {
+            if (window.navigator?.clipboard) {
+                window.navigator.clipboard.readText().then((text) => {
+                    resolve(text);
+                }).catch(() => {
+                    resolve(false);
+                });
+            } else {
+                resolve(false);
+            }
+        })
     }
 
 
@@ -1922,142 +1967,189 @@
     }
 
     /**
-     * 缓存数据
+     * 获取缓存
+     * @param key       缓存名称
+     * @param debug     是否开启调试模式， 默认为 false
+     * @param session   session模式， 默认为 false
+     * @returns {boolean|number|string|*}
      */
-    const utilsStore = (prefix) => {
+    function getStoreData(key, debug = false, session = false)
+    {
+        return getStore({
+            name: key,
+            debug: debug,
+            session: session
+        })
+    }
 
-        //缓存前缀
-        const prefixKey = prefix ? prefix + '-' : '';
+    /**
+     * 保存缓存
+     * @param key       缓存名称
+     * @param value     缓存内容
+     * @param session   session模式， 默认为 false
+     */
+    function setStoreData(key, value, session = false)
+    {
+        return setStore({
+            name: key,
+            content: value,
+            session: session
+        })
+    }
 
-        //获取缓存
-        const getStoreData = (key, debug = false, session = false) => {
-            return getStore({
-                name: key,
-                debug: debug,
-                session: session
-            })
-        };
 
-        //保存缓存
-        const setStoreData = (key, value, session = false) => {
-            return setStore({
-                name: key,
-                content: value,
-                session: session
-            })
-        };
+    /**
+     * 删除缓存
+     * @param key       缓存名称
+     * @param session   session模式， 默认为 false
+     */
+    function delStoreData(key, session = false)
+    {
+        return removeStore({
+            name: key,
+            session: session
+        })
+    }
 
-        //删除缓存
-        const delStoreData = (key, session = false) => {
-            return removeStore({
-                name: key,
-                session: session
-            })
-        };
 
-        //存储localStorage
-        const setStore = ({name, content, session}) => {
-            let names = prefixKey + name;
-            let obj = {
-                dataType: typeof (content),
-                content: content ?? '',
-                session: session ?? '',
-                datetime: new Date().getTime()
-            };
-            if (session) {
-                window.sessionStorage.setItem(names, JSON.stringify(obj));
-            } else {
-                window.localStorage.setItem(names, JSON.stringify(obj));
-            }
-        };
-
-        //获取localStorage
-        const getStore = ({name, debug, session}) => {
-            let obj, content, names = prefixKey + name;
-            if (session) {
-                obj = window.sessionStorage.getItem(names);
-            } else {
-                obj = window.localStorage.getItem(names);
-            }
-            if (isValidateNull(obj)) {
-                return;
-            }
-            try {
-                obj = JSON.parse(obj);
-            } catch {
-                return obj;
-            }
-            if (debug) {
-                return obj;
-            }
-            if (obj.dataType === 'string') {
-                content = obj.content;
-            } else if (obj.dataType === 'number') {
-                content = Number(obj.content);
-            } else if (obj.dataType === 'boolean') {
-                content = Boolean(obj.content);
-            } else if (obj.dataType === 'object') {
-                content = obj.content;
-            }
-            return content ?? '';
-        };
-
-        //删除localStorage
-        const removeStore = ({name, session}) => {
-            let names = prefixKey + name;
-            if (session) {
-                window.sessionStorage.removeItem(names);
-            } else {
-                window.localStorage.removeItem(names);
-            }
-        };
-
-        //获取全部localStorage
-        const getAllStore = ({session}) => {
-            let list = [];
-            if (session) {
-                for (let i = 0; i <= window.sessionStorage.length; i++) {
-                    list.push({
+    /**
+     * 获取全部localStorage
+     * @param session    session模式， 默认为 false
+     * @returns {*[]}
+     */
+    function getAllStore(session = false)
+    {
+        let list = [];
+        if (session) {
+            for (let i = 0; i <= window.sessionStorage.length; i++) {
+                list.push({
+                    name: window.sessionStorage.key(i),
+                    content: getStore({
                         name: window.sessionStorage.key(i),
-                        content: getStore({
-                            name: window.sessionStorage.key(i),
-                            type: 'session'
-                        })
-                    });
-                }
-            } else {
-                for (let i = 0; i <= window.localStorage.length; i++) {
-                    list.push({
+                        type: 'session'
+                    })
+                });
+            }
+        } else {
+            for (let i = 0; i <= window.localStorage.length; i++) {
+                list.push({
+                    name: window.localStorage.key(i),
+                    content: getStore({
                         name: window.localStorage.key(i),
-                        content: getStore({
-                            name: window.localStorage.key(i),
-                        })
-                    });
-                }
+                    })
+                });
             }
-            return list;
-        };
+        }
+        return list;
+    }
 
-        //清空全部localStorage
-        const clearStore = ({session}) => {
-            if (session) {
-                window.sessionStorage.clear();
-            } else {
-                window.localStorage.clear();
-            }
-        };
 
-        //清空全部localStorage
-        const clearStoreAll = () => {
+    /**
+     * 获取localStorage
+     * @param name      缓存名称
+     * @param debug     是否开启调试模式， 默认为 false
+     * @param session   session模式， 默认为 false
+     * @returns {boolean|number|string|*|string}
+     */
+    function getStore({name, debug = false, session = false})
+    {
+        let obj, content;
+        if (session) {
+            obj = window.sessionStorage.getItem(name);
+        } else {
+            obj = window.localStorage.getItem(name);
+        }
+        if (isValidateNull(obj)) {
+            return;
+        }
+        try {
+            obj = JSON.parse(obj);
+        } catch {
+            return obj;
+        }
+        if (debug) {
+            return obj;
+        }
+        if (obj.dataType === 'string') {
+            content = obj.content;
+        } else if (obj.dataType === 'number') {
+            content = Number(obj.content);
+        } else if (obj.dataType === 'boolean') {
+            content = Boolean(obj.content);
+        } else if (obj.dataType === 'object') {
+            content = obj.content;
+        }
+        return content ?? '';
+    }
+
+
+    /**
+     * 存储localStorage
+     * @param name      缓存名称
+     * @param content   缓存内容
+     * @param session   session模式， 默认为 false
+     */
+    function setStore({name, content, session = false})
+    {
+        let obj = {
+            dataType: typeof (content),
+            content: content ?? '',
+            session: session ?? '',
+            datetime: new Date().getTime()
+        };
+        if (session) {
+            window.sessionStorage.setItem(name, JSON.stringify(obj));
+        } else {
+            window.localStorage.setItem(name, JSON.stringify(obj));
+        }
+    }
+
+
+    /**
+     * 删除localStorage
+     * @param name      缓存名称
+     * @param session   session模式， 默认为 false
+     */
+    function removeStore({name, session = false})
+    {
+        if (session) {
+            window.sessionStorage.removeItem(name);
+        } else {
+            window.localStorage.removeItem(name);
+        }
+    }
+
+
+    /**
+     * 清空全部localStorage
+     * @param session   session模式， 默认为 false
+     */
+    function clearStore(session = false)
+    {
+        if (session) {
             window.sessionStorage.clear();
+        } else {
             window.localStorage.clear();
-        };
+        }
+    }
 
-        //导出
-        return {getStoreData,setStoreData,delStoreData,setStore,getStore,removeStore,getAllStore,clearStore,clearStoreAll}
-    };
 
-    //控制台打印，来自 colorui 作者 - 文晓港
+    /**
+     * 清空全部localStorage
+     */
+    function clearStoreAll()
+    {
+        window.sessionStorage.clear();
+        window.localStorage.clear();
+    }
+
+    /**
+     * 控制台打印，来自 colorui 作者 - 文晓港
+     * @param name  用于区分不同的打印
+     * @param tips  打印的提示信息
+     * @param data  打印的数据
+     * @param micro 第一个名称
+     */
     function clog(name, tips, data, micro)
     {
         const nameList = localStorage.getItem(`clog_name`);
@@ -2109,7 +2201,12 @@
         );
     }
 
-    //控制台打印
+
+    /**
+     * 控制台打印
+     * @param name  名称
+     * @param tips  提示
+     */
     function ulog(name, tips)
     {
         console.log(
@@ -2120,12 +2217,43 @@
         );
     }
 
+
+    /**
+     * 设置饿了么UI的主色调
+     * @param color 颜色值，默认为 #1ECC95
+     */
+    const setElementMainColor = (color = '#1ECC95') => {
+        const el = document.documentElement;
+        el.style.setProperty('--el-color-primary', color);
+        // 设置 css 渐变 变量
+        const numArr = [3, 5, 7, 8, 9];
+        numArr.forEach(item => {
+            let amount = 0;
+            if (item === 3) {
+                amount = 0.9;
+            } else if (item === 5) {
+                amount = 0.7;
+            } else if (item >= 7) {
+                amount = amount = (10 - item) / 10;
+            }
+            const val = toColor('#FFFFFF', color, amount);
+            el.style.setProperty(`--el-color-primary-light-${item}`, val);
+        });
+        //生成深主色颜色
+        const val = toColor('#000000', color, 0.9);
+        el.style.setProperty('--el-color-primary-dark-2', val);
+    };
+
     exports.ArrToOneObj = ArrToOneObj;
     exports.addLight = addLight;
     exports.arrFill = arrFill;
     exports.arrShuffle = arrShuffle;
+    exports.arrToId = arrToId;
+    exports.arrToKey = arrToKey;
     exports.base64ToFile = base64ToFile;
     exports.calcDate = calcDate;
+    exports.clearStore = clearStore;
+    exports.clearStoreAll = clearStoreAll;
     exports.clog = clog;
     exports.dateFormat = dateFormat;
     exports.dateNow = dateNow;
@@ -2138,8 +2266,10 @@
     exports.delLeft = delLeft;
     exports.delOther = delOther;
     exports.delRight = delRight;
+    exports.delStoreData = delStoreData;
     exports.downloadBlob = downloadBlob;
     exports.formValidate = formValidate;
+    exports.getAllStore = getAllStore;
     exports.getAlphabets = getAlphabets;
     exports.getArrValue = getArrValue;
     exports.getCopyText = getCopyText;
@@ -2155,6 +2285,7 @@
     exports.getOneObjValue = getOneObjValue;
     exports.getRandom = getRandom;
     exports.getRandomFrom = getRandomFrom;
+    exports.getStoreData = getStoreData;
     exports.getUnion = getUnion;
     exports.getUpperCase = getUpperCase;
     exports.hasKey = hasKey;
@@ -2193,9 +2324,11 @@
     exports.priceFormat = priceFormat;
     exports.replaceItem = replaceItem;
     exports.setCopyText = setCopyText;
+    exports.setElementMainColor = setElementMainColor;
     exports.setPosInsert = setPosInsert;
     exports.setPosRange = setPosRange;
     exports.setRowSpace = setRowSpace;
+    exports.setStoreData = setStoreData;
     exports.toColor = toColor;
     exports.toFormData = toFormData;
     exports.toInt = toInt;
@@ -2206,7 +2339,6 @@
     exports.toSplit = toSplit;
     exports.ulog = ulog;
     exports.uniqueId = uniqueId;
-    exports.utilsStore = utilsStore;
     exports.uuid = uuid;
 
 }));

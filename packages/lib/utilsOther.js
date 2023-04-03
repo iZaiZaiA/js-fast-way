@@ -1,5 +1,12 @@
+import { toColor } from "./utilsTo";
 
-//控制台打印，来自 colorui 作者 - 文晓港
+/**
+ * 控制台打印，来自 colorui 作者 - 文晓港
+ * @param name  用于区分不同的打印
+ * @param tips  打印的提示信息
+ * @param data  打印的数据
+ * @param micro 第一个名称
+ */
 export function clog(name, tips, data, micro)
 {
     const nameList = localStorage.getItem(`clog_name`);
@@ -51,7 +58,12 @@ export function clog(name, tips, data, micro)
     );
 }
 
-//控制台打印
+
+/**
+ * 控制台打印
+ * @param name  名称
+ * @param tips  提示
+ */
 export function ulog(name, tips)
 {
     console.log(
@@ -61,3 +73,31 @@ export function ulog(name, tips)
         'background:transparent'
     )
 }
+
+
+/**
+ * 设置饿了么UI的主色调
+ * @param color 颜色值，默认为 #1ECC95
+ */
+export const setElementMainColor = (color = '#1ECC95') => {
+    const el = document.documentElement
+    el.style.setProperty('--el-color-primary', color)
+    // 设置 css 渐变 变量
+    const numArr = [3, 5, 7, 8, 9]
+    numArr.forEach(item => {
+        let amount = 0
+        if (item === 3) {
+            amount = 0.9
+        } else if (item === 5) {
+            amount = 0.7
+        } else if (item >= 7) {
+            amount = amount = (10 - item) / 10
+        }
+        const val = toColor('#FFFFFF', color, amount)
+        el.style.setProperty(`--el-color-primary-light-${item}`, val)
+    })
+    //生成深主色颜色
+    const val = toColor('#000000', color, 0.9)
+    el.style.setProperty('--el-color-primary-dark-2', val)
+}
+

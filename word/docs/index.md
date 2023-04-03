@@ -1,0 +1,29 @@
+---
+# https://vitepress.dev/reference/default-theme-home-page
+layout: home
+
+hero:
+  name: "Js-Fast-Way"
+  text: "就是个非常简单的\n自用的方法库而已啦"
+  tagline: 并不是用 TypeScript 开发的。JavaScript 万岁！
+  actions:
+    - theme: brand
+      text: 快速开始
+      link: /guide/what-is-jfw
+    - theme: alt
+      text: GitHub
+      link: https://github.com/iZaiZaiA/js-fast-way
+    - theme: alt
+      text: Gitee
+      link: https://gitee.com/izaizaiaa/js-fast-way
+features:
+  - title: 不是 TypeScript
+    details: 因为我不会 TypeScript，也不想学 TS，所以，它不是用 TS 开发的。JavaScript 万岁！！
+  - title: 没有 CDN
+    details: 没有CDN，免费的，懒得弄。收费的，没钱弄。将就玩一下就行了，咱又不是知名大库
+  - title: 开发说明
+    details: 主要就是封装了一些常用的方法，避免重复造轮子，方便自己使用。如果你也觉得有用，那就拿去用吧
+  - title: 为什么做这个？
+    details: 市场上虽然有一大堆别人做好的方法库，但在实际项目中，有些方法，并没有，或不满足业务需求
+---
+

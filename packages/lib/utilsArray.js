@@ -275,3 +275,29 @@ export function getOneObjValue(objName = {}, keyName, keyName2)
         return getObjNullValue(objName[keyName])
     }
 }
+
+
+/**
+ * 拼接二维数组中的ID
+ * @param arr       二维数组
+ * @returns {*}
+ */
+export function arrToId(arr)
+{
+    return arrToKey(arr, 'id')
+}
+
+
+/**
+ * 拼接二维数组中的字段
+ * @param arr       二维数组
+ * @param key       字段名
+ * @returns {*}
+ */
+export function arrToKey(arr, key)
+{
+    return arr.map((obj) => {
+        return obj[key];
+    }).join(",")
+}
+

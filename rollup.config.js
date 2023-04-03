@@ -19,7 +19,7 @@ const ignoredWarningsKey = [...Object.keys(commandLineParameters)];
 const packagingFormat = commandLineParameters.packagingFormat.split(",");
 
 export default {
-    input: 'src/index.js',
+    input: 'packages/index.js',
     output: buildConfig(packagingFormat),
     plugins: [
         json(),

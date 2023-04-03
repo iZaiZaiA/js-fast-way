@@ -44,23 +44,43 @@ export function numberFormat(num)
 
 
 /**
- * 设置复制文本
+ * 设置剪切板文本
  * @param text  文本内容
- * @returns {Promise<void>}
+ * @returns {Promise<unknown>}
  */
 export async function setCopyText(text)
 {
-    return await navigator.clipboard.writeText(text);
+    return new Promise((resolve) => {
+        if (window.navigator?.clipboard) {
+            window.navigator.clipboard.writeText(text).then(() => {
+                resolve(true)
+            }).catch(() => {
+                resolve(false)
+            });
+        } else {
+            resolve(false)
+        }
+    })
 }
 
 
 /**
  * 取剪切板文本
- * @returns {Promise<string>}
+ * @returns {Promise<unknown>}
  */
 export async function getCopyText()
 {
-    return await navigator.clipboard.readText();
+    return new Promise((resolve) => {
+        if (window.navigator?.clipboard) {
+            window.navigator.clipboard.readText().then((text) => {
+                resolve(text)
+            }).catch(() => {
+                resolve(false)
+            });
+        } else {
+            resolve(false)
+        }
+    })
 }
 
 
@@ -94,3 +114,4 @@ export function setPosRange(id, pos)
 {
     document.getElementById(id)?.setSelectionRange(pos,pos)
 }
+
