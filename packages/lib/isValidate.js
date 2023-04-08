@@ -106,28 +106,68 @@ export function isNumord(value)
     return regName.test(value);
 }
 
+
 /**
- * 判断是否为空，空对象，空数组时，会返回true
- * @param value 内容
- * @returns {boolean}
+ * 是否为空，undefined、null、空字符串时，返回true
+ * @param value 数据内容
+ * @returns {boolean} 是或否
  */
-export function isValidateNull(value)
+export function isValueNull(value)
 {
-    if (typeof value == 'boolean') {
-        return false;
-    }
-    if (typeof value == 'number') {
-        return false;
-    }
-    if (value instanceof Array) {
-        if (value.length === 0) return true;
-    } else if (value instanceof Object) {
-        if (JSON.stringify(value) === '{}') return true;
-    } else {
-        return value == 'null' || value == null || value == 'undefined' || value == undefined || value == '';
-    }
-    return false;
+    return typeof value === undefined || value === null || value === '';
 }
+
+/**
+ * 是否为空，采用ES6，最终效果和 isNullAll 一致
+ * @param value 数据内容
+ * @returns {boolean} 是或否
+ */
+export function isNullES(value)
+{
+    return (value??'') === '';
+}
+
+
+/**
+ * 判断是否为空
+ * @param value 数据内容
+ * @returns {boolean} 是或否
+ */
+export function isAllNull(value)
+{
+    if (isNullES(value)) {
+        return true;
+    } else if (isObjNull(value)) {
+        return true;
+    } else if (isArrNull(value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+/**
+ * 判断对象是否为空
+ * @param value 数据内容
+ * @returns {boolean} 是或否
+ */
+export function isObjNull(value)
+{
+    return JSON.stringify(value) === "{}";
+}
+
+
+/**
+ * 判断数组是否为空
+ * @param arr 数据内容
+ * @returns {boolean} 是或否
+ */
+export function isArrNull(arr)
+{
+    return arr.length <= 0;
+}
+
 
 /**
  * 饿了么UI的表单验证

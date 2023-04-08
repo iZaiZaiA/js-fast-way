@@ -1,7 +1,6 @@
 export * from './lib/isType'
 export * from './lib/isValidate'
 export * from './lib/utilsArray'
-export * from './lib/utilsDate'
 export * from './lib/utilsFile'
 export * from './lib/utilsObject'
 export * from './lib/utilsRandom'

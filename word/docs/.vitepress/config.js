@@ -2,6 +2,7 @@ import {defineConfig} from 'vitepress'
 const pkg = require('../../../package.json')
 
 export default defineConfig({
+    lang: 'zh-CN',
     title: "js-fast-way",
     description: "js-fast-way-docs",
     themeConfig: {
@@ -35,6 +36,28 @@ export default defineConfig({
                         { text: '开始', link: '/guide/getting-started' }
                     ]
                 }
+            ],
+            '/api/': [
+                {
+                    text: '类型判断',
+                    link: '/api/isType'
+                },
+                {
+                    text: '内容验证',
+                    link: '/api/validate'
+                },
+                {
+                    text: '数组操作',
+                    link: '/api/array'
+                },
+                {
+                    text: '对象操作',
+                    link: '/api/object'
+                },
+                {
+                    text: '数据转换',
+                    link: '/api/to'
+                },
             ],
         },
         //github

@@ -1,107 +1,57 @@
-import {getObjValue, getObjNullValue} from './isType';
+import { isArray } from './isType';
+
+/**
+ * 创建初始数组
+ * @param value 默认值
+ * @param len   数组长度
+ * @returns {any[]}
+ */
+export function createArr(value = '', len= 1)
+{
+    return new Array(len).fill(value)
+}
+
+
+/**
+ * 数组随机打乱的方法
+ * @param arr 数组
+ * @returns {*}
+ */
+export function arrShuffle(arr)
+{
+    return arr.sort(() => Math.random() - 0.5)
+}
+
 
 /**
  * 一维数组中是否存在
- * @param arr 一维数组
- * @param item 内容
+ * @param arr       一维数组
+ * @param key       内容
+ * @param variable  变量
  * @returns {boolean}
  */
-export function isItem(arr, item)
+export function isArrItem(arr, key, variable)
 {
-    return arr.indexOf(item) !== -1;
+    const index = arr.indexOf(key)
+    variable = index
+    return index !== -1
 }
 
 /**
  * 二维数组中是否存在
- * @param arr 二维数组
- * @param field 字段名
- * @param key   字段值
+ * @param arr       二维数组
+ * @param field     字段名
+ * @param key       字段值
+ * @param variable  变量
  * @returns {boolean}
  */
-export function isIndex(arr, field, key)
+export function isArrIndex(arr, field, key, variable)
 {
-    return getIndex(arr, field, key) !== -1
+    const index = arrIndex(arr, field, key)
+    variable = index
+    return index !== -1
 }
 
-/**
- * 移除数组中指定元素
- * @param arr   数组
- * @param item  元素内容
- * @returns {*[]}
- */
-export function del(arr, item)
-{
-    let index = arr.indexOf(item);
-    let items = [...arr];
-    items.splice(index, 1);
-    return [...items];
-}
-
-/**
- * 移除数组中其它元素
- * @param arr   数组
- * @param item  元素内容
- * @returns {*[]}
- */
-export function delOther(arr, item)
-{
-    let index = arr.indexOf(item);
-    let items = [...arr];
-    for (let i = 0; i < arr.length; i++) {
-        if (index !== i) items.splice(i, 1);
-    }
-    return [...items];
-}
-
-/**
- * 移除数组中左边的元素
- * @param arr   数组
- * @param item  元素内容
- * @returns {*[]}
- */
-export function delLeft(arr, item)
-{
-    let index = arr.indexOf(item);
-    let items = [...arr];
-    for (let i = 0; i < arr.length; i++) {
-        if (index >= i) return;
-        items.splice(i, 1);
-    }
-    return [...items];
-}
-
-/**
- * 移除数组中右边的元素
- * @param arr   数组
- * @param item  元素内容
- * @returns {*[]}
- */
-export function delRight(arr, item)
-{
-    let index = arr.indexOf(item);
-    let items = [...arr];
-    for (let i = 0; i < arr.length; i++) {
-        if (index > i) items.splice(i, 1);
-    }
-    return [...items];
-}
-
-/**
- * 替换数组中两个元素的位置
- * @param arr   数组
- * @param item1 元素1
- * @param item2 元素2
- * @returns {*[]}
- */
-export function replaceItem(arr, item1, item2)
-{
-    let index1 = arr.indexOf(item1);
-    let index2 = arr.indexOf(item2);
-    let items = [...arr];
-    items.splice(index1, 1);
-    items.splice(index2, 0, item1);
-    return [...items];
-}
 
 /**
  * 获取二维数组索引
@@ -110,13 +60,29 @@ export function replaceItem(arr, item1, item2)
  * @param key   字段值
  * @returns {*}
  */
-
-export function getIndex(arr, field, key)
+export function arrIndex(arr, field, key)
 {
     return arr.findIndex((item) => {
         return item[field] == key;
     });
 }
+
+
+/**
+ * 移除数组中指定元素
+ * @param arr   数组
+ * @param item  元素内容
+ * @returns {*[]}
+ */
+export function arrDel(arr, item)
+{
+    let index = arr.indexOf(item);
+    if (index === -1) return arr;
+    let items = [...arr];
+    items.splice(index, 1);
+    return [...items];
+}
+
 
 /**
  * 移除二维数组中指定元素
@@ -125,10 +91,30 @@ export function getIndex(arr, field, key)
  * @param key   字段值
  * @returns {*[]}
  */
-export function delKey(arr, field, key)
+export function arrDelKey(arr, field, key)
 {
-    const index = getIndex(arr, field, key);
-    return del(arr, arr[index]);
+    const index = arrIndex(arr, field, key);
+    if (index === -1) return arr;
+    return arrDel(arr, arr[index]);
+}
+
+
+
+/**
+ * 移除数组中其它元素
+ * @param arr   数组
+ * @param item  元素内容
+ * @returns {*[]}
+ */
+export function arrDelOther(arr, item)
+{
+    let index = arr.indexOf(item);
+    if (index === -1) return arr;
+    let items = [...arr];
+    for (let i = 0; i < arr.length; i++) {
+        if (index !== i) items.splice(i, 1);
+    }
+    return [...items];
 }
 
 /**
@@ -138,10 +124,33 @@ export function delKey(arr, field, key)
  * @param key   字段值
  * @returns {*[]}
  */
-export function delKeyOther(arr, field, key)
+export function arrDelKeyOther(arr, field, key)
 {
-    const index = getIndex(arr, field, key);
-    return delOther(arr, arr[index]);
+    const index = arrIndex(arr, field, key);
+    if (index === -1) return arr;
+    return arrDelOther(arr, arr[index]);
+}
+
+
+/**
+ * 移除数组中左边的元素
+ * @param arr   数组
+ * @param item  元素内容
+ * @returns {*[]}
+ */
+export function arrDelLeft(arr, item)
+{
+    let index = arr.indexOf(item);
+    if (index === -1) return arr;
+    let items = [...arr];
+    for (let i = 0; i < arr.length; i++) {
+        if (index >= i) {
+            break;
+        } else {
+            items.splice(i, 1);
+        }
+    }
+    return [...items];
 }
 
 /**
@@ -151,10 +160,29 @@ export function delKeyOther(arr, field, key)
  * @param key   字段值
  * @returns {*[]}
  */
-export function delKeyLeft(arr, field, key)
+export function arrDelKeyLeft(arr, field, key)
 {
-    const index = getIndex(arr, field, key);
-    return delLeft(arr, arr[index]);
+    const index = arrIndex(arr, field, key);
+    if (index === -1) return arr;
+    return arrDelLeft(arr, arr[index]);
+}
+
+
+/**
+ * 移除数组中右边的元素
+ * @param arr   数组
+ * @param item  元素内容
+ * @returns {*[]}
+ */
+export function arrDelRight(arr, item)
+{
+    let index = arr.indexOf(item);
+    if (index === -1) return arr;
+    let items = [...arr];
+    for (let i = 0; i < arr.length; i++) {
+        if (index > i) items.splice(i, 1);
+    }
+    return [...items];
 }
 
 /**
@@ -164,11 +192,32 @@ export function delKeyLeft(arr, field, key)
  * @param key   字段值
  * @returns {*[]}
  */
-export function delKeyRight(arr, field, key)
+export function arrDelKeyRight(arr, field, key)
 {
-    const index = getIndex(arr, field, key);
-    return delRight(arr, arr[index]);
+    const index = arrIndex(arr, field, key);
+    if (index === -1) return arr;
+    return arrDelRight(arr, arr[index]);
 }
+
+
+/**
+ * 替换数组中两个元素的位置
+ * @param arr   数组
+ * @param item1 元素1
+ * @param item2 元素2
+ * @returns {*[]}
+ */
+export function arrReplace(arr, item1, item2)
+{
+    let index1 = arr.indexOf(item1);
+    let index2 = arr.indexOf(item2);
+    if (index1 === -1 || index2 === -1) return arr;
+    let items = [...arr];
+    items.splice(index1, 1);
+    items.splice(index2, 0, item1);
+    return [...items];
+}
+
 
 /**
  * 得到两个数组的交集, 两个数组的元素为数值或字符串
@@ -176,7 +225,7 @@ export function delKeyRight(arr, field, key)
  * @param arr2 数组2
  * @returns {*[]}
  */
-export function intersection(arr1, arr2)
+export function arrIntersection(arr1, arr2)
 {
     let len = Math.min(arr1.length, arr2.length)
     let i = -1, res = [];
@@ -192,10 +241,11 @@ export function intersection(arr1, arr2)
  * @param arr2 数组2
  * @returns {*[]}
  */
-export function getUnion(arr1, arr2)
+export function arrUnion(arr1, arr2)
 {
     return Array.from(new Set([...arr1, ...arr2]));
 }
+
 
 /**
  * 判断要查询的数组是否至少有一个元素包含在目标数组中
@@ -203,77 +253,9 @@ export function getUnion(arr1, arr2)
  * @param arr2 数组2
  * @returns {*}
  */
-export function hasOneOf(arr1, arr2)
+export function arrSomeOf(arr1, arr2)
 {
     return arr1.some(_ => arr2.indexOf(_) > -1);
-}
-
-/**
- * 数组随机打乱的方法
- * @param arr 数组
- * @returns {*}
- */
-export function arrShuffle(arr)
-{
-    return arr.sort(() => Math.random() - 0.5)
-}
-
-/**
- * 创建初始数组
- * @param len 数组长度
- * @param val 默认值
- * @returns {any[]}
- */
-export function arrFill(len= 1,val = '')
-{
-    return new Array(len).fill(val)
-}
-
-
-/**
- * 数组转对象
- * @param arr 数组数据
- * @param keyName 对象键值名
- * @param objName 对象变量
- * @param arrName 数组变量
- * @param children 子级字段名
- * @returns {Promise<void>}
- * @constructor
- */
-export async function ArrToOneObj(arr, keyName, objName = {}, arrName = [], children = 'children')
-{
-    if (arr && arr.length > 0) {
-        for (const item of arr) {
-            objName[item[keyName]] = {}
-            arrName.push(item[keyName])
-            for (const key of Object.keys(item)) {
-                if (key !== children) {
-                    objName[item[keyName]][key] = item[key]
-                }
-                if (key === children && item[children] && item[children].length > 0) {
-                    await ArrToOneObj(item[children], keyName, objName, arrName, children)
-                }
-            }
-        }
-    }
-}
-
-
-/**
- * 取转换后的对象值
- * @param objName   对象数据
- * @param keyName   对象键值名
- * @param keyName2  字段名
- * @returns {boolean|{}|*|string}
- */
-export function getOneObjValue(objName = {}, keyName, keyName2)
-{
-    if (keyName2) {
-        const objValue = getObjValue(objName[keyName])
-        return objValue[keyName2] || ''
-    } else {
-        return getObjNullValue(objName[keyName])
-    }
 }
 
 
@@ -287,17 +269,27 @@ export function arrToId(arr)
     return arrToKey(arr, 'id')
 }
 
-
 /**
  * 拼接二维数组中的字段
  * @param arr       二维数组
- * @param key       字段名
+ * @param field     字段名
+ * @param join      分隔符
  * @returns {*}
  */
-export function arrToKey(arr, key)
+export function arrToKey(arr, field= 'id', join = ',')
 {
     return arr.map((obj) => {
-        return obj[key];
-    }).join(",")
+        return obj[field];
+    }).join(join)
 }
 
+
+/**
+ * 取数组数据, 如果数据存在，就返回原始数据。如果不存在，就返回 空数组 []
+ * @param value 数据内容
+ * @returns {*|*[]}
+ */
+export function getArrValue(value)
+{
+    return isArray(value) ? value : [];
+}

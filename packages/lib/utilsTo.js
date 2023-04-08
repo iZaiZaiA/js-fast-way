@@ -1,19 +1,3 @@
-import {isValueNull} from "./isType"
-
-
-/**
- * 强转int型
- * @param val   内容
- * @returns {number}
- */
-export function toInt(val)
-{
-    if (isValueNull(val)) return 0;
-    const num = parseInt(val, 0);
-    return Number.isNaN(num) ? -1 : num;
-}
-
-
 /**
  * Json强转为Form类型
  * @param obj   Json对象
@@ -27,29 +11,6 @@ export function toFormData(obj)
     });
     return data;
 }
-
-
-/**
- * 根据逗号联合
- * @param arr   数组
- * @returns {*|string}
- */
-export function toJoin(arr)
-{
-    return arr ? arr.join() : '';
-}
-
-
-/**
- * 根据逗号分隔
- * @param val   内容
- * @returns {string[]|string}
- */
-export function toSplit(val)
-{
-    return val ? String(val).split(',') : '';
-}
-
 
 /**
  * 表单序列化
@@ -72,7 +33,7 @@ export function toSerialize(form)
  * @param ratio 比例
  * @returns {string}
  */
-export function toColor(c1, c2, ratio)
+export function toColor(c1, c2, ratio = 0.5)
 {
     ratio = Math.max(Math.min(Number(ratio), 1), 0)
     let r1 = parseInt(c1.substring(1, 3), 16)
@@ -96,7 +57,7 @@ export function toColor(c1, c2, ratio)
  * @param {number} amount The amount to change the color by
  * @returns {string} The processed part of the color
  */
-export function addLight(color, amount)
+function addLight(color, amount)
 {
     const cc = parseInt(color, 16) + amount;
     const c = cc > 255 ? 255 : cc;
@@ -104,30 +65,30 @@ export function addLight(color, amount)
 }
 
 /**
- * Lightens a 6 char HEX color according to the passed percentage
- * @param {string} color The color to change
- * @param {number} amount The amount to change the color by
- * @returns {string} The processed color represented as HEX
+ * 设置颜色透明度
+ * @param {string} color 要改变的颜色
+ * @param {number} amount 透明度
+ * @returns {string}
  */
-export function toLighten(color, amount)
+export function toLighten(color, amount= 0.5)
 {
     color = color.indexOf('#') >= 0 ? color.substring(1, color.length) : color;
     amount = Math.trunc((255 * amount) / 100);
-    return `#${addLight(color.substring(0, 2), amount)}${addLight(
-        color.substring(2, 4),
-        amount
-    )}${addLight(color.substring(4, 6), amount)}`;
+    const r = addLight(color.substring(0, 2), amount);
+    const g = addLight(color.substring(2, 4), amount);
+    const b = addLight(color.substring(4, 6), amount);
+    return `#${r + g + b}`;
 }
 
 /**
  * 字符串转数组或JSON
- * @param val   字符串
+ * @param value   字符串
  * @returns {boolean|any}
  */
-export function toParse(val)
+export function toParse(value)
 {
     try {
-        return JSON.parse(val)
+        return JSON.parse(value)
     } catch (e) {
         return false;
     }
@@ -139,14 +100,42 @@ export function toParse(val)
  * @param type      margin or padding
  * @returns {string}
  */
-export function setRowSpace(spacing, type = 'margin')
+export function setRowSpace(spacing, type = 'm')
 {
-    const val = toInt(spacing);
-    const int = type === 'margin' ? -2 : 2;
-    if (val !== 0) {
-        const floor = Math.floor(val / int) + (val % 2) + 'px';
+    const int = type === 'm' ? -2 : 2;
+    if (spacing !== 0) {
+        const floor = Math.floor(spacing / int) + (spacing % 2) + 'px';
         return `${type}:${floor}`;
     } else {
         return '';
+    }
+}
+
+
+/**
+ * 数组转对象
+ * @param arr 数组数据
+ * @param field 对象键值名
+ * @param objName 对象变量
+ * @param arrName 数组变量
+ * @param children 子级字段名
+ * @returns {Promise<void>}
+ * @constructor
+ */
+export async function ArrToOneObj(arr, field, objName = {}, arrName = [], children = 'children')
+{
+    if (arr && arr.length > 0) {
+        for (const item of arr) {
+            objName[item[field]] = {}
+            arrName.push(item[field])
+            for (const key of Object.keys(item)) {
+                if (key !== children) {
+                    objName[item[field]][key] = item[key]
+                }
+                if (key === children && item[children] && item[children].length > 0) {
+                    await ArrToOneObj(item[children], field, objName, arrName, children)
+                }
+            }
+        }
     }
 }

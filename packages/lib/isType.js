@@ -17,7 +17,7 @@ export function isType(value, type)
 /**
  * 获取对象数据类型
  * @param obj 数据内容
- * @returns {*|string}
+ * @returns {*|string} boolean、number、string、function、array、date、regExp、undefined、null、object、element
  */
 export function getObjType(obj)
 {
@@ -147,69 +147,4 @@ export function isPromise(value)
 export function isElement(value)
 {
     return isObject(value) && !!value.tagName;
-}
-
-
-/**
- * 是否为空，undefined、null、空字符串时，返回true
- * @param value 数据内容
- * @returns {boolean} 是或否
- */
-export function isNullAll(value)
-{
-    return typeof value === undefined || value === null || value === '';
-}
-
-/**
- * 是否为空，采用ES6，最终效果和 isNullAll 一致
- * @param value 数据内容
- * @returns {boolean} 是或否
- */
-export function isValueNull(value)
-{
-    return (value??'') === '';
-}
-
-
-/**
- * 判断对象是否为空
- * @param value 数据内容
- * @returns {boolean} 是或否
- */
-export function isObjNull(value)
-{
-    return JSON.stringify(value) === "{}";
-}
-
-/**
- * 取数组数据, 如果数据存在，就返回原始数据。如果不存在，就返回 空数组 []
- * @param value 数据内容
- * @returns {*|*[]}
- */
-export function getArrValue(value)
-{
-    return isArray(value) ? value : [];
-}
-
-
-/**
- * 取对象数据, 如果数据存在，就返回原始数据。如果不存在，就返回 空对象 {}
- * @param value 数据内容
- * @returns {*|{}}
- */
-export function getObjValue(value)
-{
-    return isObject(value) ? value : {};
-}
-
-
-/**
- * 取对象数据2, 如果数据存在，返回原始数据。如果不存在，或为空对象时,返回false
- * @param value 数据内容
- * @returns {boolean | {}}
- */
-export function getObjNullValue(value)
-{
-    const res = getObjValue(value);
-    return isObjNull(res) ? false : res;
 }

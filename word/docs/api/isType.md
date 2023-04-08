@@ -1,615 +1,277 @@
 # 类型判断
 
-各种类型的判断和处理方法
+在各种业务场景中，可能会用到的一些类型判断方法
 
 ## 是否为某个类型
 
+用于判断数据内容是否为某个类型
 
 ```javascript
-import { is } from "js-fast-way"
+import { isType } from "js-fast-way"
 
-is({}, 'Object')
+isType({}, 'Object') // true
 ```
 
-### 参数说明
+### value <Badge type="warning" text="必传参数" />
 
-| 参数   | 类型     | 可选值 | 默认值 | 说明                |
-|------|--------|-----|-----|-------------------|
-| val  | -      | -   | -   | 判断的内容，如 `{}`      |
-| type | string | -   | -   | 类型名称，如 `'Object'` |
+- 类型: `-`
+- 说明: `数据内容，如 {}`
+
+### type <Badge type="warning" text="必传参数" />
+
+- 类型: `string`
+- 说明：`要对比的类型`
+- 可选值：`boolean | number | string | function | array | date | regExp | undefined | null | object | 等`
 
 ### 返回内容
 
-| 类型      | 说明                               |
-|---------|----------------------------------|
-| Boolean | 和传递的类型一致，就返回 `true`，否则返回 `false` |
+- 类型: `Boolean`
+- 说明：`是否和传递的类型一致`
+- 返回值：`true | false`
 
 
 
+## 对象数据类型
 
-## 取数据类型
+获取对象数据类型， 根据 `[object *]` 获取该对象的数据类型， 如 `[object Boolean]` 返回 `boolean`
 
-`getObjType()` `支持版本：V0.0.2`
+```javascript
+import { getObjType } from "js-fast-way"
 
-### 参数说明
+getObjType({}) // object
+```
 
-| 参数  | 类型  | 可选值 | 默认值 | 说明  |
-|-----|-----|-----|-----|-----|
-| val | -   | -   | -   | 内容  |
+### obj <Badge type="warning" text="必传参数" />
+
+- 类型: `object`
+- 说明：`对象数据内容`
 
 ### 返回内容
 
-| 类型     | 说明        |
-|--------|-----------|
-| String | 返回所属的类型名称 |
+- 类型: `String`
+- 说明：`返回所属的类型名称`
+- 返回值：`boolean | number | string | function | array | date | regExp | undefined | null | object | element`
 
-### code示例
+
+## 是否为字符串
 
 ```javascript
-const { getObjType } = isType()
+import { isString } from "js-fast-way"
 
-getObjType({})
+isString('vue-utils-plus') // true
 ```
 
+### value <Badge type="warning" text="必传参数" />
 
-## 是否为Null
-
-`isNull()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明  |
-|-----|-----|-----|-----|-----|
-| val | -   | -   | -   | 内容  |
+- 类型: `-`
+- 说明: `数据内容`
 
 ### 返回内容
 
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```javascript
-const { isNull } = isType()
-
-isNull(null)
-```
-
-
-## 是否为未定义和Null
-
-`isNullAndUnDef()` `支持版本：V0.0.2`
-
-`isNullOrUnDef()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明  |
-|-----|-----|-----|-----|-----|
-| val | -   | -   | -   | 内容  |
-
-### 返回内容
-
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```javascript
-const { isNullAndUnDef, isNullOrUnDef } = isType()
-
-let obj = {key: null}
-
-isNullAndUnDef(obj.key)
-isNullOrUnDef(obj.key)
-```
-
-
-## 是否为空
-
-`isNullAll()` `支持版本：V0.0.2`
-
-`isValueNull()` `支持版本：V0.0.2`
-
-是否为 `undefined`  `null`  `''`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明  |
-|-----|-----|-----|-----|-----|
-| val | -   | -   | -   | 内容  |
-
-### 返回内容
-
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```javascript
-const { isNullAll, isValueNull } = isType()
-
-let obj = {}
-
-isNullAll(obj.key)
-
-//是否为空，采用ES6，最终效果和 isNullAll 一致
-isValueNull(obj.key)
-```
-
-
-## 是否为函数
-
-`isFunction()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
-
-### 返回内容
-
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```javascript
-const { isFunction } = isType()
-
-function objFun() {}
-
-isFunction(objFun)
-```
-
-
-## 是否为空对象
-
-`isObjNull()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
-
-### 返回内容
-
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```javascript
-const { isObjNull } = isType()
-
-isObjNull({})
-```
-
-# 是否已定义
-
-`isDef()` `支持版本：V0.0.2`
-
-`isUnDef()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
-
-### 返回内容
-
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```javascript
-const { isDef, isUnDef } = isType()
-
-let obj = {}
-
-isDef(obj.key)
-isUnDef(obj.key)
-```
-
-
-## 是否为时间
-
-`isDate()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
-
-### 返回内容
-
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```javascript
-const { isDate } = isType()
-
-isDate('2022-07-29')
-```
+- 类型: `Boolean`
+- 说明：`是否为字符串类型`
+- 返回值：`true | false`
 
 
 ## 是否为数值
 
-`isNumber()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
-
-### 返回内容
-
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
 ```javascript
-const { isNumber } = isType()
+import { isNumber } from "js-fast-way"
 
-isNumber(2022)
+isNumber(2022) // true
 ```
 
+### value <Badge type="warning" text="必传参数" />
 
-## 是否为异步函数
-
-`isAsyncFunction()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
+- 类型: `-`
+- 说明: `数据内容`
 
 ### 返回内容
 
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
+- 类型: `Boolean`
+- 说明：`是否为数值类型`
+- 返回值：`true | false`
 
-### code示例
+
+## 是否为布尔
 
 ```javascript
-const { isAsyncFunction } = isType()
+import { isBoolean } from "js-fast-way"
+
+isBoolean(true) // true
+```
+
+### value <Badge type="warning" text="必传参数" />
+
+- 类型: `-`
+- 说明: `数据内容`
+
+### 返回内容
+
+- 类型: `Boolean`
+- 说明：`是否为布尔类型`
+- 返回值：`true | false`
+
+
+## 是否为数组
+
+```javascript
+import { isArray } from "js-fast-way"
+
+isArray([]) // true
+```
+
+### value <Badge type="warning" text="必传参数" />
+
+- 类型: `-`
+- 说明: `数据内容`
+
+### 返回内容
+
+- 类型: `Boolean`
+- 说明：`是否为数组类型`
+- 返回值：`true | false`
+
+
+
+## 是否为对象
+
+```javascript
+import { isObject } from "js-fast-way"
+
+isObject({}) // true
+```
+
+### value <Badge type="warning" text="必传参数" />
+
+- 类型: `-`
+- 说明: `数据内容`
+
+### 返回内容
+
+- 类型: `Boolean`
+- 说明：`是否为对象类型`
+- 返回值：`true | false`
+
+
+## 是否为时间
+
+```javascript
+import { isDate } from "js-fast-way"
+
+isDate('2022-07-29')
+```
+
+### value <Badge type="warning" text="必传参数" />
+
+- 类型: `-`
+- 说明: `数据内容`
+
+### 返回内容
+
+- 类型: `Boolean`
+- 说明：`是否为时间类型`
+- 返回值：`true | false`
+
+
+## 是否为 function
+
+```javascript
+import { isFunction } from "js-fast-way"
+
+function objFun() {
+
+}
+isFunction(objFun) // true
+```
+
+### func <Badge type="warning" text="必传参数" />
+
+- 类型: `-`
+- 说明: `数据内容`
+
+### 返回内容
+
+- 类型: `Boolean`
+- 说明：`是否为 function 类型`
+- 返回值：`true | false`
+
+
+
+## 是否为 async
+
+```javascript
+import { isAsyncFunction } from "js-fast-way"
 
 async function AsyncFunction() {
     return true
 }
 
-isAsyncFunction(AsyncFunction)
+isAsyncFunction(AsyncFunction) // true
 ```
 
+### func <Badge type="warning" text="必传参数" />
 
-## 是否为Promise
-
-`isPromise()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
+- 类型: `-`
+- 说明: `数据内容`
 
 ### 返回内容
 
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
+- 类型: `Boolean`
+- 说明：`是否为async类型`
+- 返回值：`true | false`
 
-### code示例
+
+## 是否为 Promise
 
 ```javascript
-const { isPromise } = isType()
+import { isPromise } from "js-fast-way"
 
 let promiseDate = new Promise( (resolve, reject) => {
     resolve(true);
 });
 
-isPromise(promiseDate)
+isPromise(promiseDate) // true
 ```
 
+### value <Badge type="warning" text="必传参数" />
 
-## 是否为字符串
-
-`isString()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
+- 类型: `-`
+- 说明: `数据内容`
 
 ### 返回内容
 
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```javascript
-const { isString } = isType()
-
-isString('vue-utils-plus')
-```
-
-
-## 是否为Boolean
-
-`isBoolean()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
-
-### 返回内容
-
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```javascript
-const { isBoolean } = isType()
-
-isBoolean(true)
-```
-
-
-## 是否为数组
-
-`isArray()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
-
-### 返回内容
-
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```javascript
-const { isArray } = isType()
-
-isArray([])
-```
-
-
-## 是否为对象
-
-`isObject()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
-
-### 返回内容
-
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```javascript
-const { isObject } = isType()
-
-isObject({})
-```
-
-
-## 是否客户端
-
-`isClient()` `支持版本：V0.0.2`
-
-### 返回内容
-
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```javascript
-const { isClient } = isType()
-
-isClient()
-```
-
-
-## 是否为浏览器
-
-`isWindow()` `支持版本：V0.0.2`
-
-### 返回内容
-
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```javascript
-const { isWindow } = isType()
-
-isWindow()
-```
+- 类型: `Boolean`
+- 说明：`是否为Promise类型`
+- 返回值：`true | false`
 
 
 ## 是否为元素
 
-`isElement()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
-
-### 返回内容
-
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```html
+```vue
 <template>
     <div ref="idRef">元素</div>
 </template>
 
 <script setup>
 import {ref, onMounted} from 'vue'
-
-import { isType } from "vue-utils-plus"
-const { isElement } = isType()
+import { isElement } from "js-fast-way"
 
 const idRef = ref(null)
 
 onMounted(() => {
-    isElement(idRef.value)
+    isElement(idRef.value) // true
 })
 </script>
 ```
 
+### value <Badge type="warning" text="必传参数" />
 
-## 是否为图片节点
-
-`isImageDom()` `支持版本：V0.0.2`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
+- 类型: `-`
+- 说明: `数据内容`
 
 ### 返回内容
 
-| 类型      | 说明                       |
-|---------|--------------------------|
-| Boolean | 是就返回 `true`，否则返回 `false` |
-
-### code示例
-
-```html
-<template>
-    <img src="xxxxx.png" ref="idRef" alt="">元素</img>
-</template>
-
-<script setup>
-import {ref, onMounted} from 'vue'
-
-import { isType } from "vue-utils-plus"
-const { isImageDom } = isType()
-
-const idRef = ref(null)
-
-onMounted(() => {
-    isImageDom(idRef.value)
-})
-</script>
-```
-
-
-## 取数组数据
-
-`getArrValue()` `支持版本：V0.0.6`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
-
-### code示例
-
-```javascript
-const { getArrValue } = isType()
-// 比如，后端接口返回的一个数据。
-// 但我们无法预知，我们要取的data是否为数组
-// 有可能在某些情况下，不是数组。
-const res = {}
-// 如果数据存在，就返回原始数据 res.data.data
-// 如果不存在，就返回 空数组 []
-getArrValue(res.data.data)
-```
-
-
-## 取对象数据
-
-`getObjValue()` `支持版本：V0.0.6`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
-
-### code示例
-
-```javascript
-const { getObjValue } = isType()
-// 比如，后端接口返回的一个数据。
-// 但我们无法预知，我们要取的data是否为对象
-// 有可能在某些情况下，不是对象。
-const res = {}
-// 如果数据存在，就返回原始数据 res.data.data
-// 如果不存在，就返回 空对象 {}
-getObjValue(res.data.data)
-```
-
-
-## 取对象数据2
-
-`getObjNullValue()` `支持版本：V0.0.6`
-
-### 参数说明
-
-| 参数  | 类型  | 可选值 | 默认值 | 说明    |
-|-----|-----|-----|-----|-------|
-| val | -   | -   | -   | 判断的内容 |
-
-### code示例
-
-```javascript
-const { getObjNullValue } = isType()
-// 本质上，跟 getObjValue 一样，只是多了一个处理。
-const res = {}
-// 如果数据存在，返回原始数据
-// 如果不存在，或为空对象时，返回 false
-getObjNullValue(res.data.data)
-```
-
+- 类型: `Boolean`
+- 说明：`是否为Element类型`
+- 返回值：`true | false`

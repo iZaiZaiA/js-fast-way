@@ -1,3 +1,5 @@
+import { isObject } from "./isType";
+import { isObjNull } from "./isValidate";
 
 /**
  * 对象深拷贝
@@ -37,10 +39,8 @@ export function deepClone(obj, cache = new Map())
  * @param key   字段
  * @returns {number|boolean}
  */
-export function hasKey(obj, key)
+export function objHasKey(obj, key)
 {
-    //如果传入第二个参数key，则是判断这个obj对象是否存在key这个属性
-    //如果没有传入key这个参数，则判断obj对象是否有键值对
     if (key) return key in obj;
     let keysArr = Object.keys(obj);
     return keysArr.length;
@@ -61,3 +61,45 @@ export function objEqual(obj1, obj2)
     else if (keysArr1.length === 0 && keysArr2.length === 0) return true
     else return !keysArr1.some(key => obj1[key] != obj2[key])
 }
+
+
+/**
+ * 取对象数据, 如果数据存在，就返回原始数据。如果不存在，就返回 空对象 {}
+ * @param value 数据内容
+ * @returns {*|{}}
+ */
+export function getObjValue(value)
+{
+    return isObject(value) ? value : {};
+}
+
+
+/**
+ * 取对象数据2, 如果数据存在，返回原始数据。如果不存在，或为空对象时,返回false
+ * @param value 数据内容
+ * @returns {boolean | {}}
+ */
+export function getObjVal(value)
+{
+    const res = getObjValue(value);
+    return isObjNull(res) ? false : res;
+}
+
+
+/**
+ * 取转换后的对象值
+ * @param obj       对象数据
+ * @param field     对象键值名
+ * @param key       字段名
+ * @returns {boolean|{}|*|string}
+ */
+export function getToObjVal(obj = {}, field, key)
+{
+    if (key) {
+        const objValue = getObjValue(obj[field])
+        return objValue[key] || ''
+    } else {
+        return getObjVal(obj[field])
+    }
+}
+
