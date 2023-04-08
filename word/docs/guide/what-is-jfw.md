@@ -23,6 +23,6 @@ js-fast-way 是开源的，可以拿去二开，也可以用于商业项目中�
 
 ## vue-utils-plus ？
 
-vue-utils-plus 是 js-fast-way 的前身，是基于vue 和 vite 开发，但后来发现，实际上没用的vue的东西，并且，在调用方法函数时，没有参数提示，所以，就重写了 js-fast-way，基于原生js开发，rollup 打包编译。
+vue-utils-plus 是 js-fast-way 的前身，是基于vue 和 vite 开发，但后来发现，实际上没用vue的东西，并且，在调用方法函数时，没有参数提示，所以，就重写了 js-fast-way，基于原生js开发，rollup 打包编译。
 
 后续 vue-utils-plus 不再更新维护
