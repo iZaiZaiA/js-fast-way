@@ -460,3 +460,41 @@ getArrValue('1111') // []
 - 类型: `Array`
 - 返回值：`返回数组数据`
 
+
+
+## 取数组中的值
+
+```javascript
+import { arrKeyValue } from "js-fast-way"
+
+const arr = [
+    {id: 1, name: '张三'},
+    {id: 2, name: '李四'},
+    {id: 3, name: '王五'}
+]
+arrKeyValue(arr, 'id', 'name', 2) // '李四'
+```
+
+### arr <Badge type="warning" text="必传参数" />
+
+- 类型: `Array`
+- 说明: `二维数组`
+
+### field <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `字段名`
+
+### key <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `内容 或 字段值`
+
+### value <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `字段值`
+
+### 返回内容
+
+- 类型: `-`

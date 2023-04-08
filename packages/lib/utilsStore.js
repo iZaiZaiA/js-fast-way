@@ -1,4 +1,19 @@
-import {isValidateNull} from "./isValidate"
+import { isAllNull } from "./isValidate"
+
+/**
+ * 保存缓存
+ * @param key       缓存名称
+ * @param value     缓存内容
+ * @param session   session模式， 默认为 false
+ */
+export function setStoreData(key, value, session = false)
+{
+    return setStore({
+        name: key,
+        content: value,
+        session: session
+    })
+}
 
 
 /**
@@ -13,21 +28,6 @@ export function getStoreData(key, debug = false, session = false)
     return getStore({
         name: key,
         debug: debug,
-        session: session
-    })
-}
-
-/**
- * 保存缓存
- * @param key       缓存名称
- * @param value     缓存内容
- * @param session   session模式， 默认为 false
- */
-export function setStoreData(key, value, session = false)
-{
-    return setStore({
-        name: key,
-        content: value,
         session: session
     })
 }
@@ -48,7 +48,7 @@ export function delStoreData(key, session = false)
 
 
 /**
- * 获取全部localStorage
+ * 获取全部缓存
  * @param session    session模式， 默认为 false
  * @returns {*[]}
  */
@@ -94,7 +94,7 @@ function getStore({name, debug = false, session = false})
     } else {
         obj = window.localStorage.getItem(name);
     }
-    if (isValidateNull(obj)) {
+    if (isAllNull(obj)) {
         return;
     }
     try {
@@ -156,7 +156,7 @@ function removeStore({name, session = false})
 
 
 /**
- * 清空全部localStorage
+ * 清空缓存
  * @param session   session模式， 默认为 false
  */
 export function clearStore(session = false)
@@ -170,7 +170,7 @@ export function clearStore(session = false)
 
 
 /**
- * 清空全部localStorage
+ * 清空全部缓存
  */
 export function clearStoreAll()
 {

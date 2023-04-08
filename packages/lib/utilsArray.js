@@ -293,3 +293,21 @@ export function getArrValue(value)
 {
     return isArray(value) ? value : [];
 }
+
+
+/**
+ * 取数组中的值
+ * @param arr       数组
+ * @param field     字段名
+ * @param key       字段名2
+ * @param value     字段值
+ * @returns {*|string}
+ */
+const arrKeyValue = (arr, field, key, value) => {
+    if (value > 0) {
+        const index = arrIndex(arr, field, value)
+        return arr[index][key] ?? value
+    } else {
+        return ''
+    }
+}

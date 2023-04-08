@@ -211,3 +211,54 @@ let aaa = {
 - 类型: `String`
 - 默认值：`children`
 - 说明：`子级字段名`
+
+
+
+## 金额处理
+
+保留几位小数，不四舍五入(关于金额数值的处理用这个方法,以防金额计算出错)
+
+```javascript
+import { priceFormat } from "js-fast-way"
+
+priceFormat(20)   // 20.00
+```
+
+### price <Badge type="warning" text="必传参数" />
+
+- 类型: `Number`
+- 说明：`金额`
+
+### decimal <Badge type="tip" text="非必传" />
+
+- 类型: `String`
+- 默认值：`2`
+- 说明：`小数点位数`
+
+### 返回内容
+
+- 类型: `String`
+- 返回值：`转换后的数据`
+
+
+
+## 数字格式化
+
+转化为 K 或 W
+
+```javascript
+import { numberFormat } from "js-fast-way"
+
+numberFormat(20000)   // 2W
+```
+
+### num <Badge type="warning" text="必传参数" />
+
+- 类型: `Number`
+- 说明：`数字内容`
+
+### 返回内容
+
+- 类型: `String`
+- 返回值：`转换后的数据`
+

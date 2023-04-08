@@ -3,7 +3,7 @@
  * 生成UUID
  * @returns {string}
  */
-export function uuid()
+export function getUUID()
 {
     return crypto.randomUUID();
 }
@@ -45,7 +45,7 @@ export function getRandom(num= 8, type)
  * @param num   长度
  * @returns {string}
  */
-export function getNumber(num)
+export function getNumber(num = 8)
 {
     return getRandom(num, NUM);
 }
@@ -56,7 +56,7 @@ export function getNumber(num)
  * @param num   长度
  * @returns {string}
  */
-export function getLowerCase(num)
+export function getLowerCase(num = 8)
 {
     return getRandom(num, XEU);
 }
@@ -67,7 +67,7 @@ export function getLowerCase(num)
  * @param num   长度
  * @returns {string}
  */
-export function getUpperCase(num)
+export function getUpperCase(num = 8)
 {
     return getRandom(num, DEU);
 }
@@ -78,7 +78,7 @@ export function getUpperCase(num)
  * @param num   长度
  * @returns {string}
  */
-export function getNumberLower(num)
+export function getNumberLower(num = 8)
 {
     return getRandom(num, NUM + XEU);
 }
@@ -89,7 +89,7 @@ export function getNumberLower(num)
  * @param num   长度
  * @returns {string}
  */
-export function getNumberUpper(num)
+export function getNumberUpper(num = 8)
 {
     return getRandom(num, NUM + DEU);
 }
@@ -99,7 +99,7 @@ export function getNumberUpper(num)
  * @param num   长度
  * @returns {string}
  */
-export function getAlphabets(num)
+export function getAlphabets(num = 8)
 {
     return getRandom(num, XEU + DEU);
 }

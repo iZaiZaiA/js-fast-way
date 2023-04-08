@@ -32,7 +32,7 @@ $ yarn add -D js-fast-way
 在需要的地方，引入所需的方法函数名即可。
 
 ```js
-import { isObjNull } from "vue-utils-plus"
+import { isObjNull } from "js-fast-way"
 
 let obj = {}
 console.log(isObjNull(obj))

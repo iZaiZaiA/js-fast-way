@@ -114,11 +114,11 @@ export function setRowSpace(spacing, type = 'm')
 
 /**
  * 数组转对象
- * @param arr 数组数据
- * @param field 对象键值名
- * @param objName 对象变量
- * @param arrName 数组变量
- * @param children 子级字段名
+ * @param arr       数组数据
+ * @param field     对象键值名
+ * @param objName   对象变量
+ * @param arrName   数组变量
+ * @param children  子级字段名
  * @returns {Promise<void>}
  * @constructor
  */
@@ -137,5 +137,49 @@ export async function ArrToOneObj(arr, field, objName = {}, arrName = [], childr
                 }
             }
         }
+    }
+}
+
+
+/**
+ * 金额处理:保留几位小数，不四舍五入(关于金额数值的处理用这个方法,以防金额计算出错)
+ * @param price     金额
+ * @param decimal   小数点位数 默认2位
+ * @returns {number|string}
+ */
+export function priceFormat(price, decimal = 2)
+{
+    if (price) {
+        let price = (price * 100) / 100;
+        return parseFloat(price)
+            .toFixed(decimal)
+            .toString()
+            .split('')
+            .reverse()
+            .join('')
+            .replace(/(\d{3})/g, '$1,')
+            .replace(/\,$/, '')
+            .split('')
+            .reverse()
+            .join('')
+    } else {
+        return 0;
+    }
+}
+
+
+/**
+ * 数字格式化，转化为 K 或 W
+ * @param num   数字内容
+ * @returns {*|string}
+ */
+export function numberFormat(num)
+{
+    if (num > 1000 && num < 10000) {
+        return Math.floor(num / 1000) + 'K';
+    } else if (num > 10000) {
+        return Math.floor(num / 10000) + 'W';
+    } else {
+        return num;
     }
 }

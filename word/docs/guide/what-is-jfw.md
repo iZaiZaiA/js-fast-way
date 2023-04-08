@@ -8,6 +8,9 @@
 
 ## API文档
 
+- **[API 文档](https://js-fast-way.vercel.app/)**
+- **[API 文档](https://jfw.izaizai.cn/)**
+
 为了方便自己查询和使用相关方法函数，我为此搞了这么一个文档，文档挂在 [Vercel](https://vercel.com/) 上，理论上会存在很久的时间，方便自己使用，也方便大家使用。
 
 ## 开源
