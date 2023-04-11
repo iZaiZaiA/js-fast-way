@@ -30,7 +30,7 @@ export function arrShuffle(arr)
  * @param variable  变量
  * @returns {boolean}
  */
-export function isArrItem(arr, key, variable)
+export function isArrItem(arr, key, variable = -1)
 {
     const index = arr.indexOf(key)
     variable = index
@@ -45,7 +45,7 @@ export function isArrItem(arr, key, variable)
  * @param variable  变量
  * @returns {boolean}
  */
-export function isArrIndex(arr, field, key, variable)
+export function isArrIndex(arr, field, key, variable = -1)
 {
     const index = arrIndex(arr, field, key)
     variable = index
@@ -303,7 +303,8 @@ export function getArrValue(value)
  * @param value     字段值
  * @returns {*|string}
  */
-const arrKeyValue = (arr, field, key, value) => {
+export function arrKeyValue(arr, field, key, value)
+{
     if (value > 0) {
         const index = arrIndex(arr, field, value)
         return arr[index][key] ?? value

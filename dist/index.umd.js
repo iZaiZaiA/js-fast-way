@@ -1072,9 +1072,10 @@
      * @param variable  变量
      * @returns {boolean}
      */
-    function isArrItem(arr, key, variable)
+    function isArrItem(arr, key, variable = -1)
     {
         const index = arr.indexOf(key);
+        variable = index;
         return index !== -1
     }
 
@@ -1086,9 +1087,10 @@
      * @param variable  变量
      * @returns {boolean}
      */
-    function isArrIndex(arr, field, key, variable)
+    function isArrIndex(arr, field, key, variable = -1)
     {
         const index = arrIndex(arr, field, key);
+        variable = index;
         return index !== -1
     }
 
@@ -1332,6 +1334,25 @@
     function getArrValue(value)
     {
         return isArray(value) ? value : [];
+    }
+
+
+    /**
+     * 取数组中的值
+     * @param arr       数组
+     * @param field     字段名
+     * @param key       字段名2
+     * @param value     字段值
+     * @returns {*|string}
+     */
+    function arrKeyValue(arr, field, key, value)
+    {
+        if (value > 0) {
+            const index = arrIndex(arr, field, value);
+            return arr[index][key] ?? value
+        } else {
+            return ''
+        }
     }
 
     /**
@@ -1822,6 +1843,26 @@
         }
     }
 
+
+    /**
+     * 计算两个日期之间的差距
+     * @param date1 日期时间1，时间戳格式
+     * @param date2 日期时间2，时间戳格式
+     * @returns {{leave1: number, hours: number, seconds: number, leave2: number, leave3: number, minutes: number, days: number}}
+     */
+    function calcDate(date1, date2)
+    {
+        let date3 = date2 - date1;
+        let days = Math.floor(date3 / (24 * 3600 * 1000));
+        let leave1 = date3 % (24 * 3600 * 1000); //计算天数后剩余的毫秒数
+        let hours = Math.floor(leave1 / (3600 * 1000));
+        let leave2 = leave1 % (3600 * 1000); //计算小时数后剩余的毫秒数
+        let minutes = Math.floor(leave2 / (60 * 1000));
+        let leave3 = leave2 % (60 * 1000); //计算分钟数后剩余的毫秒数
+        let seconds = Math.round(date3 / 1000);
+        return {leave1, leave2, leave3, days: days, hours: hours, minutes: minutes, seconds: seconds}
+    }
+
     /**
      * 保存缓存
      * @param key       缓存名称
@@ -2199,6 +2240,7 @@
     exports.arrDelRight = arrDelRight;
     exports.arrIndex = arrIndex;
     exports.arrIntersection = arrIntersection;
+    exports.arrKeyValue = arrKeyValue;
     exports.arrReplace = arrReplace;
     exports.arrShuffle = arrShuffle;
     exports.arrSomeOf = arrSomeOf;
@@ -2206,6 +2248,7 @@
     exports.arrToKey = arrToKey;
     exports.arrUnion = arrUnion;
     exports.base64ToFile = base64ToFile;
+    exports.calcDate = calcDate;
     exports.clearStore = clearStore;
     exports.clearStoreAll = clearStoreAll;
     exports.clog = clog;

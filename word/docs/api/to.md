@@ -262,3 +262,39 @@ numberFormat(20000)   // 2W
 - 类型: `String`
 - 返回值：`转换后的数据`
 
+
+
+## 计算日期时间
+
+计算两个日期之间的差距
+
+```javascript
+import { calcDate } from "js-fast-way"
+
+calcDate('日期1', '日期2')
+```
+
+### date1 <Badge type="warning" text="必传参数" />
+
+- 类型: `Number`
+- 说明：`时间戳格式`
+
+### date2 <Badge type="warning" text="必传参数" />
+
+- 类型: `Number`
+- 说明：`时间戳格式`
+
+### 返回内容
+
+- 类型: `Object`
+
+| 参数名     | 说明           |
+|---------|--------------|
+| leave1  | 计算天数后剩余的毫秒数  |
+| leave2  | 计算小时数后剩余的毫秒数 |
+| leave3  | 计算分钟数后剩余的毫秒数 |
+| days    | 剩余天数         |
+| hours   | 剩余小时         |
+| minutes | 剩余分钟         |
+| seconds | 剩余秒          |
+
