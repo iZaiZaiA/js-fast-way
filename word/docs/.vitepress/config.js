@@ -3,6 +3,7 @@ import {chineseSearchOptimize, pagefindPlugin} from 'vitepress-plugin-pagefind'
 const pkg = require('../../../package.json')
 
 export default defineConfig({
+    //base: '/js-fast-way/',
     lang: 'zh-cn',
     title: "js-fast-way",
     description: "js-fast-way-docs",
