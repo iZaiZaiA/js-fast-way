@@ -990,10 +990,10 @@ function isAllNull(value)
 {
     if (isNullES(value)) {
         return true;
-    } else if (isObjNull(value)) {
-        return true;
-    } else if (isArrNull(value)) {
-        return true;
+    } else if (isObject(value)) {
+        return JSON.stringify(value) === "{}";
+    } else if (isArray(value)) {
+        return value.length <= 0;
     } else {
         return false;
     }
@@ -1007,7 +1007,11 @@ function isAllNull(value)
  */
 function isObjNull(value)
 {
-    return JSON.stringify(value) === "{}";
+    if (isObject(value)) {
+        return JSON.stringify(value) === "{}";
+    } else {
+        return true //返回true，定义为空
+    }
 }
 
 
@@ -1018,7 +1022,11 @@ function isObjNull(value)
  */
 function isArrNull(arr)
 {
-    return arr.length <= 0;
+    if (isArray(arr)) {
+        return arr.length <= 0;
+    } else {
+        return true //返回true，定义为空
+    }
 }
 
 
@@ -1341,9 +1349,9 @@ function getArrValue(value)
  */
 function arrKeyValue(arr, field, key, value)
 {
-    if (value > 0) {
+    if (value) {
         const index = arrIndex(arr, field, value);
-        return arr[index][key] ?? value
+        return arr[index][key] ?? ''
     } else {
         return ''
     }
@@ -2174,45 +2182,38 @@ function ulog(name, tips)
  */
 function clog(micro, name, tips, data, )
 {
-    const nameList = localStorage.getItem(`clog_name`);
+    let nameList = getStoreData('clog_name', false, true);
     if (!nameList) {
-        localStorage.setItem(`clog_name`, [name]);
+        setStoreData('clog_name', [name], true);
     } else {
         const nameListArr = nameList.split(`,`);
         if (nameListArr.indexOf(name) === -1) {
             nameListArr.push(name);
-            localStorage.setItem(`clog_name`, nameListArr.join(`,`));
+            setStoreData('clog_name', nameListArr.join(`,`), true);
         }
     }
     // 从本地存储中根据name获取到index
-    let index = localStorage.getItem(`clog_${name}_index`);
+    let index = getStoreData(`clog_${name}_index`, false, true);
     // 如果index不存在，说明是第一次打印，那么就将index设置为1
     if (!index) {
         index = 1;
-        localStorage.setItem(`clog_${name}_index`, index);
     } else {
         // 如果index存在，说明不是第一次打印，那么就将index转换为数字类型
         index = Number(index) + 1;
-        localStorage.setItem(`clog_${name}_index`, index);
     }
-    let colorList = localStorage.getItem(`clog_color`);
+    setStoreData(`clog_${name}_index`, index, true);
+    let colorList = getStoreData('clog_color', false, true);
     if (!colorList) {
         colorList = ['#fbbd08', '#f37b1d', '#e54d42', '#e03997', '#b745cb', '#8044de', '#0081ff', '#37c0fe', '#6eb92b', '#8dc63f', '#8799a3', '#a5673f'];
     } else {
         colorList = colorList.split(`,`);
     }
-    let color = localStorage.getItem(`clog_${name}_color`);
+    let color = getStoreData(`clog_${name}_color`, false, true);
     if (!color) {
         color = colorList[0];
         colorList.splice(0, 1);
-        localStorage.setItem(`clog_color`, colorList);
-        localStorage.setItem(`clog_${name}_color`, color);
-    }
-    if (typeof data === 'object') {
-        data = JSON.parse(JSON.stringify(data));
-    }
-    if (typeof data === 'undefined') {
-        data = ' ';
+        setStoreData('clog_color', colorList, true);
+        setStoreData(`clog_${name}_color`, color, true);
     }
     console.log(
         `%c ${micro} %c ${name} %c ${tips} `,

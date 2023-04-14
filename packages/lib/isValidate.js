@@ -1,4 +1,5 @@
 import {verifyCardNum} from "../idCard/verify";
+import {isArray, isObject} from "./isType.js";
 
 /**
  * 验证网址是否合法
@@ -137,10 +138,10 @@ export function isAllNull(value)
 {
     if (isNullES(value)) {
         return true;
-    } else if (isObjNull(value)) {
-        return true;
-    } else if (isArrNull(value)) {
-        return true;
+    } else if (isObject(value)) {
+        return JSON.stringify(value) === "{}";
+    } else if (isArray(value)) {
+        return value.length <= 0;
     } else {
         return false;
     }
@@ -154,7 +155,11 @@ export function isAllNull(value)
  */
 export function isObjNull(value)
 {
-    return JSON.stringify(value) === "{}";
+    if (isObject(value)) {
+        return JSON.stringify(value) === "{}";
+    } else {
+        return true //返回true，定义为空
+    }
 }
 
 
@@ -165,7 +170,11 @@ export function isObjNull(value)
  */
 export function isArrNull(arr)
 {
-    return arr.length <= 0;
+    if (isArray(arr)) {
+        return arr.length <= 0;
+    } else {
+        return true //返回true，定义为空
+    }
 }
 
 

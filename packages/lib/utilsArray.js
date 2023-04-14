@@ -305,9 +305,9 @@ export function getArrValue(value)
  */
 export function arrKeyValue(arr, field, key, value)
 {
-    if (value > 0) {
+    if (value) {
         const index = arrIndex(arr, field, value)
-        return arr[index][key] ?? value
+        return arr[index][key] ?? ''
     } else {
         return ''
     }
