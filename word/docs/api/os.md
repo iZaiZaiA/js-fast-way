@@ -3,6 +3,30 @@
 在各种业务场景中，可能会用到的系统元素操作
 
 
+## 设置图片颜色
+
+```javascript
+import { setImageColor } from "js-fast-way"
+
+const {rgb, color, result} = setImageColor('#1ECC95') //{rgb, color, result}
+
+document.getElementById('image-box').style.backgroundColor = color.toString();
+document.getElementById('image').style.filter = result.filter;
+
+```
+
+### value <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `十六进制的颜色值`
+
+### 返回内容
+
+- 类型: `Object`
+- 说明: `转换后的相关数据`
+
+
+
 ## 设置剪切板文本
 
 在本地调试使用会报错，需要部署到服务器上，并且是`https`才能正常使用

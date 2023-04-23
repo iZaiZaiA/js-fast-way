@@ -1,5 +1,21 @@
 import { toColor } from "./utilsTo";
 import { setStoreData, getStoreData } from "./utilsStore";
+import { Color, Solver, hexToRgb } from "../imageColor/color";
+
+/**
+ * 设置图片颜色
+ * @param value 十六进制的颜色值
+ * @returns {{result: {filter: *, loss: *, values: *}, color: Color, rgb: ([number,number,number]|null)}}
+ */
+export function setImageColor(value)
+{
+    const rgb = hexToRgb(value);
+    const color = new Color(rgb[0], rgb[1], rgb[2]);
+    const solver = new Solver(color);
+    const result = solver.solve();
+    return {rgb, color, result}
+}
+
 
 /**
  * 设置剪切板文本
