@@ -2322,7 +2322,7 @@
             function fmt(idx, multiplier = 1) {
                 return Math.round(filters[idx] * multiplier);
             }
-            return `filter: invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%);`;
+            return `invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%)`;
         }
     }
 
@@ -2344,7 +2344,25 @@
     }
 
     /**
-     * 设置图片颜色
+     * 设置图片颜色样式，原图需要为黑色，底色建议透明
+     * @param id    图片元素ID
+     * @param value 十六进制的颜色值
+     * @returns {boolean}
+     */
+    function setImageColorStyle(id, value)
+    {
+        try {
+            const {result} = setImageColor(value);
+            document.getElementById(id).style.filter = result.filter;
+            return true
+        } catch {
+            return false
+        }
+    }
+
+
+    /**
+     * 设置图片颜色，原图需要为黑色，底色建议透明
      * @param value 十六进制的颜色值
      * @returns {{result: {filter: *, loss: *, values: *}, color: Color, rgb: ([number,number,number]|null)}}
      */
@@ -2623,6 +2641,7 @@
     exports.setElementFocus = setElementFocus;
     exports.setElementMainColor = setElementMainColor;
     exports.setImageColor = setImageColor;
+    exports.setImageColorStyle = setImageColorStyle;
     exports.setPosInsert = setPosInsert;
     exports.setPosRange = setPosRange;
     exports.setRowSpace = setRowSpace;

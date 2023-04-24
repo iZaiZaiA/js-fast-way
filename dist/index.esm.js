@@ -2316,7 +2316,7 @@ class Solver {
         function fmt(idx, multiplier = 1) {
             return Math.round(filters[idx] * multiplier);
         }
-        return `filter: invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%);`;
+        return `invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%)`;
     }
 }
 
@@ -2338,7 +2338,25 @@ function hexToRgb(hex) {
 }
 
 /**
- * 设置图片颜色
+ * 设置图片颜色样式，原图需要为黑色，底色建议透明
+ * @param id    图片元素ID
+ * @param value 十六进制的颜色值
+ * @returns {boolean}
+ */
+function setImageColorStyle(id, value)
+{
+    try {
+        const {result} = setImageColor(value);
+        document.getElementById(id).style.filter = result.filter;
+        return true
+    } catch {
+        return false
+    }
+}
+
+
+/**
+ * 设置图片颜色，原图需要为黑色，底色建议透明
  * @param value 十六进制的颜色值
  * @returns {{result: {filter: *, loss: *, values: *}, color: Color, rgb: ([number,number,number]|null)}}
  */
@@ -2533,4 +2551,4 @@ function clog(micro, name, tips, data, )
     );
 }
 
-export { ArrToOneObj, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, deepClone, delStoreData, downloadBlob, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileSuffix, getLowerCase, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileSize, isFunction, isIdCard, isLowerCase, isName, isNullES, isNum, isNumber, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, numberFormat, objEqual, objHasKey, priceFormat, setCopyText, setElementFocus, setElementMainColor, setImageColor, setPosInsert, setPosRange, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, ulog, uniqueId };
+export { ArrToOneObj, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, deepClone, delStoreData, downloadBlob, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileSuffix, getLowerCase, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileSize, isFunction, isIdCard, isLowerCase, isName, isNullES, isNum, isNumber, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, numberFormat, objEqual, objHasKey, priceFormat, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, ulog, uniqueId };

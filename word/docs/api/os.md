@@ -2,8 +2,42 @@
 
 在各种业务场景中，可能会用到的系统元素操作
 
+## 设置图片颜色样式 <Badge type="warning" text="V0.1.0" />
 
-## 设置图片颜色
+原图需要为黑色，底色建议透明
+
+```vue
+<template>
+    <img id="image-png" src="jfw.png" alt="">
+</template>
+
+<script setup>
+import { setImageColorStyle } from "js-fast-way"
+
+setImageColorStyle('image-png', '#1ECC95') //true
+</script>
+```
+
+### id <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `图片元素ID`
+
+### value <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `十六进制的颜色值`
+
+### 返回内容
+
+- 类型: `Boolean`
+- 说明: `是否设置成功`
+
+
+
+## 设置图片颜色 <Badge type="warning" text="V0.0.9" />
+
+原图需要为黑色，底色建议透明
 
 ```javascript
 import { setImageColor } from "js-fast-way"
