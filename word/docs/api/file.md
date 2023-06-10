@@ -146,3 +146,68 @@ getFileSuffix('xxxx/aaa.jpg') // jpg
 ### 返回内容
 
 - 类型: `String`
+
+
+
+## 效验文件格式
+
+```javascript
+import { isFileFormat } from "js-fast-way"
+
+isFileFormat(文件数据, '.jpg')
+```
+
+### file <Badge type="warning" text="必传参数" />
+
+- 类型: `File`
+- 说明: `文件数据`
+
+### accept <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `文件类型格式`
+
+### 返回内容
+
+- 类型: `Boolean`
+
+
+
+## 获取文件类型
+
+```javascript
+import { getFileType } from "js-fast-way"
+
+getFileType('xxxx.jpg') // image
+```
+
+### name <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `带后缀的文件名称`
+
+### typeMap
+
+- 类型: `Object`
+- 说明: `文件类型格式`
+
+```js
+//默认的文件类型格式
+let typeMap = {
+    image: ['gif', 'jpg', 'jpeg', 'png', 'bmp', 'webp'],
+    video: ['mp4', 'm3u8', 'rmvb', 'avi', 'swf', '3gp', 'mkv', 'flv'],
+    music: ['mp3', 'wav', 'wma', 'ogg', 'aac', 'flac'],
+    zip: ['zip', 'rar', '7z', 'tag', 'gzip'],
+    word: ['doc', 'docx'],
+    excel: ['xls', 'xlsx'],
+    ppt: ['ppt', 'pptx'],
+    pdf: ['pdf'],
+    text: ['txt'],
+}
+```
+
+### 返回内容
+
+- 类型: `String`
+- 返回值：`image | video | music | zip | word | excel | ppt | pdf | text | file`
+

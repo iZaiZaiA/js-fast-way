@@ -1,3 +1,5 @@
+import {getObjVal} from "./utilsObject.js";
+
 /**
  * 判断文件大小
  * @param byte  文件字节
@@ -18,7 +20,11 @@ export function isFileSize(byte, size)
  */
 export function getFileName(name)
 {
-    return name.substring(0, name.lastIndexOf("."))
+    if (name) {
+        return name.substring(0, name.lastIndexOf("."))
+    } else {
+        return ''
+    }
 }
 
 
@@ -29,9 +35,28 @@ export function getFileName(name)
  */
 export function getFileSuffix(name)
 {
-    return name.substring(name.lastIndexOf(".") + 1)
+    if (name) {
+        return name?.substring(name?.lastIndexOf(".") + 1)
+    } else {
+        return ''
+    }
 }
 
+
+/**
+ * 获取带后缀的文件名
+ * @param name  文件名
+ * @returns {*|string}
+ */
+export function getFileNames(name)
+{
+    if (name) {
+        let num = name.lastIndexOf('/') + 1
+        return name.substring(num);
+    } else {
+        return ''
+    }
+}
 
 /**
  * base64转成文件
@@ -81,4 +106,59 @@ export function downloadBlob(data, disposition = '', type = "application/vnd.ms-
     window.URL.revokeObjectURL(blobURL)
 }
 
+/**
+ * 效验文件格式
+ * @param file      文件
+ * @param accept    文件格式
+ * @returns {*}
+ */
+export function isFileFormat(file, accept)
+{
+    const { fileType, name } = file
+    const extension = name.includes('.') ? `.${name.split('.').pop()}` : ''
+    const baseType = fileType.replace(/\/.*$/, '')
+    return accept.split(',').map((type) => type.trim()).filter((type) => type).some((acceptedType) => {
+        if (acceptedType.startsWith('.')) {
+            return extension === acceptedType
+        }
+        if (/\/\*$/.test(acceptedType)) {
+            return baseType === acceptedType.replace(/\/\*$/, '')
+        }
+        if (/^[^/]+\/[^/]+$/.test(acceptedType)) {
+            return fileType === acceptedType
+        }
+        return false
+    })
+}
 
+
+/**
+ * 获取文件类型
+ * @param name      文件名称
+ * @param typeMap   自定义类型
+ * @returns {string}
+ */
+export function getFileType(name, typeMap = {})
+{
+    let type = 'file', fileType = getFileSuffix(name)
+    let typeMapObj= getObjVal(typeMap)
+    if (!typeMapObj) {
+        typeMapObj = {
+            image: ['gif', 'jpg', 'jpeg', 'png', 'bmp', 'webp'],
+            video: ['mp4', 'm3u8', 'rmvb', 'avi', 'swf', '3gp', 'mkv', 'flv'],
+            music: ['mp3', 'wav', 'wma', 'ogg', 'aac', 'flac'],
+            zip: ['zip', 'rar', '7z', 'tag', 'gzip'],
+            word: ['doc', 'docx'],
+            excel: ['xls', 'xlsx'],
+            ppt: ['ppt', 'pptx'],
+            pdf: ['pdf'],
+            text: ['txt'],
+        }
+    }
+    Object.keys(typeMapObj).forEach((_type) => {
+        if (typeMapObj[_type].indexOf(fileType.toLowerCase()) > -1) {
+            type = _type
+        }
+    })
+    return type
+}
