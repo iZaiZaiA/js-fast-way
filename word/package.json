@@ -8,7 +8,6 @@
     "docs:preview": "vitepress preview docs --clean-cache"
   },
   "devDependencies": {
-    "vitepress": "^1.0.0-beta.1",
-    "vitepress-plugin-pagefind": "^0.2.4"
+    "vitepress": "^1.0.0-beta.1"
   }
 }

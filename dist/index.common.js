@@ -1360,6 +1360,51 @@ function arrKeyValue(arr, field, key, value)
 }
 
 /**
+ * 数组对象排序
+ * @param key   排序字段
+ * @param order 排序方式
+ * @returns {(function(*, *): (number|number))|*}
+ */
+function arrCompare(key, order = 'asc')
+{
+    return function innerSort(a, b) {
+        if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+            // 该属性在任何一个对象上都不存在
+            return 0;
+        }
+        const varA = (typeof a[key] === 'string')
+            ? a[key].toUpperCase() : a[key];
+        const varB = (typeof b[key] === 'string')
+            ? b[key].toUpperCase() : b[key];
+        let comparison = 0;
+        if (varA > varB) {
+            comparison = 1;
+        } else if (varA < varB) {
+            comparison = -1;
+        }
+        return (
+            (order === 'desc') ? (comparison * -1) : comparison
+        );
+    };
+}
+
+/**
+ * 数组对象排序
+ * @param arr   数组
+ * @param field 字段名
+ * @param order 排序方式 正序 asc  倒序 desc
+ * @returns {*}
+ */
+function arrKeySort(arr, field = 'id', order = 'asc')
+{
+    if (isArray(arr)) {
+        return arr.sort(arrCompare(field, order));
+    } else {
+        return arr;
+    }
+}
+
+/**
  * 对象深拷贝
  * @param obj       深拷贝的对象
  * @param cache
@@ -2634,6 +2679,7 @@ function clog(micro, name, tips, data, )
 }
 
 exports.ArrToOneObj = ArrToOneObj;
+exports.arrCompare = arrCompare;
 exports.arrDel = arrDel;
 exports.arrDelKey = arrDelKey;
 exports.arrDelKeyLeft = arrDelKeyLeft;
@@ -2644,6 +2690,7 @@ exports.arrDelOther = arrDelOther;
 exports.arrDelRight = arrDelRight;
 exports.arrIndex = arrIndex;
 exports.arrIntersection = arrIntersection;
+exports.arrKeySort = arrKeySort;
 exports.arrKeyValue = arrKeyValue;
 exports.arrReplace = arrReplace;
 exports.arrShuffle = arrShuffle;

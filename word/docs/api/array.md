@@ -498,3 +498,40 @@ arrKeyValue(arr, 'id', 'name', 2) // '李四'
 ### 返回内容
 
 - 类型: `-`
+
+
+
+## 数组对象排序
+
+```javascript
+import { arrKeySort } from "js-fast-way"
+
+const arr = [
+    {id: 1, name: '张三'},
+    {id: 3, name: '王五'},
+    {id: 2, name: '李四'},
+]
+arrKeySort(arr, 'id', 'asc') // [{id: 1, name: '张三'}, {id: 2, name: '李四'}, {id: 3, name: '王五'}]
+```
+
+### arr <Badge type="warning" text="必传参数" />
+
+- 类型: `Array`
+- 说明: `二维数组`
+
+### field
+
+- 类型: `String`
+- 说明: `字段名`
+- 默认: `id`
+
+### order
+
+- 类型: `String`
+- 说明: `排序方式`, 正序 `asc` 或  倒序 `desc`
+- 默认: `asc`
+
+
+### 返回内容
+
+- 类型: `Array`

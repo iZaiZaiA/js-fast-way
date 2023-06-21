@@ -1,9 +1,8 @@
 import {defineConfig} from 'vitepress'
-import {chineseSearchOptimize, pagefindPlugin} from 'vitepress-plugin-pagefind'
 const pkg = require('../../../package.json')
 
 export default defineConfig({
-    base: '/js-fast-way/',
+    //base: '/js-fast-way/',
     lang: 'zh-cn',
     title: "js-fast-way",
     description: "js-fast-way-docs",
@@ -101,16 +100,5 @@ export default defineConfig({
             message: 'Released under the MIT License.',
             copyright: 'Copyright © 2023-present iZaiZaiA'
         }
-    },
-    vite: {
-        plugins: [
-            pagefindPlugin({
-                btnPlaceholder: '搜索',
-                placeholder: '搜索文档',
-                emptyText: '空空如也',
-                heading: '共: {{searchResult}} 条结果',
-                customSearchQuery: chineseSearchOptimize
-            })
-        ],
-    },
+    }
 })
