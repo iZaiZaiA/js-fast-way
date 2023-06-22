@@ -77,7 +77,6 @@ toColor('#FFFFFF', '#FE0000', 0.5) // #FF7F7F
 - 返回值：`新的css颜色值`
 
 
-
 ## 颜色透明度
 
 把一个css颜色值设置成带透明度的颜色值
@@ -104,6 +103,44 @@ toLighten('#FE0000') // rgba(254, 0, 0, 0.5)
 - 类型: `String`
 - 返回值：`新的css颜色值`
 
+
+## 反转字体颜色
+
+根据深浅色背景颜色，返回黑白文字颜色。
+
+```javascript
+import { toTextColor } from "js-fast-way"
+
+toTextColor('#FFFFFF') // #000000
+```
+
+### color <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明：`背景颜色值`
+
+### 返回内容
+
+- 类型: `String`
+- 返回值：`#000000` 或 `#ffffff`
+
+
+## 16进制转换为RGB
+
+```javascript
+import { set16ToRgb } from "js-fast-way"
+
+set16ToRgb('#FFFFFF')
+```
+
+### str <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明：`颜色值`
+
+### 返回内容
+
+- 类型: `String`
 
 
 ## 转数组或JSON

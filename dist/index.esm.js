@@ -1990,6 +1990,90 @@ function calcDate(date1, date2)
     return {leave1, leave2, leave3, days: days, hours: hours, minutes: minutes, seconds: seconds}
 }
 
+
+/**
+ * 根据深浅色背景，返回黑白文字颜色。
+ * @param color    颜色值
+ * @returns {string|string}
+ */
+function toTextColor(color){
+    //默认中色
+    if(!color) {
+        return '#000000';
+    }
+    //渐变色直接返回中色值
+    if(color.search('gradient') !== -1) {
+        return '#000000';
+    }
+    //16进制转换成rgb
+    if(color.search('#') !== -1) {
+        color = set16ToRgb(color);
+    }
+    let bgColor = color.replace("rgb(", "").replace("rgba(", "").replace(")", "");
+    let bgColorArry = bgColor.split(",");
+    //浅色背景就返回深色文字颜色。
+    return isLight(bgColorArry) ? '#000000' : '#ffffff';
+}
+
+
+/**
+ * 是否浅色
+ * @param rgb
+ * @returns {boolean}
+ */
+function isLight (rgb=[0,0,0]) {
+    return (0.213 * rgb[0] +0.715 * rgb[1] +0.072 * rgb[2] >255 / 2);
+}
+
+/**
+ * 16进制转换为RGB
+ * @param str
+ * @returns {string}
+ */
+function set16ToRgb(str){
+    let reg = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
+    if(!reg.test(str)) {
+        return;
+    }
+    let newStr = (str.toLowerCase()).replace(/\#/g,'');
+    let len = newStr.length;
+    if(len === 3) {
+        let t = '';
+        for(let i= 0; i < len; i++) {
+            t += newStr.slice(i,i+1).concat(newStr.slice(i, i + 1));
+        }
+        newStr = t;
+    }
+    let arr = []; //将字符串分隔，两个两个的分隔
+    for(let i = 0; i < 6; i = i + 2) {
+        let s = newStr.slice(i, i + 2);
+        arr.push(parseInt("0x" + s));
+    }
+    return 'rgb(' + arr.join(",")  + ')';
+}
+
+/**
+ * RGB转换为16进制
+ * @param str
+ * @returns {string}
+ */
+function setRgbTo16(str){
+    let reg = /^(rgb|RGB)/;
+    if(!reg.test(str)) {
+        return;
+    }
+    let arr = str.slice(4, str.length-1).split(",");
+    let color = '#';
+    for(let i= 0; i < arr.length; i++) {
+        let t = Number(arr[i]).toString(16);
+        if(t == "0") {   //如果为“0”的话，需要补0操作,否则只有5位数
+            t =  t + "0";
+        }
+        color += t;
+    }
+    return color;
+}
+
 /**
  * 保存缓存
  * @param key       缓存名称
@@ -2676,4 +2760,4 @@ function clog(micro, name, tips, data, )
     );
 }
 
-export { ArrToOneObj, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, deepClone, delStoreData, downloadBlob, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLowerCase, isName, isNullES, isNum, isNumber, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, numberFormat, objEqual, objHasKey, priceFormat, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, ulog, uniqueId };
+export { ArrToOneObj, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, deepClone, delStoreData, downloadBlob, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, numberFormat, objEqual, objHasKey, priceFormat, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };

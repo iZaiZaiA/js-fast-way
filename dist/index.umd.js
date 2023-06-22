@@ -1996,6 +1996,90 @@
         return {leave1, leave2, leave3, days: days, hours: hours, minutes: minutes, seconds: seconds}
     }
 
+
+    /**
+     * 根据深浅色背景，返回黑白文字颜色。
+     * @param color    颜色值
+     * @returns {string|string}
+     */
+    function toTextColor(color){
+        //默认中色
+        if(!color) {
+            return '#000000';
+        }
+        //渐变色直接返回中色值
+        if(color.search('gradient') !== -1) {
+            return '#000000';
+        }
+        //16进制转换成rgb
+        if(color.search('#') !== -1) {
+            color = set16ToRgb(color);
+        }
+        let bgColor = color.replace("rgb(", "").replace("rgba(", "").replace(")", "");
+        let bgColorArry = bgColor.split(",");
+        //浅色背景就返回深色文字颜色。
+        return isLight(bgColorArry) ? '#000000' : '#ffffff';
+    }
+
+
+    /**
+     * 是否浅色
+     * @param rgb
+     * @returns {boolean}
+     */
+    function isLight (rgb=[0,0,0]) {
+        return (0.213 * rgb[0] +0.715 * rgb[1] +0.072 * rgb[2] >255 / 2);
+    }
+
+    /**
+     * 16进制转换为RGB
+     * @param str
+     * @returns {string}
+     */
+    function set16ToRgb(str){
+        let reg = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
+        if(!reg.test(str)) {
+            return;
+        }
+        let newStr = (str.toLowerCase()).replace(/\#/g,'');
+        let len = newStr.length;
+        if(len === 3) {
+            let t = '';
+            for(let i= 0; i < len; i++) {
+                t += newStr.slice(i,i+1).concat(newStr.slice(i, i + 1));
+            }
+            newStr = t;
+        }
+        let arr = []; //将字符串分隔，两个两个的分隔
+        for(let i = 0; i < 6; i = i + 2) {
+            let s = newStr.slice(i, i + 2);
+            arr.push(parseInt("0x" + s));
+        }
+        return 'rgb(' + arr.join(",")  + ')';
+    }
+
+    /**
+     * RGB转换为16进制
+     * @param str
+     * @returns {string}
+     */
+    function setRgbTo16(str){
+        let reg = /^(rgb|RGB)/;
+        if(!reg.test(str)) {
+            return;
+        }
+        let arr = str.slice(4, str.length-1).split(",");
+        let color = '#';
+        for(let i= 0; i < arr.length; i++) {
+            let t = Number(arr[i]).toString(16);
+            if(t == "0") {   //如果为“0”的话，需要补0操作,否则只有5位数
+                t =  t + "0";
+            }
+            color += t;
+        }
+        return color;
+    }
+
     /**
      * 保存缓存
      * @param key       缓存名称
@@ -2748,6 +2832,7 @@
     exports.isFileSize = isFileSize;
     exports.isFunction = isFunction;
     exports.isIdCard = isIdCard;
+    exports.isLight = isLight;
     exports.isLowerCase = isLowerCase;
     exports.isName = isName;
     exports.isNullES = isNullES;
@@ -2767,6 +2852,7 @@
     exports.objEqual = objEqual;
     exports.objHasKey = objHasKey;
     exports.priceFormat = priceFormat;
+    exports.set16ToRgb = set16ToRgb;
     exports.setCopyText = setCopyText;
     exports.setElementFocus = setElementFocus;
     exports.setElementMainColor = setElementMainColor;
@@ -2774,6 +2860,7 @@
     exports.setImageColorStyle = setImageColorStyle;
     exports.setPosInsert = setPosInsert;
     exports.setPosRange = setPosRange;
+    exports.setRgbTo16 = setRgbTo16;
     exports.setRowSpace = setRowSpace;
     exports.setStoreData = setStoreData;
     exports.toColor = toColor;
@@ -2781,6 +2868,7 @@
     exports.toLighten = toLighten;
     exports.toParse = toParse;
     exports.toSerialize = toSerialize;
+    exports.toTextColor = toTextColor;
     exports.ulog = ulog;
     exports.uniqueId = uniqueId;
 
