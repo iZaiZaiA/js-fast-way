@@ -2554,34 +2554,39 @@
 
     /**
      * 设置图片颜色样式，原图需要为黑色，底色建议透明
-     * @param id    图片元素ID
-     * @param value 十六进制的颜色值
-     * @returns {boolean}
+     * @param id        图片元素ID
+     * @param value     十六进制的颜色值
+     * @returns {Promise<unknown>}
      */
     function setImageColorStyle(id, value)
     {
-        try {
-            const {result} = setImageColor(value);
-            document.getElementById(id).style.filter = result.filter;
-            return true
-        } catch {
-            return false
-        }
+        return new Promise((resolve) => {
+            setImageColor(value).then(({result}) => {
+                try {
+                    document.getElementById(id).style.filter = result.filter;
+                    resolve(true);
+                } catch {
+                    resolve(false);
+                }
+            }).catch(() => {
+                resolve(false);
+            });
+        })
     }
-
 
     /**
      * 设置图片颜色，原图需要为黑色，底色建议透明
      * @param value 十六进制的颜色值
-     * @returns {{result: {filter: *, loss: *, values: *}, color: Color, rgb: ([number,number,number]|null)}}
+     * @returns {Promise<unknown>}
      */
-    function setImageColor(value)
-    {
-        const rgb = hexToRgb(value);
-        const color = new Color(rgb[0], rgb[1], rgb[2]);
-        const solver = new Solver(color);
-        const result = solver.solve();
-        return {rgb, color, result}
+    function setImageColor(value) {
+        return new Promise((resolve) => {
+            const rgb = hexToRgb(value);
+            const color = new Color(rgb[0], rgb[1], rgb[2]);
+            const solver = new Solver(color);
+            const result = solver.solve();
+            resolve({rgb, color, result});
+        })
     }
 
 
