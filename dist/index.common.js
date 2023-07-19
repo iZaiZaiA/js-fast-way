@@ -1489,9 +1489,10 @@ function produce(baseState, fn) {
         }
         return data
     };
-
-    const draft = getDraft(baseState);
-    fn(draft);
+    if (fn) {
+        const draft = getDraft(baseState);
+        fn(draft);
+    }
     return finalize(baseState)
 }
 
