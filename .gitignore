@@ -3,5 +3,5 @@ node_modules
 .vscode
 .DS_Store
 .temp
-.cache
+cache
 yarn.lock

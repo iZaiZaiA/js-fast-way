@@ -24,6 +24,8 @@ deepClone(obj) // {id: 11, name: 22}
 
 ## 深拷贝数据 <Badge type="warning" text="v0.2.2" />
 
+对数组和对象的数据拷贝
+
 ```javascript
 import { deepCloneV2 } from "js-fast-way"
 
@@ -32,8 +34,8 @@ deepCloneV2(obj) // {id: 11, name: 22}
 
 //测试函数
 deepCloneV2(obj, draftState => {
-    console.log(draftState)
-}) // {id: 11, name: 22}
+    draftState.id = 33
+}) // {id: 33, name: 22}
 ```
 
 ### obj <Badge type="warning" text="必传参数" />
