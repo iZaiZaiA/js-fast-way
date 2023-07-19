@@ -8,11 +8,6 @@ export default defineConfig({
     description: "js-fast-way-docs",
     lastUpdated: true,
     themeConfig: {
-        outlineTitle: '此页的目录大纲',
-        docFooter: {
-            prev: '上一章',
-            next: '下一章'
-        },
         //导航
         nav: [
             {text: '首页', link: '/'},
@@ -94,6 +89,15 @@ export default defineConfig({
         editLink: {
             pattern: 'https://github.com/iZaiZaiA/js-fast-way/edit/word/docs/:path',
             text: '在 GitHub 上编辑此页'
+        },
+        docFooter: {
+            prev: '上一章',
+            next: '下一章'
+        },
+        outlineTitle: '此页的目录大纲',
+        lastUpdateText: '上次更新',
+        search: {
+            provider: 'local'
         },
         //页脚
         footer: {

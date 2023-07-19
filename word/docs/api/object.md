@@ -22,6 +22,36 @@ deepClone(obj) // {id: 11, name: 22}
 - 说明：`返回新的对象`
 
 
+## 深拷贝数据 <Badge type="warning" text="v0.2.2" />
+
+```javascript
+import { deepCloneV2 } from "js-fast-way"
+
+let obj = {id: 11, name: 22}
+deepCloneV2(obj) // {id: 11, name: 22}
+
+//测试函数
+deepCloneV2(obj, draftState => {
+    console.log(draftState)
+}) // {id: 11, name: 22}
+```
+
+### obj <Badge type="warning" text="必传参数" />
+
+- 类型: `Object / Array`
+- 说明: `需要深拷贝的对象`
+
+### fn
+
+- 类型: `Function`
+- 说明: `函数`
+
+### 返回内容
+
+- 类型: `Object / Array`
+- 说明：`返回新的对象`
+
+
 ## 对象中是否存在
 
 如果传入第二个参数`key`，则是判断这个obj对象是否存在`key`这个属性，如果没有传入`key`这个参数，则判断obj对象是否有键值对
