@@ -1607,6 +1607,26 @@ function getToObjVal(obj = {}, field, key)
 }
 
 /**
+ * 获取文件大小的字符串类型
+ * @param size  文件字节大小
+ * @returns {string}
+ */
+function filterSize(size)
+{
+    if (!size) return '';
+    if (size < pow1024(1)) return size + ' B';
+    if (size < pow1024(2)) return (size / pow1024(1)).toFixed(2) + ' KB';
+    if (size < pow1024(3)) return (size / pow1024(2)).toFixed(2) + ' MB';
+    if (size < pow1024(4)) return (size / pow1024(3)).toFixed(2) + ' GB';
+    return (size / pow1024(4)).toFixed(2) + ' TB'
+}
+
+// 求次幂
+function pow1024(num) {
+    return Math.pow(1024, num)
+}
+
+/**
  * 判断文件大小
  * @param byte  文件字节
  * @param size  文件兆数
@@ -2649,6 +2669,26 @@ function hexToRgb(hex) {
 }
 
 /**
+ * 获取年份列表
+ * @param end   结束年份 默认今年
+ * @param start 开始年份 默认2000
+ * @returns {unknown[]}
+ */
+function getYearList(end, start = 2000) {
+    if (!end) end = new Date().getFullYear();
+    return Array.from({ length: end - start }, (_, i) => i + (start + 1))
+}
+
+/**
+ * 获取月份列表
+ * @returns {string[]}
+ */
+function getMonthList() {
+    return Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'))
+}
+
+
+/**
  * 设置图片颜色样式，原图需要为黑色，底色建议透明
  * @param id        图片元素ID
  * @param value     十六进制的颜色值
@@ -2866,4 +2906,4 @@ function clog(micro, name, tips, data, )
     );
 }
 
-export { ArrToOneObj, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, deepClone, deepCloneV2, delStoreData, downloadBlob, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, numberFormat, objEqual, objHasKey, priceFormat, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };
+export { ArrToOneObj, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, numberFormat, objEqual, objHasKey, pow1024, priceFormat, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };

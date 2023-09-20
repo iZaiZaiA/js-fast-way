@@ -2,6 +2,27 @@ import { toColor } from "./utilsTo";
 import { setStoreData, getStoreData } from "./utilsStore";
 import { Color, Solver, hexToRgb } from "./plugins/color";
 
+
+/**
+ * 获取年份列表
+ * @param end   结束年份 默认今年
+ * @param start 开始年份 默认2000
+ * @returns {unknown[]}
+ */
+export function getYearList(end, start = 2000) {
+    if (!end) end = new Date().getFullYear()
+    return Array.from({ length: end - start }, (_, i) => i + (start + 1))
+}
+
+/**
+ * 获取月份列表
+ * @returns {string[]}
+ */
+export function getMonthList() {
+    return Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'))
+}
+
+
 /**
  * 设置图片颜色样式，原图需要为黑色，底色建议透明
  * @param id        图片元素ID

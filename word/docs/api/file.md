@@ -211,3 +211,24 @@ let typeMap = {
 - 类型: `String`
 - 返回值：`image | video | music | zip | word | excel | ppt | pdf | text | file`
 
+
+## 获取文件大小的字符串类型
+
+返回计算后的文件大小，单位为`KB`、`MB`、`GB`、`TB` 等
+
+```javascript
+import { filterSize } from "js-fast-way"
+
+filterSize(1024) // 1KB
+```
+
+### size <Badge type="warning" text="必传参数" />
+
+- 类型: `Number`
+- 说明: `文件字节`
+
+
+### 返回内容
+
+- 类型: `Boolean`
+- 返回值：`字符串`

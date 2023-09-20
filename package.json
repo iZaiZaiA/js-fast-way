@@ -1,9 +1,10 @@
 {
     "name": "js-fast-way",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "description": "js-fast-way",
     "type": "module",
     "scripts": {
+        "dev": "rollup -c --watch",
         "build": "rollup -c"
     },
     "main": "./dist/index.common.js",

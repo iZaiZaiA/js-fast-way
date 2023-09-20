@@ -1609,6 +1609,26 @@ function getToObjVal(obj = {}, field, key)
 }
 
 /**
+ * 获取文件大小的字符串类型
+ * @param size  文件字节大小
+ * @returns {string}
+ */
+function filterSize(size)
+{
+    if (!size) return '';
+    if (size < pow1024(1)) return size + ' B';
+    if (size < pow1024(2)) return (size / pow1024(1)).toFixed(2) + ' KB';
+    if (size < pow1024(3)) return (size / pow1024(2)).toFixed(2) + ' MB';
+    if (size < pow1024(4)) return (size / pow1024(3)).toFixed(2) + ' GB';
+    return (size / pow1024(4)).toFixed(2) + ' TB'
+}
+
+// 求次幂
+function pow1024(num) {
+    return Math.pow(1024, num)
+}
+
+/**
  * 判断文件大小
  * @param byte  文件字节
  * @param size  文件兆数
@@ -2651,6 +2671,26 @@ function hexToRgb(hex) {
 }
 
 /**
+ * 获取年份列表
+ * @param end   结束年份 默认今年
+ * @param start 开始年份 默认2000
+ * @returns {unknown[]}
+ */
+function getYearList(end, start = 2000) {
+    if (!end) end = new Date().getFullYear();
+    return Array.from({ length: end - start }, (_, i) => i + (start + 1))
+}
+
+/**
+ * 获取月份列表
+ * @returns {string[]}
+ */
+function getMonthList() {
+    return Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'))
+}
+
+
+/**
  * 设置图片颜色样式，原图需要为黑色，底色建议透明
  * @param id        图片元素ID
  * @param value     十六进制的颜色值
@@ -2898,6 +2938,7 @@ exports.deepClone = deepClone;
 exports.deepCloneV2 = deepCloneV2;
 exports.delStoreData = delStoreData;
 exports.downloadBlob = downloadBlob;
+exports.filterSize = filterSize;
 exports.formValidate = formValidate;
 exports.getAllStore = getAllStore;
 exports.getAlphabets = getAlphabets;
@@ -2908,6 +2949,7 @@ exports.getFileNames = getFileNames;
 exports.getFileSuffix = getFileSuffix;
 exports.getFileType = getFileType;
 exports.getLowerCase = getLowerCase;
+exports.getMonthList = getMonthList;
 exports.getNumber = getNumber;
 exports.getNumberLower = getNumberLower;
 exports.getNumberUpper = getNumberUpper;
@@ -2920,6 +2962,7 @@ exports.getStoreData = getStoreData;
 exports.getToObjVal = getToObjVal;
 exports.getUUID = getUUID;
 exports.getUpperCase = getUpperCase;
+exports.getYearList = getYearList;
 exports.isAllNull = isAllNull;
 exports.isAlphabets = isAlphabets;
 exports.isArrIndex = isArrIndex;
@@ -2954,6 +2997,7 @@ exports.isValueNull = isValueNull;
 exports.numberFormat = numberFormat;
 exports.objEqual = objEqual;
 exports.objHasKey = objHasKey;
+exports.pow1024 = pow1024;
 exports.priceFormat = priceFormat;
 exports.set16ToRgb = set16ToRgb;
 exports.setCopyText = setCopyText;

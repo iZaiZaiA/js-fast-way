@@ -241,3 +241,55 @@ clog('micro', 'name', 'tips', 'data')
 
 - 类型: `-`
 - 说明: `打印的数据`
+
+
+
+## 获取年份列表
+
+生成一个年份数组列表，通常用于单独的年份选择器
+
+```javascript
+import { getYearList } from "js-fast-way"
+
+getYearList(2023)
+```
+
+### end
+
+- 类型: `String`
+- 说明: `结束年份, 默认为当前年份`
+
+### start
+
+- 类型: `String`
+- 说明: `开始年份, 默认为2000年`
+
+
+- 类型: `-`
+- 说明: `返回年份列表`
+
+
+
+## 获取月份列表
+
+生成一个月份数组列表，通常用于单独的月份选择器
+
+```javascript
+import { getMonthList } from "js-fast-way"
+
+getMonthList()
+```
+
+### end
+
+- 类型: `String`
+- 说明: `结束年份, 默认为当前年份`
+
+### start
+
+- 类型: `String`
+- 说明: `开始年份, 默认为2000年`
+
+
+- 类型: `-`
+- 说明: `返回年份列表`
