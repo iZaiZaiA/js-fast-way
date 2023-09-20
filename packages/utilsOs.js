@@ -9,9 +9,9 @@ import { Color, Solver, hexToRgb } from "./plugins/color";
  * @param start 开始年份 默认2000
  * @returns {unknown[]}
  */
-export function getYearList(end, start = 2000) {
+export function getYearList(end = '', start = 2000) {
     if (!end) end = new Date().getFullYear()
-    return Array.from({ length: end - start }, (_, i) => i + (start + 1))
+    return Array.from({ length: end - start }, (_, i) => i + start)
 }
 
 /**

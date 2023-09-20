@@ -2674,9 +2674,9 @@ function hexToRgb(hex) {
  * @param start 开始年份 默认2000
  * @returns {unknown[]}
  */
-function getYearList(end, start = 2000) {
+function getYearList(end = '', start = 2000) {
     if (!end) end = new Date().getFullYear();
-    return Array.from({ length: end - start }, (_, i) => i + (start + 1))
+    return Array.from({ length: end - start }, (_, i) => i + start)
 }
 
 /**
