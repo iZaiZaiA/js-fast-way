@@ -2906,4 +2906,29 @@ function clog(micro, name, tips, data, )
     );
 }
 
-export { ArrToOneObj, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, numberFormat, objEqual, objHasKey, pow1024, priceFormat, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };
+// 创建一个全局的依赖注入容器
+const dependencyContainer = {};
+
+/**
+ * 提供依赖的方法
+ * @param key   注入名
+ * @param value 提供的值
+ */
+function provide(key, value) {
+    dependencyContainer[key] = value;
+}
+
+/**
+ * 获取依赖的方法
+ * @param key           注入名
+ * @param defaultValue 注入默认值
+ * @returns {*|string}
+ */
+function inject(key, defaultValue = '') {
+    if (key in dependencyContainer) {
+        return dependencyContainer[key];
+    }
+    return defaultValue;
+}
+
+export { ArrToOneObj, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, inject, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, numberFormat, objEqual, objHasKey, pow1024, priceFormat, provide, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };

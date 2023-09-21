@@ -2912,6 +2912,31 @@
         );
     }
 
+    // 创建一个全局的依赖注入容器
+    const dependencyContainer = {};
+
+    /**
+     * 提供依赖的方法
+     * @param key   注入名
+     * @param value 提供的值
+     */
+    function provide(key, value) {
+        dependencyContainer[key] = value;
+    }
+
+    /**
+     * 获取依赖的方法
+     * @param key           注入名
+     * @param defaultValue 注入默认值
+     * @returns {*|string}
+     */
+    function inject(key, defaultValue = '') {
+        if (key in dependencyContainer) {
+            return dependencyContainer[key];
+        }
+        return defaultValue;
+    }
+
     exports.ArrToOneObj = ArrToOneObj;
     exports.arrCompare = arrCompare;
     exports.arrDel = arrDel;
@@ -2967,6 +2992,7 @@
     exports.getUUID = getUUID;
     exports.getUpperCase = getUpperCase;
     exports.getYearList = getYearList;
+    exports.inject = inject;
     exports.isAllNull = isAllNull;
     exports.isAlphabets = isAlphabets;
     exports.isArrIndex = isArrIndex;
@@ -3003,6 +3029,7 @@
     exports.objHasKey = objHasKey;
     exports.pow1024 = pow1024;
     exports.priceFormat = priceFormat;
+    exports.provide = provide;
     exports.set16ToRgb = set16ToRgb;
     exports.setCopyText = setCopyText;
     exports.setElementFocus = setElementFocus;

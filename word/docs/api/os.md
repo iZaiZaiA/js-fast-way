@@ -264,6 +264,7 @@ getYearList(2023)
 - 类型: `String`
 - 说明: `开始年份, 默认为2000年`
 
+### 返回内容
 
 - 类型: `-`
 - 说明: `返回年份列表`
@@ -290,6 +291,57 @@ getMonthList()
 - 类型: `String`
 - 说明: `开始年份, 默认为2000年`
 
+### 返回内容
 
 - 类型: `-`
 - 说明: `返回年份列表`
+
+
+
+## 依赖注入
+
+提供依赖注入的方法，跟vue3的不一样，虽然名字一样，但这个可以在任何地方用，不限制在 setup
+
+```javascript
+import { provide } from "js-fast-way"
+
+provide('js-fast-way', '您好')
+```
+
+### key <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `注入名`
+
+### value <Badge type="warning" text="必传参数" />
+
+- 类型: `-`
+- 说明: `要注入的值`
+
+
+
+## 获取依赖注入
+
+获取 `provide` 注入的值
+
+```javascript
+import { inject } from "js-fast-way"
+
+inject('js-fast-way') // 您好
+```
+
+### key <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `注入名`
+
+### defaultValue
+
+- 类型: `String`
+- 说明: `默认值，当未取到数据时，返回的内容`
+
+### 返回内容
+
+- 类型: `-`
+- 说明: `注入的内容`
+
