@@ -1,6 +1,6 @@
 {
     "name": "js-fast-way",
-    "version": "0.2.9",
+    "version": "0.3.0",
     "description": "js-fast-way",
     "type": "module",
     "scripts": {
@@ -40,8 +40,8 @@
         "vue"
     ],
     "devDependencies": {
-        "immer": "^10.0.2",
-        "rollup": "^3.29.2",
+        "immer": "^10.0.3",
+        "rollup": "3.29.3",
         "rollup-plugin-commonjs": "^10.1.0",
         "rollup-plugin-json": "^4.0.0",
         "rollup-plugin-node-resolve": "^5.2.0",

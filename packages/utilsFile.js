@@ -97,6 +97,55 @@ export function base64ToFile(base64, type = "image/jpeg", name = Date.now(), suf
     return new File([fileBlob], name + '.' + suffix);
 }
 
+/**
+ * 新下载文件
+ * @param res       接口响应的原始数据 response
+ * @param type      文件类型，默认 '', 详情可以参阅blob文件类型, 类似：application/vnd.ms-excel
+ */
+export function newDownBlob(res, type = "")
+{
+    return new Promise((resolve) => {
+        try {
+            //初始数据
+            const {data, headers} = res;
+            const disposition = getDisposition(headers)
+            //创建文件进制
+            let blob = new Blob([data], { type: type });
+            // 创建新的URL并指向File对象或者Blob对象的地址
+            const blobURL = window.URL.createObjectURL(blob)
+            // 创建a标签，用于跳转至下载链接
+            const tempLink = document.createElement('a')
+            tempLink.style.display = 'none'
+            tempLink.href = blobURL
+            const filename = disposition.split(';')[1].split('=')[1]
+            tempLink.setAttribute('download', decodeURI(filename))
+            // 兼容：某些浏览器不支持HTML5的download属性
+            if (typeof tempLink.download === 'undefined') {
+                tempLink.setAttribute('target', '_blank')
+            }
+            // 挂载a标签
+            document.body.appendChild(tempLink)
+            tempLink.click()
+            document.body.removeChild(tempLink)
+            // 释放blob URL地址
+            window.URL.revokeObjectURL(blobURL)
+            resolve({status: true, msg: '下载成功'})
+        } catch (err) {
+            resolve({status: false, msg: err.message})
+        }
+    })
+}
+
+//响应头中获取content-disposition
+const getDisposition = (headers) => {
+    try {
+        return headers['content-disposition']
+    } catch {
+        return ''
+    }
+}
+
+
 
 /**
  * 下载文件

@@ -111,6 +111,41 @@ downloadBlob('文件数据', headers['content-disposition'])
 
 
 
+
+## 新下载Blob文件
+
+```javascript
+import { newDownBlob } from "js-fast-way"
+
+//直接下载
+newDownBlob('接口响应的原始数据(response)')
+
+//测试下载，此方法函数采用了Promise，可以获得下载结果
+const testDownload = async (headers) => {
+    const {status, msg} = await newDownBlob('接口响应的原始数据(response)')
+    console.log(status) // true / false
+}
+
+```
+
+### res <Badge type="warning" text="必传参数" />
+
+- 类型: `-`
+- 说明: `接口响应的原始数据(response)，需要包含有 data 字段的文件流，以及包含 headers 字段的原始响应数据`
+
+### type <Badge type="tip" text="非必传" />
+
+- 类型: `String`
+- 默认值: ``
+- 说明: `文件类型，详情可以参阅blob文件类型，类似：application/vnd.ms-excel`
+
+### 返回内容
+
+- 如果成功，会直接调用浏览器的下载功能，进行下载
+- 如果失败，参考`测试下载`的代码示例
+
+
+
 ## 获取文件名
 
 ```javascript
