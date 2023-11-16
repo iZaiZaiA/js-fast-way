@@ -29,6 +29,4 @@ const buildConfig = (packagingFormat = []) => {
     return outputConfig;
 };
 
-export {
-    buildConfig
-};
+export {buildConfig};

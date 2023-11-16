@@ -25,5 +25,7 @@ export default {
         json(),
         resolve(),
         commonjs()
-    ]
+    ],
+    // 指定需要外部引入的模块（如 Node.js 核心模块）
+    external: ['fs', 'path'],
 }

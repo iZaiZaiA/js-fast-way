@@ -1,21 +1,13 @@
 {
     "name": "js-fast-way",
-    "version": "0.3.0",
+    "version": "0.3.6",
     "description": "js-fast-way",
-    "type": "module",
     "scripts": {
-        "dev": "rollup -c --watch",
-        "build": "rollup -c"
+        "dev": "rollup -c --bundleConfigAsCjs --watch",
+        "build": "rollup -c --bundleConfigAsCjs"
     },
     "main": "./dist/index.common.js",
     "module": "./dist/index.esm.js",
-    "exports": {
-        ".": {
-            "require": "./dist/index.common.js",
-            "import": "./dist/index.esm.js"
-        },
-        "./dist/*": "./dist/*"
-    },
     "files": [
         "dist",
         "LICENSE",
