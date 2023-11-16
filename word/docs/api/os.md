@@ -345,3 +345,30 @@ inject('js-fast-way') // 您好
 - 类型: `-`
 - 说明: `注入的内容`
 
+
+
+## 防抖函数
+
+使用这个防抖函数时，你只需要将要执行的函数和延迟时间作为参数传递给 debounce 函数即可
+
+```javascript
+import { debounce } from "js-fast-way"
+
+function myFunction() {
+    // 在这里编写你希望只执行一次的代码
+    console.log('执行一次');
+}
+const debouncedFunction = debounce(myFunction, 2000);
+
+document.getElementById('myButton').addEventListener('click', debouncedFunction);
+```
+
+### func <Badge type="warning" text="必传参数" />
+
+- 类型: `Function`
+- 说明: `要执行的函数名`
+
+### delay
+
+- 类型: `Number`
+- 说明: `延迟时间`, 默认为`500` 毫秒

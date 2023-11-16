@@ -2,7 +2,7 @@ import {defineConfig} from 'vitepress'
 const pkg = require('../../../package.json')
 
 export default defineConfig({
-    //base: '/js-fast-way/',
+    base: '/js-fast-way/',
     lang: 'zh-cn',
     title: "js-fast-way",
     description: "js-fast-way-docs",

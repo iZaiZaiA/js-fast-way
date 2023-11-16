@@ -2,6 +2,23 @@ import { toColor } from "./utilsTo";
 import { setStoreData, getStoreData } from "./utilsStore";
 import { Color, Solver, hexToRgb } from "./plugins/color";
 
+/**
+ * 防抖函数
+ * @param func  要执行的函数
+ * @param delay 延迟时间，默认500毫秒
+ * @returns {(function(...[*]): void)|*}
+ */
+export function debounce(func, delay = 500) {
+    let timeoutId;
+    return function(...args) {
+        const context = this;
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            func.apply(context, args);
+        }, delay);
+    };
+}
+
 
 /**
  * 获取年份列表

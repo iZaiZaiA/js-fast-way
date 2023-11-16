@@ -2724,6 +2724,24 @@
     }
 
     /**
+     * 防抖函数
+     * @param func  要执行的函数
+     * @param delay 延迟时间，默认500毫秒
+     * @returns {(function(...[*]): void)|*}
+     */
+    function debounce(func, delay = 500) {
+        let timeoutId;
+        return function(...args) {
+            const context = this;
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func.apply(context, args);
+            }, delay);
+        };
+    }
+
+
+    /**
      * 获取年份列表
      * @param end   结束年份 默认今年
      * @param start 开始年份 默认2000
@@ -3012,6 +3030,7 @@
     exports.clearStoreAll = clearStoreAll;
     exports.clog = clog;
     exports.createArr = createArr;
+    exports.debounce = debounce;
     exports.deepClone = deepClone;
     exports.deepCloneV2 = deepCloneV2;
     exports.delStoreData = delStoreData;

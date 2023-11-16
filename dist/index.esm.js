@@ -2718,6 +2718,24 @@ function hexToRgb(hex) {
 }
 
 /**
+ * 防抖函数
+ * @param func  要执行的函数
+ * @param delay 延迟时间，默认500毫秒
+ * @returns {(function(...[*]): void)|*}
+ */
+function debounce(func, delay = 500) {
+    let timeoutId;
+    return function(...args) {
+        const context = this;
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            func.apply(context, args);
+        }, delay);
+    };
+}
+
+
+/**
  * 获取年份列表
  * @param end   结束年份 默认今年
  * @param start 开始年份 默认2000
@@ -2980,4 +2998,4 @@ function inject(key, defaultValue = '') {
     return defaultValue;
 }
 
-export { ArrToOneObj, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, inject, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, newDownBlob, numberFormat, objEqual, objHasKey, pow1024, priceFormat, provide, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };
+export { ArrToOneObj, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, debounce, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, inject, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, newDownBlob, numberFormat, objEqual, objHasKey, pow1024, priceFormat, provide, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };
