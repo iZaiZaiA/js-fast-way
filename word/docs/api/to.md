@@ -22,7 +22,6 @@ toFormData(obj)
 - 说明：`返回 FormData 对象`
 
 
-
 ## 表单序列化
 
 其实就是把json对象转换成url参数格式的字符串
@@ -119,10 +118,15 @@ toTextColor('#FFFFFF') // #000000
 - 类型: `String`
 - 说明：`背景颜色值`
 
+### config <Badge type="warning" text="V0.4.0" />
+
+- 类型: `Object`
+- 说明：`颜色配置如：{black: '#000000', white: '#ffffff'}`
+
 ### 返回内容
 
 - 类型: `String`
-- 返回值：`#000000` 或 `#ffffff`
+- 返回值：如果`config`有传值，就返回`config`配置的颜色，否则就是 `#000000` 或 `#ffffff`
 
 
 ## 16进制转换为RGB

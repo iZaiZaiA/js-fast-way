@@ -179,6 +179,19 @@ export function isArrNull(arr)
 
 
 /**
+ * 效验是否为数字或小数的数字
+ * @param text  字符串内容
+ * @param lose  是否允许负数，默认允许
+ * @returns {boolean}
+ */
+export function isNumberReg(text, lose = true)
+{
+    let pattern = lose ? /^-?\d+(.\d{1,2})?$/ : /^[0-9]+([.]{1}[0-9]+){0,1}$/
+    return pattern.test(text)
+}
+
+
+/**
  * 饿了么UI的表单验证
  * @param formRef 表单ref
  * @returns

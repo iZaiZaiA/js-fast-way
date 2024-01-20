@@ -1031,6 +1031,19 @@ function isArrNull(arr)
 
 
 /**
+ * 效验是否为数字或小数的数字
+ * @param text  字符串内容
+ * @param lose  是否允许负数，默认允许
+ * @returns {boolean}
+ */
+function isNumberReg(text, lose = true)
+{
+    let pattern = lose ? /^-?\d+(.\d{1,2})?$/ : /^[0-9]+([.]{1}[0-9]+){0,1}$/;
+    return pattern.test(text)
+}
+
+
+/**
  * 饿了么UI的表单验证
  * @param formRef 表单ref
  * @returns
@@ -2164,17 +2177,18 @@ function calcDate(date1, date2)
 
 /**
  * 根据深浅色背景，返回黑白文字颜色。
- * @param color    颜色值
+ * @param color     颜色值
+ * @param config    颜色配置
  * @returns {string|string}
  */
-function toTextColor(color){
-    //默认中色
+function toTextColor(color, config = {}){
+    //默认颜色
     if(!color) {
-        return '#000000';
+        return config.black ?? '#000000';
     }
     //渐变色直接返回中色值
     if(color.search('gradient') !== -1) {
-        return '#000000';
+        return config.black ?? '#000000';
     }
     //16进制转换成rgb
     if(color.search('#') !== -1) {
@@ -2183,7 +2197,7 @@ function toTextColor(color){
     let bgColor = color.replace("rgb(", "").replace("rgba(", "").replace(")", "");
     let bgColorArry = bgColor.split(",");
     //浅色背景就返回深色文字颜色。
-    return isLight(bgColorArry) ? '#000000' : '#ffffff';
+    return isLight(bgColorArry) ? config.black ?? '#000000' : config.white ?? '#ffffff';
 }
 
 
@@ -2193,7 +2207,7 @@ function toTextColor(color){
  * @returns {boolean}
  */
 function isLight (rgb=[0,0,0]) {
-    return (0.213 * rgb[0] +0.715 * rgb[1] +0.072 * rgb[2] >255 / 2);
+    return (0.213 * rgb[0] + 0.715 * rgb[1] + 0.072 * rgb[2] > 255 / 1.5);
 }
 
 /**
@@ -2718,6 +2732,37 @@ function hexToRgb(hex) {
 }
 
 /**
+ * 动态加载线上js文件
+ * @param src   线上js文件地址
+ * @param type  js文件类型，默认为 text/javascript
+ * @returns {Promise<unknown>}
+ */
+async function addOnJs(src, type='text/javascript') {
+    return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.type = type;
+        document.head.appendChild(script);
+        script.onload = () => {
+            resolve();
+        };
+    })
+}
+
+/**
+ * 延迟等待
+ * @param timeout   延迟时间，默认1000毫秒
+ * @returns {Promise<unknown>}
+ */
+async function asyncTime (timeout = 1000) {
+    return new Promise(async (resolve) => {
+        setTimeout(() => {
+            resolve(true);
+        }, timeout);
+    })
+}
+
+/**
  * 防抖函数
  * @param func  要执行的函数
  * @param delay 延迟时间，默认500毫秒
@@ -2998,4 +3043,4 @@ function inject(key, defaultValue = '') {
     return defaultValue;
 }
 
-export { ArrToOneObj, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, debounce, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, inject, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, newDownBlob, numberFormat, objEqual, objHasKey, pow1024, priceFormat, provide, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };
+export { ArrToOneObj, addOnJs, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, asyncTime, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, debounce, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, inject, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumberReg, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, newDownBlob, numberFormat, objEqual, objHasKey, pow1024, priceFormat, provide, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };

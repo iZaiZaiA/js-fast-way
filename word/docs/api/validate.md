@@ -286,6 +286,32 @@ isArrNull([]) // true
 - 返回值：`true | false`
 
 
+## 是否为数字 <Badge type="warning" text="V0.4.0" />
+
+效验是否为数字或小数的数字
+
+```javascript
+import { isNumberReg } from "js-fast-way"
+
+isNumberReg('1.2') // true
+```
+
+### text <Badge type="warning" text="必传参数" />
+
+- 类型: `-`
+- 说明: `字符串内容`
+
+### lose
+
+- 类型: `Boolean`
+- 说明: `是否允许负数，默认允许`
+
+### 返回内容
+
+- 类型: `Boolean`
+- 返回值：`true | false`
+
+
 ## form表单验证
 
 饿了么UI的表单验证

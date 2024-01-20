@@ -372,3 +372,28 @@ document.getElementById('myButton').addEventListener('click', debouncedFunction)
 
 - 类型: `Number`
 - 说明: `延迟时间`, 默认为`500` 毫秒
+
+
+## 加载线上js文件 <Badge type="warning" text="V0.4.0" />
+
+动态加载线上js文件
+
+```javascript
+import { addOnJs } from "js-fast-way"
+
+addOnJs('js文件地址').then(() => {
+    console.log('加载成功')
+}).catch(() => {
+    console.log('加载失败')
+})
+```
+
+### src <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `线上js文件地址`
+
+### type
+
+- 类型: `String`
+- 说明: `js文件类型，默认为 text/javascript`

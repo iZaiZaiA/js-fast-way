@@ -3,6 +3,37 @@ import { setStoreData, getStoreData } from "./utilsStore";
 import { Color, Solver, hexToRgb } from "./plugins/color";
 
 /**
+ * 动态加载线上js文件
+ * @param src   线上js文件地址
+ * @param type  js文件类型，默认为 text/javascript
+ * @returns {Promise<unknown>}
+ */
+export async function addOnJs(src, type='text/javascript') {
+    return new Promise((resolve) => {
+        const script = document.createElement('script')
+        script.src = src
+        script.type = type
+        document.head.appendChild(script)
+        script.onload = () => {
+            resolve()
+        }
+    })
+}
+
+/**
+ * 延迟等待
+ * @param timeout   延迟时间，默认1000毫秒
+ * @returns {Promise<unknown>}
+ */
+export async function asyncTime (timeout = 1000) {
+    return new Promise(async (resolve) => {
+        setTimeout(() => {
+            resolve(true)
+        }, timeout)
+    })
+}
+
+/**
  * 防抖函数
  * @param func  要执行的函数
  * @param delay 延迟时间，默认500毫秒

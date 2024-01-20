@@ -207,17 +207,18 @@ export function calcDate(date1, date2)
 
 /**
  * 根据深浅色背景，返回黑白文字颜色。
- * @param color    颜色值
+ * @param color     颜色值
+ * @param config    颜色配置
  * @returns {string|string}
  */
-export function toTextColor(color){
-    //默认中色
+export function toTextColor(color, config = {}){
+    //默认颜色
     if(!color) {
-        return '#000000';
+        return config.black ?? '#000000';
     }
     //渐变色直接返回中色值
     if(color.search('gradient') !== -1) {
-        return '#000000';
+        return config.black ?? '#000000';
     }
     //16进制转换成rgb
     if(color.search('#') !== -1) {
@@ -226,7 +227,7 @@ export function toTextColor(color){
     let bgColor = color.replace("rgb(", "").replace("rgba(", "").replace(")", "");
     let bgColorArry = bgColor.split(",");
     //浅色背景就返回深色文字颜色。
-    return isLight(bgColorArry) ? '#000000' : '#ffffff';
+    return isLight(bgColorArry) ? config.black ?? '#000000' : config.white ?? '#ffffff';
 }
 
 
@@ -236,7 +237,7 @@ export function toTextColor(color){
  * @returns {boolean}
  */
 export function isLight (rgb=[0,0,0]) {
-    return (0.213 * rgb[0] +0.715 * rgb[1] +0.072 * rgb[2] >255 / 2);
+    return (0.213 * rgb[0] + 0.715 * rgb[1] + 0.072 * rgb[2] > 255 / 1.5);
 }
 
 /**

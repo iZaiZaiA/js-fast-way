@@ -1033,6 +1033,19 @@ function isArrNull(arr)
 
 
 /**
+ * 效验是否为数字或小数的数字
+ * @param text  字符串内容
+ * @param lose  是否允许负数，默认允许
+ * @returns {boolean}
+ */
+function isNumberReg(text, lose = true)
+{
+    let pattern = lose ? /^-?\d+(.\d{1,2})?$/ : /^[0-9]+([.]{1}[0-9]+){0,1}$/;
+    return pattern.test(text)
+}
+
+
+/**
  * 饿了么UI的表单验证
  * @param formRef 表单ref
  * @returns
@@ -2166,17 +2179,18 @@ function calcDate(date1, date2)
 
 /**
  * 根据深浅色背景，返回黑白文字颜色。
- * @param color    颜色值
+ * @param color     颜色值
+ * @param config    颜色配置
  * @returns {string|string}
  */
-function toTextColor(color){
-    //默认中色
+function toTextColor(color, config = {}){
+    //默认颜色
     if(!color) {
-        return '#000000';
+        return config.black ?? '#000000';
     }
     //渐变色直接返回中色值
     if(color.search('gradient') !== -1) {
-        return '#000000';
+        return config.black ?? '#000000';
     }
     //16进制转换成rgb
     if(color.search('#') !== -1) {
@@ -2185,7 +2199,7 @@ function toTextColor(color){
     let bgColor = color.replace("rgb(", "").replace("rgba(", "").replace(")", "");
     let bgColorArry = bgColor.split(",");
     //浅色背景就返回深色文字颜色。
-    return isLight(bgColorArry) ? '#000000' : '#ffffff';
+    return isLight(bgColorArry) ? config.black ?? '#000000' : config.white ?? '#ffffff';
 }
 
 
@@ -2195,7 +2209,7 @@ function toTextColor(color){
  * @returns {boolean}
  */
 function isLight (rgb=[0,0,0]) {
-    return (0.213 * rgb[0] +0.715 * rgb[1] +0.072 * rgb[2] >255 / 2);
+    return (0.213 * rgb[0] + 0.715 * rgb[1] + 0.072 * rgb[2] > 255 / 1.5);
 }
 
 /**
@@ -2720,6 +2734,37 @@ function hexToRgb(hex) {
 }
 
 /**
+ * 动态加载线上js文件
+ * @param src   线上js文件地址
+ * @param type  js文件类型，默认为 text/javascript
+ * @returns {Promise<unknown>}
+ */
+async function addOnJs(src, type='text/javascript') {
+    return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.type = type;
+        document.head.appendChild(script);
+        script.onload = () => {
+            resolve();
+        };
+    })
+}
+
+/**
+ * 延迟等待
+ * @param timeout   延迟时间，默认1000毫秒
+ * @returns {Promise<unknown>}
+ */
+async function asyncTime (timeout = 1000) {
+    return new Promise(async (resolve) => {
+        setTimeout(() => {
+            resolve(true);
+        }, timeout);
+    })
+}
+
+/**
  * 防抖函数
  * @param func  要执行的函数
  * @param delay 延迟时间，默认500毫秒
@@ -3001,6 +3046,7 @@ function inject(key, defaultValue = '') {
 }
 
 exports.ArrToOneObj = ArrToOneObj;
+exports.addOnJs = addOnJs;
 exports.arrCompare = arrCompare;
 exports.arrDel = arrDel;
 exports.arrDelKey = arrDelKey;
@@ -3020,6 +3066,7 @@ exports.arrSomeOf = arrSomeOf;
 exports.arrToId = arrToId;
 exports.arrToKey = arrToKey;
 exports.arrUnion = arrUnion;
+exports.asyncTime = asyncTime;
 exports.base64ToFile = base64ToFile;
 exports.calcDate = calcDate;
 exports.clearStore = clearStore;
@@ -3078,6 +3125,7 @@ exports.isName = isName;
 exports.isNullES = isNullES;
 exports.isNum = isNum;
 exports.isNumber = isNumber;
+exports.isNumberReg = isNumberReg;
 exports.isNumord = isNumord;
 exports.isObjNull = isObjNull;
 exports.isObject = isObject;
