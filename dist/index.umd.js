@@ -2737,6 +2737,28 @@
             : null;
     }
 
+    //新窗口打开链接
+    function newWindow(url){
+        try {
+            const id = getRandom();
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('target', '_blank');
+            a.setAttribute('id', id);
+            // 防止反复添加
+            if (!document.getElementById(id)) {
+                document.body.appendChild(a);
+            }
+            a.click();
+            //移除a标签
+            document.body.removeChild(a);
+        } catch (e) {
+            console.log(e);
+            window.open(url, '_blank');
+        }
+    }
+
+
     /**
      * 动态加载线上js文件
      * @param src   线上js文件地址
@@ -3141,6 +3163,7 @@
     exports.isUrl = isUrl;
     exports.isValueNull = isValueNull;
     exports.newDownBlob = newDownBlob;
+    exports.newWindow = newWindow;
     exports.numberFormat = numberFormat;
     exports.objEqual = objEqual;
     exports.objHasKey = objHasKey;

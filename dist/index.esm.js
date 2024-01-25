@@ -2731,6 +2731,28 @@ function hexToRgb(hex) {
         : null;
 }
 
+//新窗口打开链接
+function newWindow(url){
+    try {
+        const id = getRandom();
+        const a = document.createElement('a');
+        a.setAttribute('href', url);
+        a.setAttribute('target', '_blank');
+        a.setAttribute('id', id);
+        // 防止反复添加
+        if (!document.getElementById(id)) {
+            document.body.appendChild(a);
+        }
+        a.click();
+        //移除a标签
+        document.body.removeChild(a);
+    } catch (e) {
+        console.log(e);
+        window.open(url, '_blank');
+    }
+}
+
+
 /**
  * 动态加载线上js文件
  * @param src   线上js文件地址
@@ -3043,4 +3065,4 @@ function inject(key, defaultValue = '') {
     return defaultValue;
 }
 
-export { ArrToOneObj, addOnJs, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, asyncTime, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, debounce, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, inject, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumberReg, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, newDownBlob, numberFormat, objEqual, objHasKey, pow1024, priceFormat, provide, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };
+export { ArrToOneObj, addOnJs, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, asyncTime, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, debounce, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, inject, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumberReg, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, newDownBlob, newWindow, numberFormat, objEqual, objHasKey, pow1024, priceFormat, provide, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };

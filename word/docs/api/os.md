@@ -397,3 +397,21 @@ addOnJs('js文件地址').then(() => {
 
 - 类型: `String`
 - 说明: `js文件类型，默认为 text/javascript`
+
+
+
+## 新窗口打开链接 <Badge type="warning" text="V0.4.1" />
+
+创建A标签的方式来打开新标签页，可以避免浏览器拦截
+
+```javascript
+import { newWindow } from "js-fast-way"
+
+newWindow('https://www.baidu.com')
+```
+
+### url <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `要打开的链接`
+-
