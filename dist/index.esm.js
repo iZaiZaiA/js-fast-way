@@ -2731,6 +2731,51 @@ function hexToRgb(hex) {
         : null;
 }
 
+/**
+ * 页面全屏
+ * @param type  true为全屏，false为退出全屏
+ */
+function fullScreen(type= true){
+    try {
+        if (type) {
+            const el = document.documentElement;
+            if(el.RequestFullScreen){
+                el.RequestFullScreen();
+            }
+            //兼容火狐
+            if(el.mozRequestFullScreen){
+                el.mozRequestFullScreen();
+            }
+            //兼容谷歌等可以webkitRequestFullScreen也可以webkitRequestFullscreen
+            if(el.webkitRequestFullScreen){
+                el.webkitRequestFullScreen();
+            }
+            //兼容IE,只能写msRequestFullscreen
+            if(el.msRequestFullscreen){
+                el.msRequestFullscreen();
+            }
+        } else {
+            if(document.exitFullScreen){
+                document.exitFullscreen();
+            }
+            //兼容火狐
+            if(document.mozCancelFullScreen){
+                document.mozCancelFullScreen();
+            }
+            //兼容谷歌等
+            if(document.webkitExitFullscreen){
+                document.webkitExitFullscreen();
+            }
+            //兼容IE
+            if(document.msExitFullscreen){
+                document.msExitFullscreen();
+            }
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 //新窗口打开链接
 function newWindow(url){
     try {
@@ -3065,4 +3110,4 @@ function inject(key, defaultValue = '') {
     return defaultValue;
 }
 
-export { ArrToOneObj, addOnJs, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, asyncTime, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, debounce, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, inject, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumberReg, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, newDownBlob, newWindow, numberFormat, objEqual, objHasKey, pow1024, priceFormat, provide, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };
+export { ArrToOneObj, addOnJs, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, asyncTime, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, debounce, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, fullScreen, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, inject, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumberReg, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, newDownBlob, newWindow, numberFormat, objEqual, objHasKey, pow1024, priceFormat, provide, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };

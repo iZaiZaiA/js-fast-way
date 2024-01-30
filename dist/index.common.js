@@ -2733,6 +2733,51 @@ function hexToRgb(hex) {
         : null;
 }
 
+/**
+ * 页面全屏
+ * @param type  true为全屏，false为退出全屏
+ */
+function fullScreen(type= true){
+    try {
+        if (type) {
+            const el = document.documentElement;
+            if(el.RequestFullScreen){
+                el.RequestFullScreen();
+            }
+            //兼容火狐
+            if(el.mozRequestFullScreen){
+                el.mozRequestFullScreen();
+            }
+            //兼容谷歌等可以webkitRequestFullScreen也可以webkitRequestFullscreen
+            if(el.webkitRequestFullScreen){
+                el.webkitRequestFullScreen();
+            }
+            //兼容IE,只能写msRequestFullscreen
+            if(el.msRequestFullscreen){
+                el.msRequestFullscreen();
+            }
+        } else {
+            if(document.exitFullScreen){
+                document.exitFullscreen();
+            }
+            //兼容火狐
+            if(document.mozCancelFullScreen){
+                document.mozCancelFullScreen();
+            }
+            //兼容谷歌等
+            if(document.webkitExitFullscreen){
+                document.webkitExitFullscreen();
+            }
+            //兼容IE
+            if(document.msExitFullscreen){
+                document.msExitFullscreen();
+            }
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 //新窗口打开链接
 function newWindow(url){
     try {
@@ -3102,6 +3147,7 @@ exports.delStoreData = delStoreData;
 exports.downloadBlob = downloadBlob;
 exports.filterSize = filterSize;
 exports.formValidate = formValidate;
+exports.fullScreen = fullScreen;
 exports.getAllStore = getAllStore;
 exports.getAlphabets = getAlphabets;
 exports.getArrValue = getArrValue;

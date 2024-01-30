@@ -415,3 +415,21 @@ newWindow('https://www.baidu.com')
 - 类型: `String`
 - 说明: `要打开的链接`
 -
+
+
+## 页面全屏 <Badge type="warning" text="V0.4.3" />
+
+是否让web页面全屏显示，或者，退出全屏
+
+```javascript
+import { fullScreen } from "js-fast-way"
+
+fullScreen(true)
+```
+
+### type
+
+- 类型: `String`
+- 默认：`true`
+- 说明: `true为全屏，false为退出全屏`
+
