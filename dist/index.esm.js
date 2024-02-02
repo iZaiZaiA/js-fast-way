@@ -2732,6 +2732,64 @@ function hexToRgb(hex) {
 }
 
 /**
+ * 获取系统是多少位的
+ * @returns {string}
+ */
+function getOsBit() {
+    const agent = navigator.userAgent.toLowerCase();
+    const isMac = /macintosh|mac os x/i.test(navigator.userAgent);
+    if (agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0) {
+        return '32'
+    }else if (agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0) {
+        return '64'
+    }
+    if(isMac){
+        return 'mac'
+    }
+}
+
+
+/**
+ * 获取当前浏览器名称和版本
+ * @returns {{name: string, version: number}|{name: string, version: string}}
+ */
+function getBrowserVersion() {
+    // 获取userAgent信息
+    const ua = navigator.userAgent.toLowerCase();
+    // 判断是否为IE 浏览器，因为IE浏览器有独特的userAgent信息
+    if (/msie|trident/.test(ua)) {
+        // IE11 及以下版本
+        if (/msie \d+/.test(ua)) {
+            const ieVersion = parseInt(ua.match(/msie (\d+)/)[1]);
+            return {name: 'ie', version: ieVersion};
+        } else {
+            return {name: 'ie', version: '11'};
+        }
+    }
+    // 判断是否为Edge 浏览器
+    else if (/edg\/(\d+)/.test(ua)) {
+        const version = parseInt(ua.match(/edg\/(\d+)/)[1]);
+        return {name: 'edge', version: version};
+    }
+    // 判断是否为firefox 浏览器
+    else if (/firefox\/(\d+)/.test(ua)) {
+        const version = parseInt(ua.match(/firefox\/(\d+)/)[1]);
+        return {name: 'firefox', version: version};
+    }
+    // 判断是否为chrome 浏览器
+    else if (/chrome\/(\d+)/.test(ua)) {
+        const version = parseInt(ua.match(/chrome\/(\d+)/)[1]);
+        return {name: 'chrome', version: version};
+    }
+    // 判断是否为Safari 浏览器
+    else if (/safari\/(\d+)/.test(ua)) {
+        const version = parseInt(ua.match(/safari\/(\d+)/)[1]);
+        return {name: 'safari', version: version};
+    }
+}
+
+
+/**
  * 页面全屏
  * @param type  true为全屏，false为退出全屏
  */
@@ -3110,4 +3168,4 @@ function inject(key, defaultValue = '') {
     return defaultValue;
 }
 
-export { ArrToOneObj, addOnJs, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, asyncTime, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, debounce, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, fullScreen, getAllStore, getAlphabets, getArrValue, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, inject, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumberReg, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, newDownBlob, newWindow, numberFormat, objEqual, objHasKey, pow1024, priceFormat, provide, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };
+export { ArrToOneObj, addOnJs, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, asyncTime, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, debounce, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, fullScreen, getAllStore, getAlphabets, getArrValue, getBrowserVersion, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getOsBit, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, inject, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumberReg, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, newDownBlob, newWindow, numberFormat, objEqual, objHasKey, pow1024, priceFormat, provide, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };

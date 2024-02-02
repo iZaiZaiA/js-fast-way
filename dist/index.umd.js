@@ -2738,6 +2738,64 @@
     }
 
     /**
+     * 获取系统是多少位的
+     * @returns {string}
+     */
+    function getOsBit() {
+        const agent = navigator.userAgent.toLowerCase();
+        const isMac = /macintosh|mac os x/i.test(navigator.userAgent);
+        if (agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0) {
+            return '32'
+        }else if (agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0) {
+            return '64'
+        }
+        if(isMac){
+            return 'mac'
+        }
+    }
+
+
+    /**
+     * 获取当前浏览器名称和版本
+     * @returns {{name: string, version: number}|{name: string, version: string}}
+     */
+    function getBrowserVersion() {
+        // 获取userAgent信息
+        const ua = navigator.userAgent.toLowerCase();
+        // 判断是否为IE 浏览器，因为IE浏览器有独特的userAgent信息
+        if (/msie|trident/.test(ua)) {
+            // IE11 及以下版本
+            if (/msie \d+/.test(ua)) {
+                const ieVersion = parseInt(ua.match(/msie (\d+)/)[1]);
+                return {name: 'ie', version: ieVersion};
+            } else {
+                return {name: 'ie', version: '11'};
+            }
+        }
+        // 判断是否为Edge 浏览器
+        else if (/edg\/(\d+)/.test(ua)) {
+            const version = parseInt(ua.match(/edg\/(\d+)/)[1]);
+            return {name: 'edge', version: version};
+        }
+        // 判断是否为firefox 浏览器
+        else if (/firefox\/(\d+)/.test(ua)) {
+            const version = parseInt(ua.match(/firefox\/(\d+)/)[1]);
+            return {name: 'firefox', version: version};
+        }
+        // 判断是否为chrome 浏览器
+        else if (/chrome\/(\d+)/.test(ua)) {
+            const version = parseInt(ua.match(/chrome\/(\d+)/)[1]);
+            return {name: 'chrome', version: version};
+        }
+        // 判断是否为Safari 浏览器
+        else if (/safari\/(\d+)/.test(ua)) {
+            const version = parseInt(ua.match(/safari\/(\d+)/)[1]);
+            return {name: 'safari', version: version};
+        }
+    }
+
+
+    /**
      * 页面全屏
      * @param type  true为全屏，false为退出全屏
      */
@@ -3155,6 +3213,7 @@
     exports.getAllStore = getAllStore;
     exports.getAlphabets = getAlphabets;
     exports.getArrValue = getArrValue;
+    exports.getBrowserVersion = getBrowserVersion;
     exports.getCopyText = getCopyText;
     exports.getFileName = getFileName;
     exports.getFileNames = getFileNames;
@@ -3168,6 +3227,7 @@
     exports.getObjType = getObjType;
     exports.getObjVal = getObjVal;
     exports.getObjValue = getObjValue;
+    exports.getOsBit = getOsBit;
     exports.getRandom = getRandom;
     exports.getRandomFrom = getRandomFrom;
     exports.getStoreData = getStoreData;

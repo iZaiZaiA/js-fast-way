@@ -433,3 +433,35 @@ fullScreen(true)
 - 默认：`true`
 - 说明: `true为全屏，false为退出全屏`
 
+
+
+## 系统32位或64位
+
+获取系统是多少位的，32位还是64位，返回值为32、64、mac
+
+```javascript
+import { getOsBit } from "js-fast-way"
+
+getOsBit() // 64
+```
+
+### 返回内容
+
+- 类型: `String`
+- 说明: `32、64、mac`
+
+
+## 浏览器名称和版本
+
+获取当前浏览器名称和版本, 目前只支持 `chrome`、`firefox`、`safari`、`edge`、`ie`
+
+```javascript
+import { getBrowserVersion } from "js-fast-way"
+
+getBrowserVersion() // {name: 'chrome', version: '121.0.0'}
+```
+
+### 返回内容
+
+- 类型: `Object`
+- 说明: `{name, version}`
