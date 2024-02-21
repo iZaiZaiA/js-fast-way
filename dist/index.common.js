@@ -1625,7 +1625,7 @@ function getToObjVal(obj = {}, field, key)
  * 获取文件大小的字符串类型
  * @param size  文件字节大小
  * @param obj  是否返回对象，默认 false
- * @returns {string}
+ * @returns {{unit: string, size}|string|{unit: string, size: number}|string|{unit: string, size: string}}
  */
 function filterSize(size, obj = false)
 {
