@@ -43,6 +43,16 @@ export function getBrowserVersion() {
         const version = parseInt(ua.match(/edg\/(\d+)/)[1]);
         return {name: 'edge', version: version};
     }
+    // 判断是否为QQ浏览器
+    else if (/qqbrowser\/(\d+)/.test(ua)) {
+        const version = parseInt(ua.match(/qqbrowser\/(\d+)/)[1]);
+        return {name: 'qq', version: version};
+    }
+    // 判断是否为夸克浏览器
+    else if (/quarkpc\/(\d+)/.test(ua)) {
+        const version = parseInt(ua.match(/quarkpc\/(\d+)/)[1]);
+        return {name: 'quark', version: version};
+    }
     // 判断是否为firefox 浏览器
     else if (/firefox\/(\d+)/.test(ua)) {
         const version = parseInt(ua.match(/firefox\/(\d+)/)[1]);

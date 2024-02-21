@@ -1628,16 +1628,28 @@
     /**
      * 获取文件大小的字符串类型
      * @param size  文件字节大小
+     * @param obj  是否返回对象，默认 false
      * @returns {string}
      */
-    function filterSize(size)
+    function filterSize(size, obj = false)
     {
-        if (!size) return '';
-        if (size < pow1024(1)) return size + ' B';
-        if (size < pow1024(2)) return (size / pow1024(1)).toFixed(2) + ' KB';
-        if (size < pow1024(3)) return (size / pow1024(2)).toFixed(2) + ' MB';
-        if (size < pow1024(4)) return (size / pow1024(3)).toFixed(2) + ' GB';
-        return (size / pow1024(4)).toFixed(2) + ' TB'
+        if (!size) {
+            return obj ? {size: 0, unit: 'k'} : '';
+        } else if (size < pow1024(1)) {
+            return obj ? {size: size, unit: 'B'} : size + ' B';
+        } else if (size < pow1024(2)) {
+            const num = (size / pow1024(1)).toFixed(2);
+            return obj ? {size: num, unit: 'KB'} : num + ' KB';
+        } else if (size < pow1024(3)) {
+            const num = (size / pow1024(2)).toFixed(2);
+            return obj ? {size: num, unit: 'MB'} : num + ' MB';
+        } else if (size < pow1024(4)) {
+            const num = (size / pow1024(3)).toFixed(2);
+            return obj ? {size: num, unit: 'GB'} : num + ' GB';
+        } else {
+            const num = (size / pow1024(4)).toFixed(2);
+            return obj ? {size: num, unit: 'TB'} : num + ' TB';
+        }
     }
 
     // 求次幂
@@ -2776,6 +2788,16 @@
         else if (/edg\/(\d+)/.test(ua)) {
             const version = parseInt(ua.match(/edg\/(\d+)/)[1]);
             return {name: 'edge', version: version};
+        }
+        // 判断是否为QQ浏览器
+        else if (/qqbrowser\/(\d+)/.test(ua)) {
+            const version = parseInt(ua.match(/qqbrowser\/(\d+)/)[1]);
+            return {name: 'qq', version: version};
+        }
+        // 判断是否为夸克浏览器
+        else if (/quarkpc\/(\d+)/.test(ua)) {
+            const version = parseInt(ua.match(/quarkpc\/(\d+)/)[1]);
+            return {name: 'quark', version: version};
         }
         // 判断是否为firefox 浏览器
         else if (/firefox\/(\d+)/.test(ua)) {
