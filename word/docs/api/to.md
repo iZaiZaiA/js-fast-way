@@ -339,3 +339,82 @@ calcDate('日期1', '日期2')
 | minutes | 剩余分钟         |
 | seconds | 剩余秒          |
 
+
+## http转https <Badge type="warning" text="V0.4.7" />
+
+```javascript
+import { setUrlHttps } from "js-fast-way"
+
+setUrlHttps('http://123.com') //https://123.com
+```
+
+### str <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明：`网址`
+
+### 返回内容
+
+- 类型: `String`
+- 返回值：`转换后的数据`
+
+
+## http转为https <Badge type="warning" text="V0.4.7" />
+
+替换文本中所有的http为https
+
+```javascript
+import { setAllUrlHttps } from "js-fast-way"
+
+setUrlHttps('http://123.com,http://456.com') //https://123.com,https://456.com
+```
+
+### str <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明：`网址`
+
+### 返回内容
+
+- 类型: `String`
+- 返回值：`转换后的数据`
+
+
+## https转http <Badge type="warning" text="V0.4.7" />
+
+```javascript
+import { setUrlHttp } from "js-fast-way"
+
+setUrlHttp('https://123.com') //http://123.com
+```
+
+### str <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明：`网址`
+
+### 返回内容
+
+- 类型: `String`
+- 返回值：`转换后的数据`
+
+
+## https转为http <Badge type="warning" text="V0.4.7" />
+
+替换文本中所有的https为http
+
+```javascript
+import { setAllUrlHttp } from "js-fast-way"
+
+setAllUrlHttp('https://123.com,https://456.com') //http://123.com,http://456.com
+```
+
+### str <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明：`网址`
+
+### 返回内容
+
+- 类型: `String`
+- 返回值：`转换后的数据`

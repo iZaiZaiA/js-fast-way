@@ -113,7 +113,7 @@ export function isDate(value)
  */
 export function isFunction(func)
 {
-    return isType(func, 'Function');
+    return typeof func === 'function';
 }
 
 
@@ -124,7 +124,7 @@ export function isFunction(func)
  */
 export function isAsyncFunction(func)
 {
-    return isType(func, 'AsyncFunction');
+    return typeof func === 'function';
 }
 
 

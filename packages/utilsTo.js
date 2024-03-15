@@ -247,9 +247,7 @@ export function isLight (rgb=[0,0,0]) {
  */
 export function set16ToRgb(str){
     let reg = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/
-    if(!reg.test(str)) {
-        return;
-    }
+    if(!reg.test(str)) return '';
     let newStr = (str.toLowerCase()).replace(/\#/g,'')
     let len = newStr.length;
     if(len === 3) {
@@ -287,4 +285,45 @@ export function setRgbTo16(str){
         color += t;
     }
     return color;
+}
+
+
+/**
+ * 替换http为https
+ * @param str   url
+ * @returns {*}
+ */
+export function setUrlHttps(str){
+    if (!str) return str
+    return str.replace('http://', 'https://')
+}
+
+/**
+ * 替换文本中所有的http为https
+ * @param str   url
+ * @returns {*}
+ */
+export function setAllUrlHttps(str){
+    if (!str) return str
+    return str.replace(/http:\/\//g, 'https://')
+}
+
+/**
+ * 替换https为http
+ * @param str   url
+ * @returns {*}
+ */
+export function setUrlHttp(str){
+    if (!str) return str
+    return str.replace('https://', 'http://')
+}
+
+/**
+ * 替换文本中所有的https为http
+ * @param str   url
+ * @returns {*}
+ */
+export function setAllUrlHttp(str){
+    if (!str) return str
+    return str.replace(/https:\/\//g, 'http://')
 }

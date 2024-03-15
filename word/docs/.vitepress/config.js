@@ -76,6 +76,10 @@ export default defineConfig({
                     text: '系统元素操作',
                     link: '/api/os'
                 },
+                {
+                    text: '其它函数',
+                    link: '/api/hook'
+                },
             ],
             '/article/': [
                 { text: '数组操作', link: '/article/array' },
