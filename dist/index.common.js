@@ -115,7 +115,7 @@ function isDate(value)
  */
 function isFunction(func)
 {
-    return isType(func, 'Function');
+    return typeof func === 'function';
 }
 
 
@@ -126,7 +126,7 @@ function isFunction(func)
  */
 function isAsyncFunction(func)
 {
-    return isType(func, 'AsyncFunction');
+    return typeof func === 'function';
 }
 
 
@@ -2231,9 +2231,7 @@ function isLight (rgb=[0,0,0]) {
  */
 function set16ToRgb(str){
     let reg = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
-    if(!reg.test(str)) {
-        return;
-    }
+    if(!reg.test(str)) return '';
     let newStr = (str.toLowerCase()).replace(/\#/g,'');
     let len = newStr.length;
     if(len === 3) {
@@ -2271,6 +2269,47 @@ function setRgbTo16(str){
         color += t;
     }
     return color;
+}
+
+
+/**
+ * 替换http为https
+ * @param str   url
+ * @returns {*}
+ */
+function setUrlHttps(str){
+    if (!str) return str
+    return str.replace('http://', 'https://')
+}
+
+/**
+ * 替换文本中所有的http为https
+ * @param str   url
+ * @returns {*}
+ */
+function setAllUrlHttps(str){
+    if (!str) return str
+    return str.replace(/http:\/\//g, 'https://')
+}
+
+/**
+ * 替换https为http
+ * @param str   url
+ * @returns {*}
+ */
+function setUrlHttp(str){
+    if (!str) return str
+    return str.replace('https://', 'http://')
+}
+
+/**
+ * 替换文本中所有的https为http
+ * @param str   url
+ * @returns {*}
+ */
+function setAllUrlHttp(str){
+    if (!str) return str
+    return str.replace(/https:\/\//g, 'http://')
 }
 
 /**
@@ -3192,6 +3231,45 @@ function inject(key, defaultValue = '') {
     return defaultValue;
 }
 
+// 函数接收一个参数，表示监测的最大帧数，这里默认值是 1000
+// 如果说你渲染的东西特别多可以传入一个值
+function useDefer(maxFrameCount = 1000) {
+    // 然后开始计数
+    let frameCount = 0;
+    const refreshFrameCount = () => {
+        requestAnimationFrame(() => {
+            // 每一次 requestAnimationFrame 就计数加一
+            // 表示当前渲染的帧数变多了一帧
+            frameCount++;
+            // 只要当前帧数小于最大帧数就递归执行
+            if (frameCount < maxFrameCount) {
+                refreshFrameCount();
+            }
+        });
+    };
+    refreshFrameCount();
+    // 返回一个函数，接收传递进来的 n
+    return function (showInFrameCount) {
+        // 判断当前渲染的帧数有没有大于 n
+        return frameCount >= showInFrameCount
+    }
+}
+
+let iTimes;
+
+/**
+ * 防止并发操作，阻止2毫秒内的操作
+ * @returns {Promise<unknown>}
+ */
+function useClick() {
+    return new Promise((resolve) => {
+        clearTimeout(iTimes);
+        iTimes = setTimeout(() => {
+            resolve(true);
+        }, 200);
+    })
+}
+
 exports.ArrToOneObj = ArrToOneObj;
 exports.addOnJs = addOnJs;
 exports.arrCompare = arrCompare;
@@ -3295,6 +3373,8 @@ exports.pow1024 = pow1024;
 exports.priceFormat = priceFormat;
 exports.provide = provide;
 exports.set16ToRgb = set16ToRgb;
+exports.setAllUrlHttp = setAllUrlHttp;
+exports.setAllUrlHttps = setAllUrlHttps;
 exports.setCopyText = setCopyText;
 exports.setElementFocus = setElementFocus;
 exports.setElementMainColor = setElementMainColor;
@@ -3305,6 +3385,8 @@ exports.setPosRange = setPosRange;
 exports.setRgbTo16 = setRgbTo16;
 exports.setRowSpace = setRowSpace;
 exports.setStoreData = setStoreData;
+exports.setUrlHttp = setUrlHttp;
+exports.setUrlHttps = setUrlHttps;
 exports.toColor = toColor;
 exports.toFormData = toFormData;
 exports.toLighten = toLighten;
@@ -3313,3 +3395,5 @@ exports.toSerialize = toSerialize;
 exports.toTextColor = toTextColor;
 exports.ulog = ulog;
 exports.uniqueId = uniqueId;
+exports.useClick = useClick;
+exports.useDefer = useDefer;

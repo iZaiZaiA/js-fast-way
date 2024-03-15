@@ -113,7 +113,7 @@ function isDate(value)
  */
 function isFunction(func)
 {
-    return isType(func, 'Function');
+    return typeof func === 'function';
 }
 
 
@@ -124,7 +124,7 @@ function isFunction(func)
  */
 function isAsyncFunction(func)
 {
-    return isType(func, 'AsyncFunction');
+    return typeof func === 'function';
 }
 
 
@@ -2229,9 +2229,7 @@ function isLight (rgb=[0,0,0]) {
  */
 function set16ToRgb(str){
     let reg = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
-    if(!reg.test(str)) {
-        return;
-    }
+    if(!reg.test(str)) return '';
     let newStr = (str.toLowerCase()).replace(/\#/g,'');
     let len = newStr.length;
     if(len === 3) {
@@ -2269,6 +2267,47 @@ function setRgbTo16(str){
         color += t;
     }
     return color;
+}
+
+
+/**
+ * 替换http为https
+ * @param str   url
+ * @returns {*}
+ */
+function setUrlHttps(str){
+    if (!str) return str
+    return str.replace('http://', 'https://')
+}
+
+/**
+ * 替换文本中所有的http为https
+ * @param str   url
+ * @returns {*}
+ */
+function setAllUrlHttps(str){
+    if (!str) return str
+    return str.replace(/http:\/\//g, 'https://')
+}
+
+/**
+ * 替换https为http
+ * @param str   url
+ * @returns {*}
+ */
+function setUrlHttp(str){
+    if (!str) return str
+    return str.replace('https://', 'http://')
+}
+
+/**
+ * 替换文本中所有的https为http
+ * @param str   url
+ * @returns {*}
+ */
+function setAllUrlHttp(str){
+    if (!str) return str
+    return str.replace(/https:\/\//g, 'http://')
 }
 
 /**
@@ -3190,4 +3229,43 @@ function inject(key, defaultValue = '') {
     return defaultValue;
 }
 
-export { ArrToOneObj, addOnJs, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, asyncTime, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, debounce, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, fullScreen, getAllStore, getAlphabets, getArrValue, getBrowserVersion, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getOsBit, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, inject, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumberReg, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, newDownBlob, newWindow, numberFormat, objEqual, objHasKey, pow1024, priceFormat, provide, set16ToRgb, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId };
+// 函数接收一个参数，表示监测的最大帧数，这里默认值是 1000
+// 如果说你渲染的东西特别多可以传入一个值
+function useDefer(maxFrameCount = 1000) {
+    // 然后开始计数
+    let frameCount = 0;
+    const refreshFrameCount = () => {
+        requestAnimationFrame(() => {
+            // 每一次 requestAnimationFrame 就计数加一
+            // 表示当前渲染的帧数变多了一帧
+            frameCount++;
+            // 只要当前帧数小于最大帧数就递归执行
+            if (frameCount < maxFrameCount) {
+                refreshFrameCount();
+            }
+        });
+    };
+    refreshFrameCount();
+    // 返回一个函数，接收传递进来的 n
+    return function (showInFrameCount) {
+        // 判断当前渲染的帧数有没有大于 n
+        return frameCount >= showInFrameCount
+    }
+}
+
+let iTimes;
+
+/**
+ * 防止并发操作，阻止2毫秒内的操作
+ * @returns {Promise<unknown>}
+ */
+function useClick() {
+    return new Promise((resolve) => {
+        clearTimeout(iTimes);
+        iTimes = setTimeout(() => {
+            resolve(true);
+        }, 200);
+    })
+}
+
+export { ArrToOneObj, addOnJs, arrCompare, arrDel, arrDelKey, arrDelKeyLeft, arrDelKeyOther, arrDelKeyRight, arrDelLeft, arrDelOther, arrDelRight, arrIndex, arrIntersection, arrKeySort, arrKeyValue, arrReplace, arrShuffle, arrSomeOf, arrToId, arrToKey, arrUnion, asyncTime, base64ToFile, calcDate, clearStore, clearStoreAll, clog, createArr, debounce, deepClone, deepCloneV2, delStoreData, downloadBlob, filterSize, formValidate, fullScreen, getAllStore, getAlphabets, getArrValue, getBrowserVersion, getCopyText, getFileName, getFileNames, getFileSuffix, getFileType, getLowerCase, getMonthList, getNumber, getNumberLower, getNumberUpper, getObjType, getObjVal, getObjValue, getOsBit, getRandom, getRandomFrom, getStoreData, getToObjVal, getUUID, getUpperCase, getYearList, inject, isAllNull, isAlphabets, isArrIndex, isArrItem, isArrNull, isArray, isAsyncFunction, isBoolean, isDate, isElement, isEmail, isFileFormat, isFileSize, isFunction, isIdCard, isLight, isLowerCase, isName, isNullES, isNum, isNumber, isNumberReg, isNumord, isObjNull, isObject, isPhone, isPromise, isString, isType, isUpperCase, isUrl, isValueNull, newDownBlob, newWindow, numberFormat, objEqual, objHasKey, pow1024, priceFormat, provide, set16ToRgb, setAllUrlHttp, setAllUrlHttps, setCopyText, setElementFocus, setElementMainColor, setImageColor, setImageColorStyle, setPosInsert, setPosRange, setRgbTo16, setRowSpace, setStoreData, setUrlHttp, setUrlHttps, toColor, toFormData, toLighten, toParse, toSerialize, toTextColor, ulog, uniqueId, useClick, useDefer };
