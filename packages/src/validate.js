@@ -1,5 +1,5 @@
-import {verifyCardNum} from "./plugins/verify";
-import {isArray, isObject} from "./isType";
+import {verifyCardNum} from "../plugins/verify";
+import {isArray, isObject} from "./type";
 
 /**
  * 验证网址是否合法

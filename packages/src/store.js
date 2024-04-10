@@ -1,4 +1,4 @@
-import { isAllNull } from "./isValidate"
+import { isAllNull } from "./validate"
 
 /**
  * 保存缓存

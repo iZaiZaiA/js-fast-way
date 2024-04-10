@@ -1,7 +1,7 @@
-import { toColor } from "./utilsTo";
-import { getRandom } from "./utilsRandom";
-import { setStoreData, getStoreData } from "./utilsStore";
-import { Color, Solver, hexToRgb } from "./plugins/color";
+import { toColor } from "./to";
+import { getRandom } from "./random";
+import { setStoreData, getStoreData } from "./store";
+import { Color, Solver, hexToRgb } from "../plugins/color";
 
 /**
  * 获取系统是多少位的

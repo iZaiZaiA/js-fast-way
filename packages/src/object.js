@@ -1,6 +1,6 @@
-import { isObject } from "./isType";
-import { isObjNull } from "./isValidate";
-import { produce } from "./plugins/immer";
+import { isObject } from "./type";
+import { isObjNull } from "./validate";
+import { produce } from "../plugins/immer";
 
 /**
  * 对象深拷贝

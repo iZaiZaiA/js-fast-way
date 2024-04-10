@@ -1,4 +1,4 @@
-import { isArray } from './isType';
+import { isArray } from './type';
 
 /**
  * 创建初始数组

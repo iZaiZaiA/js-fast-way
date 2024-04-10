@@ -8,7 +8,7 @@ const toString = Object.prototype.toString;
  * @param type 类型，boolean、number、string、function、array、date、regExp、undefined、null、object 等
  * @returns {boolean} 是或否
  */
-export function isType(value, type)
+export function type(value, type)
 {
     return toString.call(value) === `[object ${type}]`;
 }
@@ -47,7 +47,7 @@ export function getObjType(obj)
  */
 export function isString(value)
 {
-    return isType(value, 'String');
+    return type(value, 'String');
 }
 
 
@@ -58,7 +58,7 @@ export function isString(value)
  */
 export function isNumber(value)
 {
-    return isType(value, 'Number');
+    return type(value, 'Number');
 }
 
 
@@ -69,7 +69,7 @@ export function isNumber(value)
  */
 export function isBoolean(value)
 {
-    return isType(value, 'Boolean');
+    return type(value, 'Boolean');
 }
 
 
@@ -91,7 +91,7 @@ export function isArray(value)
  */
 export function isObject(value)
 {
-    return value !== null && isType(value, 'Object');
+    return value !== null && type(value, 'Object');
 }
 
 
@@ -102,7 +102,7 @@ export function isObject(value)
  */
 export function isDate(value)
 {
-    return isType(value, 'Date');
+    return type(value, 'Date');
 }
 
 
@@ -135,7 +135,7 @@ export function isAsyncFunction(func)
  */
 export function isPromise(value)
 {
-    return isType(value, 'Promise') && isObject(value) && isFunction(value.then) && isFunction(value.catch);
+    return type(value, 'Promise') && isObject(value) && isFunction(value.then) && isFunction(value.catch);
 }
 
 

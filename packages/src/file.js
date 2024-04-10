@@ -1,4 +1,4 @@
-import {getObjVal} from "./utilsObject";
+import { getObjVal } from "./object";
 
 /**
  * 获取文件大小的字符串类型
@@ -155,8 +155,6 @@ const getDisposition = (headers) => {
         return ''
     }
 }
-
-
 
 /**
  * 下载文件

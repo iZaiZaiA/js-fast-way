@@ -418,3 +418,41 @@ setAllUrlHttp('https://123.com,https://456.com') //http://123.com,http://456.com
 
 - 类型: `String`
 - 返回值：`转换后的数据`
+
+
+## jfwNum <Badge type="warning" text="V0.4.8" />
+
+简单的数学计算，使用了 `bignumber.js` 插件，有导出 `BigNumber`，可直接使用官方API，[官方文档](https://mikemcl.github.io/bignumber.js)
+
+```javascript
+import { jfwNum } from "js-fast-way"
+
+// 计算
+jfwNum(1, '+', '1') //2
+jfwNum(1, '-', '1').toString() //'0'
+jfwNum(1, '*', '1').toNumber() //1
+jfwNum(1, '/', '1').toFixed(2) //1.00
+
+// 是否相等
+jfwNum(5, '=', '5') //true
+```
+
+### num1 <Badge type="warning" text="必传参数" />
+
+- 类型: `String/Number`
+- 说明：`数字1`
+
+### type <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明：`类型 + - * / =`
+
+### num2 <Badge type="warning" text="必传参数" />
+
+- 类型: `String/Number`
+- 说明：`数字2`
+
+### 返回内容
+
+- 类型: `-`
+- 返回值：`计算后的内容`
