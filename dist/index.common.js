@@ -1059,6 +1059,210 @@ async function formValidate(formRef)
     });
 }
 
+// draft的标识符
+const DRAFTABLE = Symbol.for('immer-draftable');
+
+// 是否是原生对象
+const isPlainObject = value => {
+    const objectCtorString = Object.prototype.constructor.toString();
+
+    if (!value || typeof value !== "object") return false
+    const proto = Object.getPrototypeOf(value);
+    if (proto === null) {
+        return true
+    }
+    const Ctor = Object.hasOwnProperty.call(proto, "constructor") && proto.constructor;
+
+    if (Ctor === Object) return true
+
+    return (
+        typeof Ctor == "function" &&
+        Function.toString.call(Ctor) === objectCtorString
+    )
+};
+
+// 判断是否是一个draft(一个代理对象)
+const isDraftable = value => !!value && !!value[DRAFTABLE];
+
+
+function produce(baseState, fn) {
+    const drafts = new Map();
+    const copies = new Map();
+
+    const objectTraps = {
+        get(target, key) {
+            if (key === DRAFTABLE) return target
+            const data = copies.get(target) || target;
+            return getDraft(data[key])
+        },
+        set(target, key, val) {
+            const copy = shallowCopy(target);
+            const newValue = getDraft(val);
+            copy[key] = isDraftable(newValue) ? newValue[DRAFTABLE] : newValue;
+            return true
+        }
+    };
+
+    const getDraft = data => {
+        if (isDraftable(data)) {
+            return data
+        }
+        if (isPlainObject(data) || Array.isArray(data)) {
+            if (drafts.has(data)) {
+                return drafts.get(data)
+            }
+            const draft = new Proxy(data, objectTraps);
+            drafts.set(data, draft);
+            return draft
+        }
+        return data
+    };
+
+    const shallowCopy = data => {
+        if (copies.has(data)) {
+            return copies.get(data)
+        }
+        const copy = Array.isArray(data) ? data.slice() : { ...data };
+        copies.set(data, copy);
+        return copy
+    };
+
+    const isChange = data => {
+        if (drafts.has(data) || copies.has(data)) return true
+    };
+
+    const finalize = data => {
+        if (isPlainObject(data) || Array.isArray(data)) {
+            if (!isChange(data)) {
+                return data
+            }
+            const copy = shallowCopy(data);
+            Object.keys(copy).forEach(key => {
+                copy[key] = finalize(copy[key]);
+            });
+            return copy
+        }
+        return data
+    };
+    const draft = getDraft(baseState);
+    if (fn) {
+        fn(draft);
+    }
+    return finalize(baseState)
+}
+
+/**
+ * 对象深拷贝
+ * @param obj       深拷贝的对象
+ * @param cache
+ * @returns {*|*[]|{}}
+ */
+function deepClone(obj, cache = new Map())
+{
+    const isObject = (obj) => typeof obj === 'object' && obj !== null;
+    const forEach = (array, cb) => {
+        let i = -1, leng = array.length;
+        while (++i < leng) {
+            cb(array[ i ]);
+        }
+    };
+    if (isObject(obj)) {
+        const cacheObj = cache.get(obj);
+        if (cacheObj) return cacheObj
+        let cloneTarget = Array.isArray(obj) ? [] : {};
+        let keys = Object.keys(obj);
+        cache.set(obj, cloneTarget);
+        forEach(keys, (key) => {
+            const value = obj[ key ];
+            cloneTarget[ key ] = isObject(value) ? deepClone(value, cache) : value;
+        });
+        return cloneTarget
+    } else {
+        return obj
+    }
+}
+
+/**
+ * 深拷贝数据
+ * @param data  数据
+ * @param fn    函数
+ * @returns {*}
+ */
+function deepCloneV2(data, fn) {
+    return produce(data, fn)
+}
+
+
+/**
+ * 判断一个对象是否存在key
+ * @param obj   对象
+ * @param key   字段
+ * @returns {number|boolean}
+ */
+function objHasKey(obj, key)
+{
+    if (key) return key in obj;
+    let keysArr = Object.keys(obj);
+    return keysArr.length;
+}
+
+
+/**
+ * 判断两个对象是否相等，这两个对象的值只能是数字或字符串
+ * @param obj1  对象1
+ * @param obj2  对象2
+ * @returns {boolean}
+ */
+function objEqual(obj1, obj2)
+{
+    const keysArr1 = Object.keys(obj1);
+    const keysArr2 = Object.keys(obj2);
+    if (keysArr1.length !== keysArr2.length) return false
+    else if (keysArr1.length === 0 && keysArr2.length === 0) return true
+    else return !keysArr1.some(key => obj1[key] != obj2[key])
+}
+
+
+/**
+ * 取对象数据, 如果数据存在，就返回原始数据。如果不存在，就返回 空对象 {}
+ * @param value 数据内容
+ * @returns {*|{}}
+ */
+function getObjValue(value)
+{
+    return isObject(value) ? value : {};
+}
+
+
+/**
+ * 取对象数据2, 如果数据存在，返回原始数据。如果不存在，或为空对象时,返回false
+ * @param value 数据内容
+ * @returns {boolean | {}}
+ */
+function getObjVal(value)
+{
+    const res = getObjValue(value);
+    return isObjNull(res) ? false : res;
+}
+
+
+/**
+ * 取转换后的对象值
+ * @param obj       对象数据
+ * @param field     对象键值名
+ * @param key       字段名
+ * @returns {boolean|{}|*|string}
+ */
+function getToObjVal(obj = {}, field, key)
+{
+    if (key) {
+        const objValue = getObjValue(obj[field]);
+        return objValue[key] || ''
+    } else {
+        return getObjVal(obj[field])
+    }
+}
+
 /**
  * 创建初始数组
  * @param value 默认值
@@ -1417,207 +1621,43 @@ function arrKeySort(arr, field = 'id', order = 'asc')
     }
 }
 
-// draft的标识符
-const DRAFTABLE = Symbol.for('immer-draftable');
-
-// 是否是原生对象
-const isPlainObject = value => {
-    const objectCtorString = Object.prototype.constructor.toString();
-
-    if (!value || typeof value !== "object") return false
-    const proto = Object.getPrototypeOf(value);
-    if (proto === null) {
-        return true
+/**
+ * 不区分大小写的一维数组查询
+ * @param arr   数组
+ * @param val   值
+ * @returns {number}
+ */
+function indexQf(arr, val)
+{
+    let index = -1, name = val?.toLowerCase();
+    for (let i = 0; i < arr.length; i++) {
+        const item = arr[i]?.toLowerCase();
+        if (item === name) {
+            index = i;
+            break
+        }
     }
-    const Ctor = Object.hasOwnProperty.call(proto, "constructor") && proto.constructor;
-
-    if (Ctor === Object) return true
-
-    return (
-        typeof Ctor == "function" &&
-        Function.toString.call(Ctor) === objectCtorString
-    )
-};
-
-// 判断是否是一个draft(一个代理对象)
-const isDraftable = value => !!value && !!value[DRAFTABLE];
-
-
-function produce(baseState, fn) {
-    const drafts = new Map();
-    const copies = new Map();
-
-    const objectTraps = {
-        get(target, key) {
-            if (key === DRAFTABLE) return target
-            const data = copies.get(target) || target;
-            return getDraft(data[key])
-        },
-        set(target, key, val) {
-            const copy = shallowCopy(target);
-            const newValue = getDraft(val);
-            copy[key] = isDraftable(newValue) ? newValue[DRAFTABLE] : newValue;
-            return true
-        }
-    };
-
-    const getDraft = data => {
-        if (isDraftable(data)) {
-            return data
-        }
-        if (isPlainObject(data) || Array.isArray(data)) {
-            if (drafts.has(data)) {
-                return drafts.get(data)
-            }
-            const draft = new Proxy(data, objectTraps);
-            drafts.set(data, draft);
-            return draft
-        }
-        return data
-    };
-
-    const shallowCopy = data => {
-        if (copies.has(data)) {
-            return copies.get(data)
-        }
-        const copy = Array.isArray(data) ? data.slice() : { ...data };
-        copies.set(data, copy);
-        return copy
-    };
-
-    const isChange = data => {
-        if (drafts.has(data) || copies.has(data)) return true
-    };
-
-    const finalize = data => {
-        if (isPlainObject(data) || Array.isArray(data)) {
-            if (!isChange(data)) {
-                return data
-            }
-            const copy = shallowCopy(data);
-            Object.keys(copy).forEach(key => {
-                copy[key] = finalize(copy[key]);
-            });
-            return copy
-        }
-        return data
-    };
-    const draft = getDraft(baseState);
-    if (fn) {
-        fn(draft);
-    }
-    return finalize(baseState)
+    return index
 }
 
 /**
- * 对象深拷贝
- * @param obj       深拷贝的对象
- * @param cache
- * @returns {*|*[]|{}}
+ * 递归获取最子级的数据
+ * @param arr       数组数据
+ * @param parameter 参数 {index,children,key}
+ * @returns {Promise<*>}
  */
-function deepClone(obj, cache = new Map())
+async function recursionChildren(arr, parameter = {})
 {
-    const isObject = (obj) => typeof obj === 'object' && obj !== null;
-    const forEach = (array, cb) => {
-        let i = -1, leng = array.length;
-        while (++i < leng) {
-            cb(array[ i ]);
-        }
+    const param = {
+        index: !isNullES(parameter.index) ? parameter.index : 0,
+        children: !isNullES(parameter.children) ? parameter.children : 'children',
+        key: !isNullES(parameter.key) ? parameter.key : ''
     };
-    if (isObject(obj)) {
-        const cacheObj = cache.get(obj);
-        if (cacheObj) return cacheObj
-        let cloneTarget = Array.isArray(obj) ? [] : {};
-        let keys = Object.keys(obj);
-        cache.set(obj, cloneTarget);
-        forEach(keys, (key) => {
-            const value = obj[ key ];
-            cloneTarget[ key ] = isObject(value) ? deepClone(value, cache) : value;
-        });
-        return cloneTarget
+    const item = arr[param.index], children = item[param.children];
+    if (!isNullES(children) && children.length > 0) {
+        return await recursionChildren(children, {...param, index: 0})
     } else {
-        return obj
-    }
-}
-
-/**
- * 深拷贝数据
- * @param data  数据
- * @param fn    函数
- * @returns {*}
- */
-function deepCloneV2(data, fn) {
-    return produce(data, fn)
-}
-
-
-/**
- * 判断一个对象是否存在key
- * @param obj   对象
- * @param key   字段
- * @returns {number|boolean}
- */
-function objHasKey(obj, key)
-{
-    if (key) return key in obj;
-    let keysArr = Object.keys(obj);
-    return keysArr.length;
-}
-
-
-/**
- * 判断两个对象是否相等，这两个对象的值只能是数字或字符串
- * @param obj1  对象1
- * @param obj2  对象2
- * @returns {boolean}
- */
-function objEqual(obj1, obj2)
-{
-    const keysArr1 = Object.keys(obj1);
-    const keysArr2 = Object.keys(obj2);
-    if (keysArr1.length !== keysArr2.length) return false
-    else if (keysArr1.length === 0 && keysArr2.length === 0) return true
-    else return !keysArr1.some(key => obj1[key] != obj2[key])
-}
-
-
-/**
- * 取对象数据, 如果数据存在，就返回原始数据。如果不存在，就返回 空对象 {}
- * @param value 数据内容
- * @returns {*|{}}
- */
-function getObjValue(value)
-{
-    return isObject(value) ? value : {};
-}
-
-
-/**
- * 取对象数据2, 如果数据存在，返回原始数据。如果不存在，或为空对象时,返回false
- * @param value 数据内容
- * @returns {boolean | {}}
- */
-function getObjVal(value)
-{
-    const res = getObjValue(value);
-    return isObjNull(res) ? false : res;
-}
-
-
-/**
- * 取转换后的对象值
- * @param obj       对象数据
- * @param field     对象键值名
- * @param key       字段名
- * @returns {boolean|{}|*|string}
- */
-function getToObjVal(obj = {}, field, key)
-{
-    if (key) {
-        const objValue = getObjValue(obj[field]);
-        return objValue[key] || ''
-    } else {
-        return getObjVal(obj[field])
+        return !isNullES(param.key) ? item[param.key] : item
     }
 }
 
@@ -2309,6 +2349,24 @@ function setAllUrlHttp(str){
     if (!str) return str
     return str.replace(/https:\/\//g, 'http://')
 }
+
+/**
+ * 计算缓存是否过期
+ * @param key   缓存名称
+ * @param time  过期时间，毫秒
+ */
+function getStoreTime(key, time= 2000)
+{
+    const data = getStoreData(key, true);
+    if (isNullES(data)) return true
+    const date = calcDate(data.datetime, new Date().getTime());
+    if (date.seconds > time) {
+        delStoreData(key);
+        return true
+    }
+    return false
+}
+
 
 /**
  * 保存缓存
@@ -3267,6 +3325,58 @@ function useClick() {
         }, 200);
     })
 }
+
+//微型跨文件，全局事件监听器
+function useMitt(all) {
+    //事件名称到已注册处理程序函数的映射.
+    all = all || new Map();
+    return {
+        /**
+         * 注册事件处理程序
+         * @param key   //事件key
+         * @param fun   //事件方法
+         */
+        on(key, fun) {
+            const handlers = all.get(key);
+            if (handlers) {
+                handlers.push(fun);
+            } else {
+                all.set(key, [fun]);
+            }
+        },
+        /**
+         * 关闭事件处理程序
+         * @param key   //事件key
+         * @param fun   //事件方法
+         */
+        off(key, fun) {
+            const handlers = all.get(key);
+            if (handlers) {
+                if (fun) {
+                    handlers.splice(handlers.indexOf(fun) >>> 0, 1);
+                } else {
+                    all.set(key, []);
+                }
+            }
+        },
+        /**
+         * 触发事件
+         * @param key   //事件key
+         * @param data  //传递数据
+         */
+        emit(key, data) {
+            let handlers = all.get(key);
+            if (handlers) {
+                // eslint-disable-next-line array-callback-return
+                handlers.slice().map((handler) => {
+                    handler(data);
+                });
+            }
+        },
+    }
+}
+
+const emitter = useMitt();
 
 /*
  *      bignumber.js v9.1.2
@@ -6179,7 +6289,7 @@ var BigNumber = clone();
  * @param num1  数字1
  * @param type  类型 + - * / =
  * @param num2  数字2
- * @returns {BigNumber|boolean}
+ * @returns {number|boolean}
  */
 function jfwNum(num1, type, num2)
 {
@@ -6206,14 +6316,14 @@ function jfwNum(num1, type, num2)
     //处理参数
     const param1 = new BigNumber(num1);
     if (type === '+') {
-        return param1.plus(num2)
+        return param1.plus(num2).toNumber()
     } else if (type === '-') {
-        return param1.minus(num2)
+        return param1.minus(num2).toNumber()
     } else if (type === '*') {
-        return param1.multipliedBy(num2)
+        return param1.multipliedBy(num2).toNumber()
     } else if (type === '/') {
         const param2 = new BigNumber(num2);
-        return param1.dividedBy(param2)
+        return param1.dividedBy(param2).toNumber()
     } else if (type === '=') {
         const param2 = new BigNumber(num2);
         const result = param1.comparedTo(param2);
@@ -6255,6 +6365,7 @@ exports.deepClone = deepClone;
 exports.deepCloneV2 = deepCloneV2;
 exports.delStoreData = delStoreData;
 exports.downloadBlob = downloadBlob;
+exports.emitter = emitter;
 exports.filterSize = filterSize;
 exports.formValidate = formValidate;
 exports.fullScreen = fullScreen;
@@ -6279,10 +6390,12 @@ exports.getOsBit = getOsBit;
 exports.getRandom = getRandom;
 exports.getRandomFrom = getRandomFrom;
 exports.getStoreData = getStoreData;
+exports.getStoreTime = getStoreTime;
 exports.getToObjVal = getToObjVal;
 exports.getUUID = getUUID;
 exports.getUpperCase = getUpperCase;
 exports.getYearList = getYearList;
+exports.indexQf = indexQf;
 exports.inject = inject;
 exports.isAllNull = isAllNull;
 exports.isAlphabets = isAlphabets;
@@ -6324,6 +6437,7 @@ exports.objHasKey = objHasKey;
 exports.pow1024 = pow1024;
 exports.priceFormat = priceFormat;
 exports.provide = provide;
+exports.recursionChildren = recursionChildren;
 exports.set16ToRgb = set16ToRgb;
 exports.setAllUrlHttp = setAllUrlHttp;
 exports.setAllUrlHttps = setAllUrlHttps;
@@ -6350,3 +6464,4 @@ exports.ulog = ulog;
 exports.uniqueId = uniqueId;
 exports.useClick = useClick;
 exports.useDefer = useDefer;
+exports.useMitt = useMitt;

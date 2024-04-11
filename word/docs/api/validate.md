@@ -286,7 +286,7 @@ isArrNull([]) // true
 - 返回值：`true | false`
 
 
-## 是否为数字 <Badge type="warning" text="V0.4.0" />
+## 是否为小数或数字 <Badge type="warning" text="V0.4.0" />
 
 效验是否为数字或小数的数字
 

@@ -420,7 +420,7 @@ setAllUrlHttp('https://123.com,https://456.com') //http://123.com,http://456.com
 - 返回值：`转换后的数据`
 
 
-## jfwNum <Badge type="warning" text="V0.4.8" />
+## 数学计算 <Badge type="warning" text="V0.4.8" />
 
 简单的数学计算，使用了 `bignumber.js` 插件，有导出 `BigNumber`，可直接使用官方API，[官方文档](https://mikemcl.github.io/bignumber.js)
 
@@ -429,9 +429,9 @@ import { jfwNum } from "js-fast-way"
 
 // 计算
 jfwNum(1, '+', '1') //2
-jfwNum(1, '-', '1').toString() //'0'
+jfwNum(1, '-', '1').toString() //0
 jfwNum(1, '*', '1').toNumber() //1
-jfwNum(1, '/', '1').toFixed(2) //1.00
+jfwNum(1, '/', '1').toFixed(2) //1.0
 
 // 是否相等
 jfwNum(5, '=', '5') //true

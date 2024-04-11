@@ -535,3 +535,74 @@ arrKeySort(arr, 'id', 'asc') // [{id: 1, name: '张三'}, {id: 2, name: '李四'
 ### 返回内容
 
 - 类型: `Array`
+
+
+
+## indexQf查询 <Badge type="warning" text="V0.4.9" />
+
+不区分大小写的一维数组查询
+
+```javascript
+import { indexQf } from "js-fast-way"
+const arr = ['Abc','ABCd']
+indexQf(arr,'abc') // 0
+```
+
+### arr <Badge type="warning" text="必传参数" />
+
+- 类型: `Array`
+- 说明: `一维数组`
+
+### val <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `要查询的内容`
+
+### 返回内容
+
+- 类型: `Number`
+- 返回值：`返回索引，不存在为-1`
+
+
+
+## 最子级的数据 <Badge type="warning" text="V0.4.9" />
+
+递归获取最子级的数据
+
+```javascript
+import { recursionChildren } from "js-fast-way"
+const arr = [{
+    key: 'my1',
+    children: [{
+        key: 'my1-1',
+        children: [{
+            key: 'my1-1-1'
+        }]
+    }]
+}]
+
+recursionChildren(arr, {
+    index: 0,
+    children: 'children',
+    key: 'key'
+})  //my1-1-1
+```
+
+### arr <Badge type="warning" text="必传参数" />
+
+- 类型: `Array`
+- 说明: `数组数据`
+
+### parameter
+
+- 类型: `Object`
+- 说明: `参数`
+- 参数说明如下
+
+```javascript
+{
+    index: 0, //取数组中的第几个的索引
+    children: 'children',   //子级的字段名
+    key: 'key'  //要返回的字符名，可为空，为空则返回整个数据对象
+}
+```

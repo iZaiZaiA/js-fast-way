@@ -123,3 +123,30 @@ import { clearStoreAll } from "js-fast-way"
 
 clearStoreAll()
 ```
+
+
+## 缓存是否过期 <Badge type="warning" text="V0.4.9" />
+
+```javascript
+import { getStoreTime } from "js-fast-way"
+
+getStoreTime('token')
+```
+
+### key <Badge type="warning" text="必传参数" />
+
+- 类型: `String`
+- 说明: `缓存名称`
+
+
+### time
+
+- 类型: `Number`
+- 默认: 2000
+- 说明: `过期时间，毫秒`
+
+
+### 返回内容
+
+- 类型: `Boolean`
+- 返回值：`已过期为true，否则为false`

@@ -6,7 +6,7 @@ import {isNullES, isNumberReg} from "../src";
  * @param num1  数字1
  * @param type  类型 + - * / =
  * @param num2  数字2
- * @returns {BigNumber|boolean}
+ * @returns {number|boolean}
  */
 export function jfwNum(num1, type, num2)
 {
@@ -33,14 +33,14 @@ export function jfwNum(num1, type, num2)
     //处理参数
     const param1 = new BigNumber(num1)
     if (type === '+') {
-        return param1.plus(num2)
+        return param1.plus(num2).toNumber()
     } else if (type === '-') {
-        return param1.minus(num2)
+        return param1.minus(num2).toNumber()
     } else if (type === '*') {
-        return param1.multipliedBy(num2)
+        return param1.multipliedBy(num2).toNumber()
     } else if (type === '/') {
         const param2 = new BigNumber(num2)
-        return param1.dividedBy(param2)
+        return param1.dividedBy(param2).toNumber()
     } else if (type === '=') {
         const param2 = new BigNumber(num2)
         const result = param1.comparedTo(param2)

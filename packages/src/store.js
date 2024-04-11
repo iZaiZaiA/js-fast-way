@@ -1,4 +1,23 @@
-import { isAllNull } from "./validate"
+import {isAllNull, isNullES} from "./validate"
+import {calcDate} from "./to";
+
+/**
+ * 计算缓存是否过期
+ * @param key   缓存名称
+ * @param time  过期时间，毫秒
+ */
+export function getStoreTime(key, time= 2000)
+{
+    const data = getStoreData(key, true)
+    if (isNullES(data)) return true
+    const date = calcDate(data.datetime, new Date().getTime())
+    if (date.seconds > time) {
+        delStoreData(key)
+        return true
+    }
+    return false
+}
+
 
 /**
  * 保存缓存

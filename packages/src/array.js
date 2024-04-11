@@ -1,4 +1,6 @@
 import { isArray } from './type';
+import {isNullES} from "./validate";
+import {getObjVal} from "./object";
 
 /**
  * 创建初始数组
@@ -355,5 +357,45 @@ export function arrKeySort(arr, field = 'id', order = 'asc')
         return arr.sort(arrCompare(field, order));
     } else {
         return arr;
+    }
+}
+
+/**
+ * 不区分大小写的一维数组查询
+ * @param arr   数组
+ * @param val   值
+ * @returns {number}
+ */
+export function indexQf(arr, val)
+{
+    let index = -1, name = val?.toLowerCase()
+    for (let i = 0; i < arr.length; i++) {
+        const item = arr[i]?.toLowerCase()
+        if (item === name) {
+            index = i
+            break
+        }
+    }
+    return index
+}
+
+/**
+ * 递归获取最子级的数据
+ * @param arr       数组数据
+ * @param parameter 参数 {index,children,key}
+ * @returns {Promise<*>}
+ */
+export async function recursionChildren(arr, parameter = {})
+{
+    const param = {
+        index: !isNullES(parameter.index) ? parameter.index : 0,
+        children: !isNullES(parameter.children) ? parameter.children : 'children',
+        key: !isNullES(parameter.key) ? parameter.key : ''
+    }
+    const item = arr[param.index], children = item[param.children]
+    if (!isNullES(children) && children.length > 0) {
+        return await recursionChildren(children, {...param, index: 0})
+    } else {
+        return !isNullES(param.key) ? item[param.key] : item
     }
 }
