@@ -1040,7 +1040,7 @@ function isArrNull(arr)
  */
 function isNumberReg(text, lose = true)
 {
-    let pattern = lose ? /^-?\d+(.\d{1,2})?$/ : /^[0-9]+([.]{1}[0-9]+){0,1}$/;
+    let pattern = lose ? /^-?\d+(.\d+)?$/ : /^\d+(.\d+)?$/;
     return pattern.test(text)
 }
 
