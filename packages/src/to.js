@@ -163,7 +163,7 @@ export function toTextColor(color, config = {}) {
  * @param {number[]} rgb RGB颜色值
  * @returns {boolean}
  */
-function isLight(rgb) {
+export function isLight(rgb) {
     return (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) > 186;
 }
 
@@ -172,7 +172,7 @@ function isLight(rgb) {
  * @param {string} hex 16进制颜色
  * @returns {number[]}
  */
-function set16ToRgb(hex) {
+export function set16ToRgb(hex) {
     hex = hex.replace(/^#/, '');
     if (hex.length === 3) {
         hex = hex.split('').map(char => char + char).join('');
@@ -186,7 +186,7 @@ function set16ToRgb(hex) {
  * @param {string} rgb RGB颜色字符串
  * @returns {number[]}
  */
-function parseRgb(rgb) {
+export function parseRgb(rgb) {
     return rgb.match(/\d+/g).map(Number);
 }
 

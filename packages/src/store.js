@@ -69,7 +69,7 @@ export function getAllStore(session = false) {
  * @param {boolean} [options.session=false] session模式
  * @returns {*} 缓存内容
  */
-function getStore({ name, debug = false, session = false }) {
+export function getStore({ name, debug = false, session = false }) {
     const storage = session ? window.sessionStorage : window.localStorage;
     let obj = storage.getItem(name);
     if (isAllNull(obj)) return;
@@ -99,7 +99,7 @@ function getStore({ name, debug = false, session = false }) {
  * @param {*} options.content 缓存内容
  * @param {boolean} [options.session=false] session模式
  */
-function setStore({ name, content, session = false }) {
+export function setStore({ name, content, session = false }) {
     const obj = {
         dataType: typeof content,
         content: content ?? '',
@@ -120,7 +120,7 @@ function setStore({ name, content, session = false }) {
  * @param {string} options.name 缓存名称
  * @param {boolean} [options.session=false] session模式
  */
-function removeStore({ name, session = false }) {
+export function removeStore({ name, session = false }) {
     const storage = session ? window.sessionStorage : window.localStorage;
     storage.removeItem(name);
 }
