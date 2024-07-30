@@ -14,7 +14,7 @@ const buildConfig = (packagingFormat = []) => {
         name: 'JsFastWay',
         file: `dist/index.${pkgFormat}.js`,
         format: buildFormat(pkgFormat),
-        sourcemap: true, // 添加 sourcemap
+        sourcemap: false, // 添加 sourcemap
         exports: 'auto', // 自动检测导出模式
         // 为 UMD 格式添加全局变量名
         ...(pkgFormat === 'umd' ? {name: 'JsFastWay'} : {})

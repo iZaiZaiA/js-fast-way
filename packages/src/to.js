@@ -1,237 +1,329 @@
 /**
  * Json强转为Form类型
- * @param {Object} obj Json对象
+ * @param obj   Json对象
  * @returns {FormData}
  */
-export function toFormData(obj) {
+export function toFormData(obj)
+{
     const data = new FormData();
-    Object.entries(obj).forEach(([key, value]) => {
-        data.append(key, Array.isArray(value) ? value.join(',') : value);
+    Object.keys(obj).forEach(key => {
+        data.append(key, Array.isArray(obj[key]) ? obj[key].join(',') : obj[key]);
     });
     return data;
 }
 
 /**
  * 表单序列化
- * @param {Object} form 表单数据
+ * @param form  表单数据
  * @returns {string}
  */
-export function toSerialize(form) {
-    return Object.entries(form)
-        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-        .join('&');
+export function toSerialize(form)
+{
+    let list = [];
+    Object.keys(form).forEach(ele => {
+        list.push(`${ele}=${form[ele]}`)
+    })
+    return list.join('&');
 }
 
 /**
  * 颜色混合
- * @param {string} c1 颜色1
- * @param {string} c2 颜色2
- * @param {number} ratio 比例
+ * @param c1    颜色1
+ * @param c2    颜色2
+ * @param ratio 比例
  * @returns {string}
  */
-export function toColor(c1, c2, ratio = 0.5) {
-    ratio = Math.max(Math.min(Number(ratio), 1), 0);
-    const r1 = parseInt(c1.slice(1, 3), 16);
-    const g1 = parseInt(c1.slice(3, 5), 16);
-    const b1 = parseInt(c1.slice(5, 7), 16);
-    const r2 = parseInt(c2.slice(1, 3), 16);
-    const g2 = parseInt(c2.slice(3, 5), 16);
-    const b2 = parseInt(c2.slice(5, 7), 16);
-    const r = Math.round(r1 * (1 - ratio) + r2 * ratio);
-    const g = Math.round(g1 * (1 - ratio) + g2 * ratio);
-    const b = Math.round(b1 * (1 - ratio) + b2 * ratio);
-    return `#${[r, g, b].map(x => x.toString(16).padStart(2, '0')).join('')}`;
+export function toColor(c1, c2, ratio = 0.5)
+{
+    ratio = Math.max(Math.min(Number(ratio), 1), 0)
+    let r1 = parseInt(c1.substring(1, 3), 16)
+    let g1 = parseInt(c1.substring(3, 5), 16)
+    let b1 = parseInt(c1.substring(5, 7), 16)
+    let r2 = parseInt(c2.substring(1, 3), 16)
+    let g2 = parseInt(c2.substring(3, 5), 16)
+    let b2 = parseInt(c2.substring(5, 7), 16)
+    let r = Math.round(r1 * (1 - ratio) + r2 * ratio)
+    let g = Math.round(g1 * (1 - ratio) + g2 * ratio)
+    let b = Math.round(b1 * (1 - ratio) + b2 * ratio)
+    r = ('0' + (r || 0).toString(16)).slice(-2)
+    g = ('0' + (g || 0).toString(16)).slice(-2)
+    b = ('0' + (b || 0).toString(16)).slice(-2)
+    return '#' + r + g + b
 }
 
 /**
- * 调整颜色亮度
+ * Sums the passed percentage to the R, G or B of a HEX color
+ * @param {string} color The color to change
+ * @param {number} amount The amount to change the color by
+ * @returns {string} The processed part of the color
+ */
+function addLight(color, amount)
+{
+    const cc = parseInt(color, 16) + amount;
+    const c = cc > 255 ? 255 : cc;
+    return c.toString(16).length > 1 ? c.toString(16) : `0${c.toString(16)}`;
+}
+
+/**
+ * 设置颜色透明度
  * @param {string} color 要改变的颜色
- * @param {number} amount 亮度调整量（0-100）
+ * @param {number} amount 透明度
  * @returns {string}
  */
-export function toLighten(color, amount = 50) {
-    color = color.replace('#', '');
-    amount = Math.max(Math.min(amount, 100), 0);
-    const num = parseInt(color, 16);
-    const r = Math.min(255, (num >> 16) + amount);
-    const g = Math.min(255, ((num >> 8) & 0x00FF) + amount);
-    const b = Math.min(255, (num & 0x0000FF) + amount);
-    return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+export function toLighten(color, amount= 0.5)
+{
+    color = color.indexOf('#') >= 0 ? color.substring(1, color.length) : color;
+    amount = Math.trunc((255 * amount) / 100);
+    const r = addLight(color.substring(0, 2), amount);
+    const g = addLight(color.substring(2, 4), amount);
+    const b = addLight(color.substring(4, 6), amount);
+    return `#${r + g + b}`;
 }
 
 /**
  * 字符串转数组或JSON
- * @param {string} value 字符串
- * @returns {*}
+ * @param value   字符串
+ * @returns {boolean|any}
  */
-export function toParse(value) {
+export function toParse(value)
+{
     try {
-        return JSON.parse(value);
+        return JSON.parse(value)
     } catch (e) {
-        console.error("解析失败:", e);
-        return null;
+        return false;
     }
 }
 
 /**
  * 处理栅格间隔
- * @param {number} spacing 间隔
- * @param {string} type margin or padding
+ * @param spacing   间隔
+ * @param type      margin or padding
  * @returns {string}
  */
-export function setRowSpace(spacing, type = 'm') {
-    if (spacing === 0) return '';
-    const value = type === 'm' ? -spacing / 2 : spacing / 2;
-    return `${type}:${Math.floor(value)}px`;
+export function setRowSpace(spacing, type = 'm')
+{
+    const int = type === 'm' ? -2 : 2;
+    if (spacing !== 0) {
+        const floor = Math.floor(spacing / int) + (spacing % 2) + 'px';
+        return `${type}:${floor}`;
+    } else {
+        return '';
+    }
 }
+
 
 /**
  * 数组转对象
- * @param {Array} arr 数组数据
- * @param {string} field 对象键值名
- * @param {Object} objName 对象变量
- * @param {Array} arrName 数组变量
- * @param {string} children 子级字段名
+ * @param arr       数组数据
+ * @param field     对象键值名
+ * @param objName   对象变量
+ * @param arrName   数组变量
+ * @param children  子级字段名
+ * @returns {Promise<void>}
+ * @constructor
  */
-export function ArrToOneObj(arr, field, objName = {}, arrName = [], children = 'children') {
-    if (!Array.isArray(arr)) return;
-    arr.forEach(item => {
-        if (typeof item !== 'object') return;
-        objName[item[field]] = { ...item };
-        arrName.push(item[field]);
-        delete objName[item[field]][children];
-        if (Array.isArray(item[children])) {
-            ArrToOneObj(item[children], field, objName, arrName, children);
+export async function ArrToOneObj(arr, field, objName = {}, arrName = [], children = 'children')
+{
+    if (arr && arr.length > 0) {
+        for (const item of arr) {
+            objName[item[field]] = {}
+            arrName.push(item[field])
+            for (const key of Object.keys(item)) {
+                if (key !== children) {
+                    objName[item[field]][key] = item[key]
+                }
+                if (key === children && item[children] && item[children].length > 0) {
+                    await ArrToOneObj(item[children], field, objName, arrName, children)
+                }
+            }
         }
-    });
+    }
 }
 
+
 /**
- * 金额格式化:保留几位小数，不四舍五入
- * @param {number} price 金额
- * @param {number} decimal 小数点位数 默认2位
- * @returns {string}
+ * 金额处理:保留几位小数，不四舍五入(关于金额数值的处理用这个方法,以防金额计算出错)
+ * @param price     金额
+ * @param decimal   小数点位数 默认2位
+ * @returns {number|string}
  */
-export function priceFormat(price, decimal = 2) {
-    if (!price) return '0.00';
-    const fixedPrice = (Math.floor(price * Math.pow(10, decimal)) / Math.pow(10, decimal)).toFixed(decimal);
-    return fixedPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export function priceFormat(price, decimal = 2)
+{
+    if (price) {
+        let price = (price * 100) / 100;
+        return parseFloat(price)
+            .toFixed(decimal)
+            .toString()
+            .split('')
+            .reverse()
+            .join('')
+            .replace(/(\d{3})/g, '$1,')
+            .replace(/\,$/, '')
+            .split('')
+            .reverse()
+            .join('')
+    } else {
+        return 0;
+    }
 }
+
 
 /**
  * 数字格式化，转化为 K 或 W
- * @param {number} num 数字内容
- * @returns {string}
+ * @param num   数字内容
+ * @returns {*|string}
  */
-export function numberFormat(num) {
-    if (num >= 10000) return (num / 10000).toFixed(1) + 'W';
-    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-    return num.toString();
+export function numberFormat(num)
+{
+    if (num > 1000 && num < 10000) {
+        return Math.floor(num / 1000) + 'K';
+    } else if (num > 10000) {
+        return Math.floor(num / 10000) + 'W';
+    } else {
+        return num;
+    }
 }
+
 
 /**
  * 计算两个日期之间的差距
- * @param {number} date1 日期时间1，时间戳格式
- * @param {number} date2 日期时间2，时间戳格式
- * @returns {Object}
+ * @param date1 日期时间1，时间戳格式
+ * @param date2 日期时间2，时间戳格式
+ * @returns {{leave1: number, hours: number, seconds: number, leave2: number, leave3: number, minutes: number, days: number}}
  */
-export function calcDate(date1, date2) {
-    const diff = Math.abs(date2 - date1);
-    const days = Math.floor(diff / (24 * 3600 * 1000));
-    const hours = Math.floor((diff % (24 * 3600 * 1000)) / (3600 * 1000));
-    const minutes = Math.floor((diff % (3600 * 1000)) / (60 * 1000));
-    const seconds = Math.floor(diff / 1000);
-    return { days, hours, minutes, seconds };
+export function calcDate(date1, date2)
+{
+    let date3 = date2 - date1;
+    let days = Math.floor(date3 / (24 * 3600 * 1000))
+    let leave1 = date3 % (24 * 3600 * 1000) //计算天数后剩余的毫秒数
+    let hours = Math.floor(leave1 / (3600 * 1000))
+    let leave2 = leave1 % (3600 * 1000) //计算小时数后剩余的毫秒数
+    let minutes = Math.floor(leave2 / (60 * 1000))
+    let leave3 = leave2 % (60 * 1000) //计算分钟数后剩余的毫秒数
+    let seconds = Math.round(date3 / 1000)
+    return {leave1, leave2, leave3, days: days, hours: hours, minutes: minutes, seconds: seconds}
 }
 
-/**
- * 根据背景色返回适合的文字颜色
- * @param {string} color 背景颜色
- * @param {Object} config 颜色配置
- * @returns {string}
- */
-export function toTextColor(color, config = {}) {
-    if (!color) return config.black || '#000000';
-    if (color.includes('gradient')) return config.black || '#000000';
 
-    let rgb = color.startsWith('#') ? hexToRgb(color) : parseRgb(color);
-    return isLight(rgb) ? config.black || '#000000' : config.white || '#ffffff';
+/**
+ * 根据深浅色背景，返回黑白文字颜色。
+ * @param color     颜色值
+ * @param config    颜色配置
+ * @returns {string|string}
+ */
+export function toTextColor(color, config = {}){
+    //默认颜色
+    if(!color) {
+        return config.black ?? '#000000';
+    }
+    //渐变色直接返回中色值
+    if(color.search('gradient') !== -1) {
+        return config.black ?? '#000000';
+    }
+    //16进制转换成rgb
+    if(color.search('#') !== -1) {
+        color = set16ToRgb(color);
+    }
+    let bgColor = color.replace("rgb(", "").replace("rgba(", "").replace(")", "");
+    let bgColorArry = bgColor.split(",");
+    //浅色背景就返回深色文字颜色。
+    return isLight(bgColorArry) ? config.black ?? '#000000' : config.white ?? '#ffffff';
 }
 
+
 /**
- * 判断颜色是否为浅色
- * @param {number[]} rgb RGB颜色值
+ * 是否浅色
+ * @param rgb
  * @returns {boolean}
  */
-export function isLight(rgb) {
-    return (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) > 186;
+export function isLight (rgb=[0,0,0]) {
+    return (0.213 * rgb[0] + 0.715 * rgb[1] + 0.072 * rgb[2] > 255 / 1.5);
 }
 
 /**
- * 16进制颜色转RGB
- * @param {string} hex 16进制颜色
- * @returns {number[]}
+ * 16进制转换为RGB
+ * @param str
+ * @returns {string}
  */
-export function set16ToRgb(hex) {
-    hex = hex.replace(/^#/, '');
-    if (hex.length === 3) {
-        hex = hex.split('').map(char => char + char).join('');
+export function set16ToRgb(str){
+    let reg = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/
+    if(!reg.test(str)) return '';
+    let newStr = (str.toLowerCase()).replace(/\#/g,'')
+    let len = newStr.length;
+    if(len === 3) {
+        let t = ''
+        for(let i= 0; i < len; i++) {
+            t += newStr.slice(i,i+1).concat(newStr.slice(i, i + 1))
+        }
+        newStr = t
     }
-    const num = parseInt(hex, 16);
-    return [num >> 16, (num >> 8) & 255, num & 255];
-}
-
-/**
- * 解析RGB颜色字符串
- * @param {string} rgb RGB颜色字符串
- * @returns {number[]}
- */
-export function parseRgb(rgb) {
-    return rgb.match(/\d+/g).map(Number);
+    let arr = []; //将字符串分隔，两个两个的分隔
+    for(let i = 0; i < 6; i = i + 2) {
+        let s = newStr.slice(i, i + 2)
+        arr.push(parseInt("0x" + s))
+    }
+    return 'rgb(' + arr.join(",")  + ')';
 }
 
 /**
  * RGB转换为16进制
- * @param {string} rgb RGB颜色字符串
+ * @param str
  * @returns {string}
  */
-export function setRgbTo16(rgb) {
-    const [r, g, b] = parseRgb(rgb);
-    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+export function setRgbTo16(str){
+    let reg = /^(rgb|RGB)/;
+    if(!reg.test(str)) {
+        return;
+    }
+    let arr = str.slice(4, str.length-1).split(",")
+    let color = '#';
+    for(let i= 0; i < arr.length; i++) {
+        let t = Number(arr[i]).toString(16)
+        if(t == "0") {   //如果为“0”的话，需要补0操作,否则只有5位数
+            t =  t + "0"
+        }
+        color += t;
+    }
+    return color;
+}
+
+
+/**
+ * 替换http为https
+ * @param str   url
+ * @returns {*}
+ */
+export function setUrlHttps(str){
+    if (!str) return str
+    return str.replace('http://', 'https://')
 }
 
 /**
- * 替换URL中的协议为HTTPS
- * @param {string} url URL
- * @returns {string}
+ * 替换文本中所有的http为https
+ * @param str   url
+ * @returns {*}
  */
-export function setUrlHttps(url) {
-    return url ? url.replace(/^http:/, 'https:') : url;
+export function setAllUrlHttps(str){
+    if (!str) return str
+    return str.replace(/http:\/\//g, 'https://')
 }
 
 /**
- * 替换文本中所有的HTTP为HTTPS
- * @param {string} text 文本
- * @returns {string}
+ * 替换https为http
+ * @param str   url
+ * @returns {*}
  */
-export function setAllUrlHttps(text) {
-    return text ? text.replace(/http:\/\//g, 'https://') : text;
+export function setUrlHttp(str){
+    if (!str) return str
+    return str.replace('https://', 'http://')
 }
 
 /**
- * 替换URL中的协议为HTTP
- * @param {string} url URL
- * @returns {string}
+ * 替换文本中所有的https为http
+ * @param str   url
+ * @returns {*}
  */
-export function setUrlHttp(url) {
-    return url ? url.replace(/^https:/, 'http:') : url;
-}
-
-/**
- * 替换文本中所有的HTTPS为HTTP
- * @param {string} text 文本
- * @returns {string}
- */
-export function setAllUrlHttp(text) {
-    return text ? text.replace(/https:\/\//g, 'http://') : text;
+export function setAllUrlHttp(str){
+    if (!str) return str
+    return str.replace(/https:\/\//g, 'http://')
 }
