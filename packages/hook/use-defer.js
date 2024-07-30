@@ -1,23 +1,61 @@
-// 函数接收一个参数，表示监测的最大帧数，这里默认值是 1000
-// 如果说你渲染的东西特别多可以传入一个值
+/**
+ * 创建一个延迟渲染检查器
+ * @param {number} maxFrameCount - 最大帧数，默认为1000
+ * @returns {Function} - 返回一个函数用于检查是否应该渲染
+ */
 export function useDefer(maxFrameCount = 1000) {
-    // 然后开始计数
-    let frameCount = 0
-    const refreshFrameCount = () => {
-        requestAnimationFrame(() => {
-            // 每一次 requestAnimationFrame 就计数加一
-            // 表示当前渲染的帧数变多了一帧
-            frameCount++
-            // 只要当前帧数小于最大帧数就递归执行
+    // 参数验证
+    if (typeof maxFrameCount !== 'number' || maxFrameCount <= 0) {
+        throw new Error('maxFrameCount必须是一个正数');
+    }
+
+    let frameCount = 0;
+    let animationFrameId = null;
+    let isRunning = true;
+
+    /**
+     * 刷新帧计数
+     */
+    function refreshFrameCount() {
+        if (!isRunning) return;
+
+        animationFrameId = requestAnimationFrame(() => {
             if (frameCount < maxFrameCount) {
-                refreshFrameCount()
+                frameCount++;
+                refreshFrameCount();
             }
-        })
+        });
     }
-    refreshFrameCount()
-    // 返回一个函数，接收传递进来的 n
-    return function (showInFrameCount) {
-        // 判断当前渲染的帧数有没有大于 n
-        return frameCount >= showInFrameCount
+
+    // 开始计数
+    refreshFrameCount();
+
+    /**
+     * 检查是否应该渲染
+     * @param {number} showInFrameCount - 应该在第几帧开始渲染
+     * @returns {boolean} - 是否应该渲染
+     */
+    function deferCheck(showInFrameCount) {
+        if (typeof showInFrameCount !== 'number' || showInFrameCount < 0) {
+            throw new Error('showInFrameCount必须是一个非负数');
+        }
+        return frameCount >= showInFrameCount;
     }
+
+    /**
+     * 停止计数并清理资源
+     */
+    function stop() {
+        isRunning = false;
+        if (animationFrameId !== null) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+    }
+
+    // 返回一个对象，包含检查函数和停止函数
+    return {
+        deferCheck,
+        stop
+    };
 }

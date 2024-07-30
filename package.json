@@ -1,6 +1,6 @@
 {
     "name": "js-fast-way",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "description": "js-fast-way",
     "scripts": {
         "dev": "rollup -c --bundleConfigAsCjs --watch",
@@ -8,6 +8,7 @@
     },
     "main": "./dist/index.common.js",
     "module": "./dist/index.esm.js",
+    "browser": "./dist/index.umd.js",
     "files": [
         "dist",
         "LICENSE",
@@ -32,12 +33,14 @@
         "vue"
     ],
     "devDependencies": {
+        "@rollup/plugin-commonjs": "^26.0.1",
+        "@rollup/plugin-json": "^6.1.0",
+        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@rollup/plugin-terser": "^0.4.4",
         "bignumber.js": "^9.1.2",
-        "immer": "^10.0.4",
-        "rollup": "4.14.1",
-        "rollup-plugin-commonjs": "^10.1.0",
-        "rollup-plugin-json": "^4.0.0",
-        "rollup-plugin-node-resolve": "^5.2.0",
+        "immer": "^10.1.1",
+        "rollup": "^4.19.1",
+        "rollup-plugin-polyfill-node": "^0.13.0",
         "yargs": "^17.7.2"
     }
 }

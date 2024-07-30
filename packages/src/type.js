@@ -1,27 +1,25 @@
-//判断类型
-
+// 获取对象原型的toString方法
 const toString = Object.prototype.toString;
 
 /**
  * 判断值是否为某个类型
- * @param value 数据内容
- * @param type 类型，boolean、number、string、function、array、date、regExp、undefined、null、object 等
- * @returns {boolean} 是或否
+ * @param {*} value 数据内容
+ * @param {string} type 类型名称
+ * @returns {boolean} 是否为指定类型
  */
-export function type(value, type)
-{
+export function type(value, type) {
     return toString.call(value) === `[object ${type}]`;
 }
 
-
 /**
  * 获取对象数据类型
- * @param obj 数据内容
- * @returns {*|string} boolean、number、string、function、array、date、regExp、undefined、null、object、element
+ * @param {*} obj 数据内容
+ * @returns {string} 数据类型
  */
-export function getObjType(obj)
-{
-    let map = {
+export function getObjType(obj) {
+    if (obj instanceof Element) return 'element';
+    const typeString = toString.call(obj);
+    const map = {
         '[object Boolean]': 'boolean',
         '[object Number]': 'number',
         '[object String]': 'string',
@@ -33,118 +31,102 @@ export function getObjType(obj)
         '[object Null]': 'null',
         '[object Object]': 'object'
     };
-    if (obj instanceof Element) {
-        return 'element';
-    }
-    return map[toString.call(obj)];
+    return map[typeString] || 'unknown';
 }
 
-
 /**
- * 是否为字符串(String)
- * @param value 数据内容
- * @returns {boolean} 是或否
+ * 是否为字符串
+ * @param {*} value 数据内容
+ * @returns {boolean} 是否为字符串
  */
-export function isString(value)
-{
-    return type(value, 'String');
+export function isString(value) {
+    return typeof value === 'string';
 }
 
-
 /**
- * 是否为数值(Number)
- * @param value 数据内容
- * @returns {boolean} 是或否
+ * 是否为数值
+ * @param {*} value 数据内容
+ * @returns {boolean} 是否为数值
  */
-export function isNumber(value)
-{
-    return type(value, 'Number');
+export function isNumber(value) {
+    return typeof value === 'number' && !isNaN(value);
 }
 
-
 /**
- * 是否为布尔值(Boolean)
- * @param value 数据内容
- * @returns {boolean} 是或否
+ * 是否为布尔值
+ * @param {*} value 数据内容
+ * @returns {boolean} 是否为布尔值
  */
-export function isBoolean(value)
-{
-    return type(value, 'Boolean');
+export function isBoolean(value) {
+    return typeof value === 'boolean';
 }
 
-
 /**
- * 是否为数组 (Array)
- * @param value 数据内容
- * @returns {boolean} 是或否
+ * 是否为数组
+ * @param {*} value 数据内容
+ * @returns {boolean} 是否为数组
  */
-export function isArray(value)
-{
-    return value && Array.isArray(value);
+export function isArray(value) {
+    return Array.isArray(value);
 }
 
-
 /**
- * 是否为对象(Object)
- * @param value 数据内容
- * @returns {boolean} 是或否
+ * 是否为对象
+ * @param {*} value 数据内容
+ * @returns {boolean} 是否为对象
  */
-export function isObject(value)
-{
-    return value !== null && type(value, 'Object');
+export function isObject(value) {
+    return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
-
 /**
- * 是否为时间(Date)
- * @param value 数据内容
- * @returns {boolean} 是或否
+ * 是否为时间对象
+ * @param {*} value 数据内容
+ * @returns {boolean} 是否为时间对象
  */
-export function isDate(value)
-{
-    return type(value, 'Date');
+export function isDate(value) {
+    return value instanceof Date && !isNaN(value.getTime());
 }
 
-
 /**
- * 是否为方法函数 (Function)
- * @param func 数据内容
- * @returns {boolean} 是或否
+ * 是否为函数
+ * @param {*} func 数据内容
+ * @returns {boolean} 是否为函数
  */
-export function isFunction(func)
-{
+export function isFunction(func) {
     return typeof func === 'function';
 }
 
-
 /**
- * 是否为 Async Function
- * @param func 数据内容
- * @returns {boolean} 是或否
+ * 是否为异步函数
+ * @param {*} func 数据内容
+ * @returns {boolean} 是否为异步函数
  */
-export function isAsyncFunction(func)
-{
-    return typeof func === 'function';
+export function isAsyncFunction(func) {
+    return func instanceof AsyncFunction;
 }
 
-
 /**
- * 是否为Promise
- * @param value 数据内容
- * @returns {boolean} 是或否
+ * 是否为Promise对象
+ * @param {*} value 数据内容
+ * @returns {boolean} 是否为Promise对象
  */
-export function isPromise(value)
-{
-    return type(value, 'Promise') && isObject(value) && isFunction(value.then) && isFunction(value.catch);
+export function isPromise(value) {
+    return value instanceof Promise || (
+        isObject(value) && isFunction(value.then) && isFunction(value.catch)
+    );
 }
 
-
 /**
- * 是否为元素（Element）
- * @param value 数据内容
- * @returns {boolean} 是或否
+ * 是否为DOM元素
+ * @param {*} value 数据内容
+ * @returns {boolean} 是否为DOM元素
  */
-export function isElement(value)
-{
-    return isObject(value) && !!value.tagName;
+export function isElement(value) {
+    return value instanceof Element || (
+        isObject(value) && isString(value.nodeName) && value.nodeType === 1
+    );
 }
+
+// 用于判断异步函数的构造函数
+const AsyncFunction = (async () => {}).constructor;

@@ -1,12 +1,13 @@
-import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
-import json from 'rollup-plugin-json'
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
+import terser from '@rollup/plugin-terser';
+import nodePolyfills from 'rollup-plugin-polyfill-node';
 import { buildConfig } from "./rollup-utils.js";
 import yargs from "yargs";
 
-// 使用yargs解析命令行执行时的添加参数
-const commandLineParameters = yargs(process.argv.slice(1)).options({
-    // 打包格式, 默认为 umd,esm,common 三种格式
+// 使用yargs解析命令行参数
+const commandLineParameters = yargs(process.argv.slice(2)).options({
     packagingFormat: {
         type: "string",
         alias: "pkgFormat",
@@ -14,8 +15,6 @@ const commandLineParameters = yargs(process.argv.slice(1)).options({
     },
 }).argv;
 
-// 需要让rollup忽略的自定义参数
-const ignoredWarningsKey = [...Object.keys(commandLineParameters)];
 const packagingFormat = commandLineParameters.packagingFormat.split(",");
 
 export default {
@@ -23,9 +22,20 @@ export default {
     output: buildConfig(packagingFormat),
     plugins: [
         json(),
-        resolve(),
-        commonjs()
+        resolve({
+            preferBuiltins: true,
+            browser: true
+        }),
+        commonjs(),
+        nodePolyfills(), // 添加 Node.js polyfills 支持
+        terser() // 使用新的 @rollup/plugin-terser
     ],
-    // 指定需要外部引入的模块（如 Node.js 核心模块）
+    // 指定需要外部引入的模块
     external: ['fs', 'path'],
-}
+    // 添加警告忽略
+    onwarn: (warning, warn) => {
+        // 忽略特定警告
+        if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+        warn(warning);
+    }
+};

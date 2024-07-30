@@ -1,198 +1,143 @@
-import {isAllNull, isNullES} from "./validate"
-import {calcDate} from "./to";
+import { isAllNull, isNullES } from "./validate";
+import { calcDate } from "./to";
 
 /**
  * 计算缓存是否过期
- * @param key   缓存名称
- * @param time  过期时间，毫秒
+ * @param {string} key 缓存名称
+ * @param {number} [time=2000] 过期时间，毫秒
+ * @returns {boolean} 是否过期
  */
-export function getStoreTime(key, time= 2000)
-{
-    const data = getStoreData(key, true)
-    if (isNullES(data)) return true
-    const date = calcDate(data.datetime, new Date().getTime())
+export function getStoreTime(key, time = 2000) {
+    const data = getStoreData(key, true);
+    if (isNullES(data)) return true;
+    const date = calcDate(data.datetime, new Date().getTime());
     if (date.seconds > time) {
-        delStoreData(key)
-        return true
+        delStoreData(key);
+        return true;
     }
-    return false
+    return false;
 }
-
 
 /**
  * 保存缓存
- * @param key       缓存名称
- * @param value     缓存内容
- * @param session   session模式， 默认为 false
+ * @param {string} key 缓存名称
+ * @param {*} value 缓存内容
+ * @param {boolean} [session=false] session模式
  */
-export function setStoreData(key, value, session = false)
-{
-    return setStore({
-        name: key,
-        content: value,
-        session: session
-    })
+export function setStoreData(key, value, session = false) {
+    setStore({ name: key, content: value, session });
 }
-
 
 /**
  * 获取缓存
- * @param key       缓存名称
- * @param debug     是否开启调试模式， 默认为 false
- * @param session   session模式， 默认为 false
- * @returns {boolean|number|string|*}
+ * @param {string} key 缓存名称
+ * @param {boolean} [debug=false] 是否开启调试模式
+ * @param {boolean} [session=false] session模式
+ * @returns {*} 缓存内容
  */
-export function getStoreData(key, debug = false, session = false)
-{
-    return getStore({
-        name: key,
-        debug: debug,
-        session: session
-    })
+export function getStoreData(key, debug = false, session = false) {
+    return getStore({ name: key, debug, session });
 }
-
 
 /**
  * 删除缓存
- * @param key       缓存名称
- * @param session   session模式， 默认为 false
+ * @param {string} key 缓存名称
+ * @param {boolean} [session=false] session模式
  */
-export function delStoreData(key, session = false)
-{
-    return removeStore({
-        name: key,
-        session: session
-    })
+export function delStoreData(key, session = false) {
+    removeStore({ name: key, session });
 }
-
 
 /**
  * 获取全部缓存
- * @param session    session模式， 默认为 false
- * @returns {*[]}
+ * @param {boolean} [session=false] session模式
+ * @returns {Array} 缓存列表
  */
-export function getAllStore(session = false)
-{
-    let list = [];
-    if (session) {
-        for (let i = 0; i <= window.sessionStorage.length; i++) {
-            list.push({
-                name: window.sessionStorage.key(i),
-                content: getStore({
-                    name: window.sessionStorage.key(i),
-                    type: 'session'
-                })
-            })
-        }
-    } else {
-        for (let i = 0; i <= window.localStorage.length; i++) {
-            list.push({
-                name: window.localStorage.key(i),
-                content: getStore({
-                    name: window.localStorage.key(i),
-                })
-            })
-        }
-    }
-    return list;
+export function getAllStore(session = false) {
+    const storage = session ? window.sessionStorage : window.localStorage;
+    return Object.keys(storage).map(key => ({
+        name: key,
+        content: getStore({ name: key, session })
+    }));
 }
 
-
 /**
- * 获取localStorage
- * @param name      缓存名称
- * @param debug     是否开启调试模式， 默认为 false
- * @param session   session模式， 默认为 false
- * @returns {boolean|number|string|*|string}
+ * 获取localStorage或sessionStorage
+ * @param {Object} options 选项
+ * @param {string} options.name 缓存名称
+ * @param {boolean} [options.debug=false] 是否开启调试模式
+ * @param {boolean} [options.session=false] session模式
+ * @returns {*} 缓存内容
  */
-function getStore({name, debug = false, session = false})
-{
-    let obj, content;
-    if (session) {
-        obj = window.sessionStorage.getItem(name);
-    } else {
-        obj = window.localStorage.getItem(name);
-    }
-    if (isAllNull(obj)) {
-        return;
-    }
+function getStore({ name, debug = false, session = false }) {
+    const storage = session ? window.sessionStorage : window.localStorage;
+    let obj = storage.getItem(name);
+    if (isAllNull(obj)) return;
+
     try {
         obj = JSON.parse(obj);
-    } catch {
+    } catch (e) {
+        console.error(`解析缓存数据失败: ${name}`, e);
         return obj;
     }
-    if (debug) {
-        return obj;
+
+    if (debug) return obj;
+
+    const { dataType, content } = obj;
+    switch (dataType) {
+        case 'number': return Number(content);
+        case 'boolean': return Boolean(content);
+        case 'object': return content;
+        default: return content ?? '';
     }
-    if (obj.dataType === 'string') {
-        content = obj.content;
-    } else if (obj.dataType === 'number') {
-        content = Number(obj.content);
-    } else if (obj.dataType === 'boolean') {
-        content = Boolean(obj.content);
-    } else if (obj.dataType === 'object') {
-        content = obj.content;
-    }
-    return content ?? '';
 }
 
-
 /**
- * 存储localStorage
- * @param name      缓存名称
- * @param content   缓存内容
- * @param session   session模式， 默认为 false
+ * 存储localStorage或sessionStorage
+ * @param {Object} options 选项
+ * @param {string} options.name 缓存名称
+ * @param {*} options.content 缓存内容
+ * @param {boolean} [options.session=false] session模式
  */
-function setStore({name, content, session = false})
-{
-    let obj = {
-        dataType: typeof (content),
+function setStore({ name, content, session = false }) {
+    const obj = {
+        dataType: typeof content,
         content: content ?? '',
-        session: session ?? '',
+        session,
         datetime: new Date().getTime()
-    }
-    if (session) {
-        window.sessionStorage.setItem(name, JSON.stringify(obj));
-    } else {
-        window.localStorage.setItem(name, JSON.stringify(obj));
+    };
+    const storage = session ? window.sessionStorage : window.localStorage;
+    try {
+        storage.setItem(name, JSON.stringify(obj));
+    } catch (e) {
+        console.error(`存储数据失败: ${name}`, e);
     }
 }
-
 
 /**
- * 删除localStorage
- * @param name      缓存名称
- * @param session   session模式， 默认为 false
+ * 删除localStorage或sessionStorage
+ * @param {Object} options 选项
+ * @param {string} options.name 缓存名称
+ * @param {boolean} [options.session=false] session模式
  */
-function removeStore({name, session = false})
-{
-    if (session) {
-        window.sessionStorage.removeItem(name);
-    } else {
-        window.localStorage.removeItem(name);
-    }
+function removeStore({ name, session = false }) {
+    const storage = session ? window.sessionStorage : window.localStorage;
+    storage.removeItem(name);
 }
-
 
 /**
  * 清空缓存
- * @param session   session模式， 默认为 false
+ * @param {boolean} [session=false] session模式
  */
-export function clearStore(session = false)
-{
-    if (session) {
-        window.sessionStorage.clear();
-    } else {
-        window.localStorage.clear()
-    }
+export function clearStore(session = false) {
+    const storage = session ? window.sessionStorage : window.localStorage;
+    storage.clear();
 }
-
 
 /**
  * 清空全部缓存
  */
-export function clearStoreAll()
-{
+export function clearStoreAll() {
     window.sessionStorage.clear();
-    window.localStorage.clear()
+    window.localStorage.clear();
 }

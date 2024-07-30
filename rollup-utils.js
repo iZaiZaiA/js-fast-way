@@ -1,32 +1,24 @@
-// 处理output对象中的format字段(传入的参数会与rollup所定义的参数不符，因此需要在这里进行转换)
+// 处理output对象中的format字段
 const buildFormat = formatVal => {
-    let finalFormatVal = formatVal;
-    switch (formatVal) {
-        case "esm":
-            finalFormatVal = "es";
-            break;
-        case "common":
-            finalFormatVal = "cjs";
-            break;
-        default:
-            break;
-    }
-    return finalFormatVal;
+    const formatMap = {
+        esm: "es",
+        common: "cjs",
+        umd: "umd"
+    };
+    return formatMap[formatVal] || formatVal;
 };
 
+// 构建输出配置
 const buildConfig = (packagingFormat = []) => {
-    const outputConfig = [];
-    for (let i = 0; i < packagingFormat.length; i++) {
-        const pkgFormat = packagingFormat[i];
-        // 根据packagingFormat字段来构建对应格式的包
-        const config = {
-            name: 'JsFastWay',
-            file: `dist/index.${pkgFormat}.js`,
-            format: buildFormat(pkgFormat),
-        };
-        outputConfig.push(config);
-    }
-    return outputConfig;
+    return packagingFormat.map(pkgFormat => ({
+        name: 'JsFastWay',
+        file: `dist/index.${pkgFormat}.js`,
+        format: buildFormat(pkgFormat),
+        sourcemap: true, // 添加 sourcemap
+        exports: 'auto', // 自动检测导出模式
+        // 为 UMD 格式添加全局变量名
+        ...(pkgFormat === 'umd' ? {name: 'JsFastWay'} : {})
+    }));
 };
 
 export {buildConfig};
