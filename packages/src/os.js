@@ -141,14 +141,18 @@ export function getMonthList() {
  * @returns {Promise<boolean>}
  */
 export async function setImageColorStyle(id, value) {
-    try {
-        const { result } = await setImageColor(value);
-        document.getElementById(id).style.filter = result.filter;
-        return true;
-    } catch (e) {
-        console.error("设置图片颜色样式失败:", e);
-        return false;
-    }
+    return new Promise((resolve) => {
+        setImageColor(value).then(({result}) => {
+            try {
+                document.getElementById(id).style.filter = result.filter;
+                resolve(true)
+            } catch {
+                resolve(false)
+            }
+        }).catch(() => {
+            resolve(false)
+        })
+    })
 }
 
 /**
@@ -157,11 +161,13 @@ export async function setImageColorStyle(id, value) {
  * @returns {Promise<{rgb: number[], color: Color, result: Object}>}
  */
 export async function setImageColor(value) {
-    const rgb = hexToRgb(value);
-    const color = new Color(rgb[0], rgb[1], rgb[2]);
-    const solver = new Solver(color);
-    const result = solver.solve();
-    return { rgb, color, result };
+    return new Promise((resolve) => {
+        const rgb = hexToRgb(value);
+        const color = new Color(rgb[0], rgb[1], rgb[2]);
+        const solver = new Solver(color);
+        const result = solver.solve();
+        resolve({rgb, color, result})
+    })
 }
 
 /**
@@ -238,13 +244,11 @@ export function setElementFocus(id) {
 export const setElementMainColor = (color = '#1ECC95') => {
     const el = document.documentElement;
     el.style.setProperty('--el-color-primary', color);
-
     [3, 5, 7, 8, 9].forEach(item => {
         const amount = item === 3 ? 0.9 : item === 5 ? 0.7 : (10 - item) / 10;
         const val = toColor('#FFFFFF', color, amount);
         el.style.setProperty(`--el-color-primary-light-${item}`, val);
     });
-
     const darkVal = toColor('#000000', color, 0.9);
     el.style.setProperty('--el-color-primary-dark-2', darkVal);
 };

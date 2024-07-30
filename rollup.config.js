@@ -1,7 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
-import terser from '@rollup/plugin-terser';
 import nodePolyfills from 'rollup-plugin-polyfill-node';
 import { buildConfig } from "./rollup-utils.js";
 import yargs from "yargs";
@@ -28,7 +27,6 @@ export default {
         }),
         commonjs(),
         nodePolyfills(), // 添加 Node.js polyfills 支持
-        terser() // 使用新的 @rollup/plugin-terser
     ],
     // 指定需要外部引入的模块
     external: ['fs', 'path'],
