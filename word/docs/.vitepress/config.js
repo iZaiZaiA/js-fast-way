@@ -14,6 +14,7 @@ export default defineConfig({
             {text: '指南', link: '/guide/what-is-jfw'},
             {text: 'API', link: '/api/isType'},
             {text: '文章', link: '/article/array'},
+            {text: 'AI文档', link: 'https://gpt.qilepan.com/chat/share?shareId=jjdgakkpwmy5uo8wxrneyv19'},
             {
                 text: pkg.version,
                 items: [

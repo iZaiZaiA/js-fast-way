@@ -12,6 +12,7 @@
 
 - **[文档地址](https://js-fast-way.vercel.app/)** 部署在 Vercel 上的
 - **[国内文档地址](http://izaizaiaa.gitee.io/js-fast-way)** 部署在 gitee 上的
+- **[AI文档](https://gpt.qilepan.com/chat/share?shareId=jjdgakkpwmy5uo8wxrneyv19)** 基于奇乐AI
 
 为了方便自己查询和使用相关方法函数，我为此搞了这么一个文档，文档挂在 [Vercel](https://vercel.com/) 上，理论上会存在很久的时间，方便自己使用，也方便大家使用。
 
@@ -61,3 +62,9 @@ let obj = {}
 console.log(isObjNull(obj))
 ```
 
+## 感谢
+
+感谢[奇乐AI助手](https://ai.qilepan.com/auth?type=register&invite=NjM4)为文档接入AI功能的赞助。
+
+免费的gpt4o、mj绘画、AI音乐生成功能，请关注ai.qilepan.com
+我们免费为所有开源项目提供AI文档助手，您可以联系crazylee1996@gmail.com定制
