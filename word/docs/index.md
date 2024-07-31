@@ -16,6 +16,12 @@ hero:
     - theme: alt
       text: Gitee
       link: https://gitee.com/izaizaiaa/js-fast-way
+    - theme: alt
+      text: AI文档
+      link: https://gpt.qilepan.com/chat/share?shareId=jjdgakkpwmy5uo8wxrneyv19
+    - theme: alt
+      text: 奇乐AI
+      link: https://ai.qilepan.com/auth?type=register&invite=NjM4
 features:
   - title: 不是 TypeScript
     details: 因为我不会 TypeScript，也不想学 TS，所以，它不是用 TS 开发的。JavaScript 万岁！！
