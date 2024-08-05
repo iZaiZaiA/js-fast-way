@@ -1,6 +1,6 @@
 {
     "name": "js-fast-way",
-    "version": "0.5.5",
+    "version": "0.5.6",
     "description": "js-fast-way",
     "scripts": {
         "dev": "rollup -c --bundleConfigAsCjs --watch",
