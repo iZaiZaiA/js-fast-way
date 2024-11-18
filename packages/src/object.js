@@ -8,23 +8,28 @@ import { produce } from "../plugins/immer";
  * @param {WeakMap} cache 缓存已拷贝的对象
  * @returns {*} 深拷贝后的对象
  */
-export function deepClone(obj, cache = new WeakMap()) {
-    if (!isObject(obj)) {
-        return obj;
+export function deepClone(obj, cache = new Map()) {
+    const isObject = (obj) => typeof obj === 'object' && obj !== null
+    const forEach = (array, cb) => {
+        let i = -1, leng = array.length
+        while (++i < leng) {
+            cb(array[ i ])
+        }
     }
-
-    if (cache.has(obj)) {
-        return cache.get(obj);
+    if (isObject(obj)) {
+        const cacheObj = cache.get(obj)
+        if (cacheObj) return cacheObj
+        let cloneTarget = Array.isArray(obj) ? [] : {}
+        let keys = Object.keys(obj)
+        cache.set(obj, cloneTarget)
+        forEach(keys, (key) => {
+            const value = obj[ key ]
+            cloneTarget[ key ] = isObject(value) ? deepClone(value, cache) : value
+        })
+        return cloneTarget
+    } else {
+        return obj
     }
-
-    const cloneTarget = Array.isArray(obj) ? [] : {};
-    cache.set(obj, cloneTarget);
-
-    Object.keys(obj).forEach(key => {
-        cloneTarget[key] = deepClone(obj[key], cache);
-    });
-
-    return cloneTarget;
 }
 
 /**
